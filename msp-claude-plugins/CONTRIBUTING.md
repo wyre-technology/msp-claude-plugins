@@ -6,12 +6,18 @@ Thank you for your interest in contributing to the MSP Claude Plugins Marketplac
 
 - [The PRD Mandate](#the-prd-mandate)
 - [Getting Started](#getting-started)
-- [Step-by-Step Contribution Process](#step-by-step-contribution-process)
-- [Using Templates](#using-templates)
-- [LLM-Assisted Development](#llm-assisted-development)
-- [Quality Standards](#quality-standards)
-- [PR Review Process](#pr-review-process)
+- [Development Environment Setup](#development-environment-setup)
+- [Contribution Workflow](#contribution-workflow)
+- [Skill Development Guide](#skill-development-guide)
+- [Command Development Guide](#command-development-guide)
+- [MCP Server Integration Guide](#mcp-server-integration-guide)
+- [Testing Requirements](#testing-requirements)
+- [Style Guide](#style-guide)
+- [Pull Request Process](#pull-request-process)
+- [Issue Templates](#issue-templates)
 - [Getting Help](#getting-help)
+
+---
 
 ## The PRD Mandate
 
@@ -19,290 +25,728 @@ Thank you for your interest in contributing to the MSP Claude Plugins Marketplac
 
 Before any code is written, any skill is created, or any command is defined, a PRD must be:
 
-1. **Created** using the provided template in `_templates/plugin-prd-template.md`
+1. **Created** using the template in `_templates/plugin-prd-template.md`
 2. **Reviewed** by at least one community member
 3. **Approved** via PR review process
 4. **Stored** in the plugin's `prd/` directory
 
 ### Why PRDs First?
 
-- Ensures clear understanding of the problem being solved
-- Enables community input before development effort
-- Creates documentation that lives with the code
-- Prevents scope creep and feature drift
+| Benefit | Description |
+|---------|-------------|
+| **Clear Problem Definition** | Forces articulation of what problem you're solving |
+| **Community Input** | Enables feedback before development effort |
+| **Living Documentation** | Creates docs that live with the code |
+| **Scope Control** | Prevents scope creep and feature drift |
+| **Validation** | Ensures the contribution is valuable to the community |
+
+### PRD Requirements Checklist
+
+Before submitting a PRD, verify these items:
+
+- [ ] **Problem Statement** - Clearly describes the problem being solved
+- [ ] **User Stories** - At least 3 concrete user stories
+- [ ] **Scope** - Explicitly lists what's in scope and out of scope
+- [ ] **API Research** - References official vendor API documentation
+- [ ] **Technical Approach** - Describes implementation strategy
+- [ ] **Success Criteria** - Defines what "done" looks like
+- [ ] **Security Considerations** - Addresses credential handling
+- [ ] **Testing Plan** - Describes how the contribution will be validated
+
+See `_standards/prd-requirements.md` for detailed requirements.
+
+---
 
 ## Getting Started
 
 ### Prerequisites
 
-- GitHub account
-- Basic understanding of MSP tools and workflows
-- Familiarity with the specific vendor API you're contributing for
-- (Optional) Access to vendor API for testing
+| Requirement | Description |
+|-------------|-------------|
+| GitHub Account | For forking and submitting PRs |
+| Git | Version control |
+| Text Editor | VS Code recommended with Markdown preview |
+| MSP Knowledge | Understanding of PSA/RMM workflows |
+| API Documentation | Access to vendor API docs you're targeting |
+| (Optional) API Access | For testing against live APIs |
 
 ### Fork and Clone
 
 ```bash
-# Fork the repository via GitHub UI, then:
+# 1. Fork the repository via GitHub UI (click Fork button)
+
+# 2. Clone your fork
 git clone https://github.com/YOUR-USERNAME/msp-claude-plugins.git
 cd msp-claude-plugins
+
+# 3. Add upstream remote for syncing
+git remote add upstream https://github.com/OWNER/msp-claude-plugins.git
+
+# 4. Verify remotes
+git remote -v
+# origin    https://github.com/YOUR-USERNAME/msp-claude-plugins.git (fetch)
+# origin    https://github.com/YOUR-USERNAME/msp-claude-plugins.git (push)
+# upstream  https://github.com/OWNER/msp-claude-plugins.git (fetch)
+# upstream  https://github.com/OWNER/msp-claude-plugins.git (push)
 ```
 
-## Step-by-Step Contribution Process
+### Syncing Your Fork
+
+```bash
+# Before starting new work, sync with upstream
+git checkout main
+git fetch upstream
+git merge upstream/main
+git push origin main
+```
+
+---
+
+## Development Environment Setup
+
+### Directory Structure
+
+```
+msp-claude-plugins/
+├── _standards/              # Quality standards (read first!)
+├── _templates/              # Templates for all contributions
+├── kaseya/                  # Kaseya vendor plugins
+│   └── autotask/           # Reference implementation
+├── connectwise/             # ConnectWise vendor plugins
+├── shared/                  # Vendor-agnostic skills
+└── docs/                    # Documentation site (when available)
+```
+
+### Recommended Tools
+
+| Tool | Purpose | Installation |
+|------|---------|--------------|
+| VS Code | Editor with Markdown preview | https://code.visualstudio.com |
+| Markdown All in One | VS Code extension | VS Code marketplace |
+| YAML | VS Code extension for frontmatter | VS Code marketplace |
+| REST Client | API testing | Thunder Client extension |
+| Claude Code | Testing plugins locally | https://claude.ai/code |
+
+### Environment Variables
+
+When testing MCP integrations, configure these environment variables:
+
+```bash
+# Autotask
+export AUTOTASK_USERNAME="your-api-user@domain.com"
+export AUTOTASK_INTEGRATION_CODE="YOUR_INTEGRATION_CODE"
+export AUTOTASK_SECRET="YOUR_SECRET"
+
+# ConnectWise
+export CW_COMPANY_ID="your-company"
+export CW_PUBLIC_KEY="your-public-key"
+export CW_PRIVATE_KEY="your-private-key"
+export CW_CLIENT_ID="your-client-id"
+
+# Never commit these values!
+```
+
+---
+
+## Contribution Workflow
 
 ### Phase 1: PRD Creation
 
-1. **Create a feature branch**
-   ```bash
-   git checkout -b prd/vendor-product-component
-   ```
+```bash
+# 1. Create PRD branch
+git checkout main && git pull upstream main
+git checkout -b prd/vendor-product-component
 
-2. **Copy the PRD template**
-   ```bash
-   mkdir -p vendor/product/prd
-   cp _templates/plugin-prd-template.md vendor/product/prd/component-prd.md
-   ```
+# 2. Create PRD directory structure
+mkdir -p vendor/product/prd
 
-3. **Fill out the PRD** following the template sections
+# 3. Copy and fill out PRD template
+cp _templates/plugin-prd-template.md vendor/product/prd/component-prd.md
 
-4. **Submit PRD for review**
-   ```bash
-   git add vendor/product/prd/
-   git commit -m "PRD: Add PRD for vendor/product/component"
-   git push origin prd/vendor-product-component
-   ```
+# 4. Commit and push
+git add vendor/product/prd/
+git commit -m "PRD: Add PRD for vendor/product/component"
+git push origin prd/vendor-product-component
 
-5. **Create a Pull Request** titled `[PRD] vendor/product/component`
-
-6. **Wait for approval** - Address any feedback from reviewers
+# 5. Create Pull Request with [PRD] prefix
+# Title: [PRD] vendor/product/component
+```
 
 ### Phase 2: Implementation (After PRD Approval)
 
-1. **Create implementation branch**
-   ```bash
-   git checkout main
-   git pull upstream main
-   git checkout -b feature/vendor-product-component
-   ```
+```bash
+# 1. Create feature branch from updated main
+git checkout main && git pull upstream main
+git checkout -b feature/vendor-product-component
 
-2. **Implement your contribution**
-   - Use the skill/command templates
-   - Follow the approved PRD scope
-   - Test against actual API if possible
+# 2. Implement according to approved PRD
+# - Create skill files in skills/
+# - Create command files in commands/
+# - Update plugin.json if needed
+# - Update README.md
 
-3. **Submit for review**
-   ```bash
-   git add .
-   git commit -m "feat: Implement vendor/product/component per approved PRD"
-   git push origin feature/vendor-product-component
-   ```
+# 3. Commit with conventional commit format
+git add .
+git commit -m "feat(autotask): Add time entry skill per PRD #123"
 
-4. **Create a Pull Request** linking to the approved PRD
-
-## Repository Structure
-
-```
-vendor/product/
-├── .claude-plugin/
-│   └── plugin.json           # Plugin manifest (required)
-├── .mcp.json                 # MCP server configuration (optional)
-├── README.md                 # Product-specific documentation
-├── prd/                      # PRD history for this plugin
-│   └── initial-prd.md
-├── commands/                 # Slash commands (optional)
-│   └── *.md
-├── skills/                   # Domain knowledge (optional)
-│   └── skill-name/
-│       └── SKILL.md
-└── agents/                   # Subagent definitions (optional)
-    └── *.md
+# 4. Push and create PR
+git push origin feature/vendor-product-component
+# Create PR linking to approved PRD
 ```
 
-## Using Templates
+### Commit Message Format
 
-All templates are in the `_templates/` directory:
+Use [Conventional Commits](https://www.conventionalcommits.org/):
 
-| Template | Purpose |
-|----------|---------|
-| `plugin-prd-template.md` | PRD for any plugin contribution |
-| `skill-template/SKILL.md` | Skill with proper frontmatter |
-| `command-template.md` | Slash command definition |
-| `llm-prompts/*.md` | Prompts for LLM-assisted development |
+```
+<type>(<scope>): <description>
 
-### Creating a Plugin Manifest
+[optional body]
 
-Every plugin needs a `plugin.json`:
-
-```json
-{
-  "name": "vendor-product",
-  "version": "1.0.0",
-  "description": "Description of the plugin",
-  "author": "Your Name",
-  "vendor": "vendor-name",
-  "product": "product-name",
-  "requires_api_key": true
-}
+[optional footer]
 ```
 
-### Writing Skills
+| Type | Use Case |
+|------|----------|
+| `feat` | New feature (skill, command, plugin) |
+| `fix` | Bug fix |
+| `docs` | Documentation only |
+| `style` | Formatting, no code change |
+| `refactor` | Code restructuring |
+| `test` | Adding tests |
+| `chore` | Maintenance tasks |
 
-Skills go in `skills/skill-name/SKILL.md`:
+Examples:
+```
+feat(autotask): Add configuration items skill
+fix(autotask): Correct ticket status code values
+docs(readme): Add usage examples
+```
+
+---
+
+## Skill Development Guide
+
+Skills provide domain knowledge that Claude can reference when helping users.
+
+### Skill File Location
+
+```
+vendor/product/skills/skill-name/SKILL.md
+```
+
+### Skill Template Structure
 
 ```markdown
 ---
 description: >
-  Use this skill when [trigger conditions]
+  Use this skill when [specific trigger conditions].
+  [Additional context about what this skill covers].
 triggers:
-  - keyword 1
-  - keyword 2
+  - trigger phrase 1
+  - trigger phrase 2
+  - trigger phrase 3
 ---
 
 # Skill Title
 
 ## Overview
-...
+[2-3 paragraphs explaining what this skill covers and why it's important]
 
 ## Key Concepts
-...
+[Tables, definitions, and core knowledge]
+
+## Field Reference
+[Complete field documentation with types and descriptions]
+
+## Business Logic
+[Workflows, validation rules, status transitions]
 
 ## API Patterns
-...
+[Concrete API examples with request/response]
+
+## Common Workflows
+[Step-by-step guides for common tasks]
+
+## Error Handling
+[Common errors and resolutions]
+
+## Best Practices
+[Numbered list of recommendations]
+
+## Related Skills
+[Links to related skills]
 ```
 
-### Writing Commands
+### Example: Learning from Existing Skills
 
-Commands go in `commands/command-name.md`:
+Study the Autotask tickets skill as a reference:
+
+**File:** `kaseya/autotask/skills/tickets/SKILL.md`
+
+**Key elements to note:**
+
+1. **Frontmatter Triggers** - Multiple relevant keywords
+   ```yaml
+   triggers:
+     - autotask ticket
+     - service ticket
+     - create ticket autotask
+     - ticket queue
+     - ticket status
+   ```
+
+2. **Status Code Tables** - Clear reference data
+   ```markdown
+   | Status ID | Name | Description | Business Logic |
+   |-----------|------|-------------|----------------|
+   | **1** | NEW | Newly created ticket | Default for new tickets |
+   ```
+
+3. **Business Logic Code** - Practical validation examples
+   ```javascript
+   function validateStatusTransition(currentStatus, newStatus, ticket) {
+     // Validation logic
+   }
+   ```
+
+4. **API Examples** - Real request/response patterns
+   ```json
+   POST /v1.0/Tickets
+   {
+     "companyID": 12345,
+     "title": "Issue description",
+     "status": 1,
+     "priority": 2
+   }
+   ```
+
+### Skill Quality Checklist
+
+Before submitting a skill, verify:
+
+- [ ] Frontmatter has accurate, comprehensive triggers
+- [ ] Overview explains the domain clearly
+- [ ] All relevant fields are documented with types
+- [ ] Status codes/enums have complete tables
+- [ ] API examples use realistic (but fake) data
+- [ ] No hardcoded credentials
+- [ ] Business logic includes validation rules
+- [ ] Error handling section is complete
+- [ ] Links to related skills work
+
+---
+
+## Command Development Guide
+
+Commands provide slash-command shortcuts for common operations.
+
+### Command File Location
+
+```
+vendor/product/commands/command-name.md
+```
+
+### Command Template Structure
 
 ```markdown
 ---
 name: command-name
-description: What this command does
+description: Brief description of what this command does
 arguments:
-  - name: arg1
-    description: Argument description
+  - name: required-arg
+    description: Description of this argument
     required: true
+  - name: optional-arg
+    description: Description of optional argument
+    required: false
 ---
 
 # Command Title
 
+Brief description of the command's purpose.
+
 ## Prerequisites
-...
+- List of requirements before using this command
+- API credentials configured
+- Permissions needed
 
 ## Steps
-...
+1. **Step title** - Description
+   - Sub-step details
+   - API calls made
+
+2. **Step title** - Description
+   ```json
+   // Example API request
+   ```
+
+## Parameters
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| arg1 | string | Yes | - | Description |
+| arg2 | int | No | 10 | Description |
+
+## Examples
+
+### Basic Usage
+```
+/command-name "required value"
 ```
 
-## LLM-Assisted Development
+### With Options
+```
+/command-name "value" --option1 "something" --option2 123
+```
 
-We encourage using LLMs (Claude, etc.) to help create PRDs, skills, and commands. However, you must follow these standards:
+## Output
 
-### Required Workflow
+### Success
+```
+✅ Operation completed
+Details...
+```
 
-1. **Start with the PRD prompt** - Use `_templates/llm-prompts/prd-generation.md`
-2. **Generate PRD** and submit for human review
-3. **After PRD approval**, use skill/command generation prompts
-4. **Review all LLM output** before committing
-5. **Test against actual API** when possible
+### Error Handling
+| Error | Resolution |
+|-------|------------|
+| Not found | Verify ID exists |
+| Unauthorized | Check credentials |
 
-### LLM Prompts Available
+## Related Commands
+- `/other-command` - Description
+```
 
-| Prompt | Use Case |
-|--------|----------|
-| `prd-generation.md` | Generate a complete PRD |
-| `skill-generation.md` | Generate a skill from approved PRD |
-| `command-generation.md` | Generate a command from approved PRD |
+### Command Best Practices
 
-### Important Notes on LLM Usage
+1. **Keep names short and memorable** - `/create-ticket` not `/create-new-service-ticket`
+2. **Use intuitive arguments** - First argument should be most important
+3. **Provide sensible defaults** - Optional args should have good defaults
+4. **Show progress** - Include output examples showing success/failure
+5. **Handle errors gracefully** - Document common errors and fixes
 
-- LLM output is a **starting point**, not a final product
-- Always validate API examples against actual documentation
-- Human review is required before submission
-- Do not submit LLM-generated content without verification
+---
 
-## Quality Standards
+## MCP Server Integration Guide
 
-### Quality Checklist
+MCP (Model Context Protocol) enables direct API connectivity from Claude.
 
-Before submitting a PR, verify:
+### MCP Configuration File
 
-- [ ] PRD exists and is approved
-- [ ] SKILL.md follows template structure
-- [ ] Frontmatter includes accurate triggers
-- [ ] API examples are validated against documentation
-- [ ] No hardcoded credentials or sensitive data
-- [ ] README.md updated with new capabilities
-- [ ] Commands tested with actual API (if possible)
+Create `.mcp.json` in your plugin root:
 
-### Security Requirements
+```json
+{
+  "mcpServers": {
+    "vendor-product": {
+      "command": "npx",
+      "args": ["-y", "@vendor/mcp-server-product"],
+      "env": {
+        "API_USERNAME": "${VENDOR_USERNAME}",
+        "API_KEY": "${VENDOR_API_KEY}"
+      }
+    }
+  }
+}
+```
 
-- **No credentials** - Use environment variable references only
-- **No customer data** - Use placeholder data in examples
-- **No real IDs** - Use generic IDs like `12345` in examples
+### Environment Variable References
 
-### Documentation Standards
+- Use `${VARIABLE_NAME}` syntax for environment variables
+- Document all required variables in README.md
+- Never hardcode credentials
 
-See `_standards/` for detailed requirements:
+### Testing MCP Integration
 
-- `prd-requirements.md` - PRD standards
-- `skill-quality-checklist.md` - Skill validation
-- `api-documentation-guide.md` - API documentation format
+```bash
+# 1. Set environment variables
+export VENDOR_USERNAME="test-user"
+export VENDOR_API_KEY="test-key"
 
-## PR Review Process
+# 2. Start Claude Code with plugin
+cd vendor/product
+claude --plugin .
 
-### PRD Reviews
+# 3. Test MCP tools
+# Claude should have access to vendor API tools
+```
 
-1. Submit PR with `[PRD]` prefix in title
-2. Minimum 1 reviewer approval required
-3. Reviewers check for completeness, clarity, and feasibility
-4. Address feedback and update PRD
-5. Merge when approved
+### MCP Server Development
 
-### Implementation Reviews
+If creating a new MCP server:
 
-1. Submit PR linking to approved PRD
-2. Minimum 1 reviewer approval required
-3. Reviewers verify:
-   - Implementation matches PRD scope
-   - Quality checklist is satisfied
-   - No security issues
-4. Address feedback and update
-5. Merge when approved
+1. Follow [MCP specification](https://modelcontextprotocol.io/)
+2. Publish to npm as `@vendor/mcp-server-product`
+3. Document all available tools
+4. Include authentication guidance
+5. Handle rate limiting appropriately
+
+---
+
+## Testing Requirements
+
+### Manual Testing Checklist
+
+| Test | Description | Required |
+|------|-------------|----------|
+| Skill Triggers | Verify triggers activate the skill | Yes |
+| API Examples | Validate against actual API docs | Yes |
+| Command Arguments | Test all argument combinations | Yes |
+| Error Cases | Verify error messages are helpful | Yes |
+| MCP Connection | Test MCP server connectivity | If MCP |
+
+### Testing Against Live API
+
+When you have API access:
+
+```bash
+# 1. Configure credentials
+export VENDOR_API_KEY="your-key"
+
+# 2. Use REST client to test examples
+# Verify all API examples in skills actually work
+
+# 3. Document any discrepancies
+# Update skill if API behavior differs from docs
+```
+
+### Testing Without API Access
+
+If you don't have API access:
+
+1. Build from official API documentation
+2. Mark contribution as "Documentation-based, untested"
+3. Add note in PR requesting community testing
+4. Look for community members with API access
+
+---
+
+## Style Guide
+
+### Markdown Formatting
+
+| Element | Style |
+|---------|-------|
+| Headers | Use ATX style (`#`, `##`, `###`) |
+| Lists | Use `-` for unordered, `1.` for ordered |
+| Code | Use fenced code blocks with language |
+| Tables | Use pipes with header separator |
+| Links | Use reference-style for repeated links |
+
+### Naming Conventions
+
+| Type | Convention | Example |
+|------|------------|---------|
+| Skill directories | kebab-case | `time-entries/` |
+| Command files | kebab-case | `create-ticket.md` |
+| Plugin names | kebab-case | `autotask-psa` |
+| Environment vars | SCREAMING_SNAKE_CASE | `AUTOTASK_API_KEY` |
+
+### API Example Standards
+
+```json
+// Good - uses generic IDs and realistic structure
+{
+  "companyID": 12345,
+  "title": "Email not working",
+  "priority": 2,
+  "status": 1
+}
+
+// Bad - uses real data
+{
+  "companyID": 987654321,  // Real ID
+  "title": "Fix John's email",  // Real person
+  "contactEmail": "john@realcompany.com"  // Real email
+}
+```
+
+### Documentation Language
+
+- Use active voice
+- Be concise but complete
+- Define acronyms on first use
+- Include examples for complex concepts
+- Write for MSP technicians (not developers)
+
+---
+
+## Pull Request Process
+
+### PR Title Format
+
+| Type | Format | Example |
+|------|--------|---------|
+| PRD | `[PRD] scope` | `[PRD] autotask/time-entries` |
+| Feature | `feat(scope): description` | `feat(autotask): Add time entries skill` |
+| Fix | `fix(scope): description` | `fix(autotask): Correct status codes` |
+| Docs | `docs(scope): description` | `docs(readme): Add examples` |
+
+### PR Description Template
+
+```markdown
+## Summary
+Brief description of changes
+
+## Related PRD
+Link to approved PRD (for feature PRs)
+
+## Changes
+- Change 1
+- Change 2
+
+## Testing
+- [ ] Tested manually
+- [ ] API examples validated
+- [ ] MCP integration tested (if applicable)
+
+## Checklist
+- [ ] PRD approved (for features)
+- [ ] Quality checklist complete
+- [ ] No credentials in code
+- [ ] README updated
+- [ ] CHANGELOG updated
+```
+
+### Review Process
+
+1. **Automated Checks** - Formatting, links, structure
+2. **Peer Review** - At least 1 approval required
+3. **Maintainer Review** - For significant changes
+4. **Community Testing** - For untested contributions
 
 ### Responding to Feedback
 
-- Be responsive to reviewer comments
+- Address all comments before re-requesting review
+- Use "Resolve conversation" when addressed
 - Ask for clarification if feedback is unclear
-- Update your PR based on feedback
-- Re-request review after addressing comments
+- Be patient - reviewers are volunteers
+
+---
+
+## Issue Templates
+
+### Bug Report
+
+When reporting bugs, include:
+
+```markdown
+**Plugin/Skill Affected:** kaseya/autotask/tickets
+
+**Description:** Brief description of the bug
+
+**Expected Behavior:** What should happen
+
+**Actual Behavior:** What actually happens
+
+**Steps to Reproduce:**
+1. Step 1
+2. Step 2
+3. Step 3
+
+**Environment:**
+- Claude Code version:
+- OS:
+- API version (if known):
+
+**Additional Context:** Screenshots, logs, etc.
+```
+
+### Feature Request
+
+When requesting features, include:
+
+```markdown
+**Plugin/Vendor:** Which vendor/product
+
+**Problem Statement:** What problem does this solve?
+
+**Proposed Solution:** Your idea for the solution
+
+**User Stories:**
+- As a [role], I want to [action] so that [benefit]
+
+**Alternatives Considered:** Other approaches you thought of
+
+**Willingness to Contribute:**
+- [ ] I would be willing to submit a PRD for this
+- [ ] I would be willing to implement this
+```
+
+### New Plugin Request
+
+When requesting a new vendor plugin:
+
+```markdown
+**Vendor:** Vendor name
+**Product:** Product name
+
+**API Documentation:** Link to official API docs
+
+**Key Entities:** What should the plugin cover?
+- Entity 1
+- Entity 2
+
+**Community Interest:** Why is this valuable?
+
+**Willingness to Contribute:**
+- [ ] I have API access for testing
+- [ ] I would be willing to lead this plugin
+```
+
+---
 
 ## Getting Help
 
-### Questions About Contributing
+### Communication Channels
 
-- Open a GitHub Issue with the `question` label
-- Check existing issues for similar questions
-
-### Vendor-Specific Questions
-
-- Tag issues with the vendor label (e.g., `kaseya`, `connectwise`)
-- Reference specific API documentation when asking
+| Channel | Use Case |
+|---------|----------|
+| GitHub Issues | Bug reports, feature requests |
+| GitHub Discussions | Questions, ideas, community chat |
+| PR Comments | Code review, implementation questions |
 
 ### Getting API Access
 
-If you don't have API access for testing:
+If you need API access for testing:
 
-1. Check if the vendor has a developer/partner program
-2. Request sandbox access from the vendor
-3. Build from documentation and mark as "untested"
-4. Ask the community if anyone can help test
+1. **Vendor Partner Programs** - Many vendors have free partner/developer tiers
+2. **Sandbox Environments** - Ask vendor for test environment
+3. **Community Help** - Post in discussions asking for testing help
+4. **Documentation-Based** - Build from docs, mark as untested
+
+### Mentorship
+
+New to contributing? Look for issues labeled:
+- `good-first-issue` - Great starting points
+- `help-wanted` - Community help needed
+- `documentation` - Lower barrier to entry
+
+---
 
 ## Code of Conduct
 
 Please read our [Code of Conduct](CODE_OF_CONDUCT.md) before contributing.
 
-We are committed to providing a welcoming and inclusive environment for all contributors.
+We are committed to providing a welcoming and inclusive environment for all contributors regardless of background, identity, or experience level.
 
 ---
 
+## Recognition
+
+Contributors are recognized in:
+- CHANGELOG.md for significant contributions
+- README.md acknowledgments section
+- GitHub contributor graphs
+
 Thank you for contributing to the MSP Claude Plugins Marketplace!
+
+---
+
+<p align="center">
+  <strong>Questions?</strong> Open an issue or start a discussion.
+  <br>
+  <a href="https://github.com/OWNER/msp-claude-plugins/issues">Issues</a> •
+  <a href="https://github.com/OWNER/msp-claude-plugins/discussions">Discussions</a>
+</p>

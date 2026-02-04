@@ -297,13 +297,150 @@
         "priority": "medium",
         "subtasks": [],
         "updatedAt": "2026-02-04T15:20:34.826Z"
+      },
+      {
+        "id": "21",
+        "title": "Create comprehensive CHANGELOG.md",
+        "description": "Create a comprehensive CHANGELOG.md file following the Keep a Changelog format (keepachangelog.com/en/1.1.0/) to document all changes and features in the project.",
+        "details": "Create a CHANGELOG.md file in the root directory of the project following the Keep a Changelog format (keepachangelog.com/en/1.1.0/). The file should include:\n\n1. A header section explaining the purpose of the changelog and linking to the Keep a Changelog format\n2. An \"Unreleased\" section to track changes that are not yet in a release\n3. A \"1.0.0\" section documenting the initial release with all current features:\n   - Autotask plugin with 7 skills (Tickets, Projects, Contracts, CRM, Time Entries, API Patterns, Configuration Items)\n   - 3 commands (to be specified based on existing implementation)\n   - Shared skills (MSP Terminology, Ticket Triage)\n   - ConnectWise placeholder for future implementation\n   - Contribution infrastructure (templates, standards, documentation)\n\nEach version section should be organized into the following categories as needed:\n- Added: for new features\n- Changed: for changes in existing functionality\n- Deprecated: for soon-to-be removed features\n- Removed: for now removed features\n- Fixed: for any bug fixes\n- Security: in case of vulnerabilities\n\nFormat the changelog with proper Markdown syntax, including:\n- Clear headings for each version (## [1.0.0] - YYYY-MM-DD)\n- Bulleted lists for each entry\n- Links to GitHub issues/PRs where applicable\n- A link reference section at the bottom that will connect version numbers to GitHub release tags when the repository is created\n\nExample structure:\n```markdown\n# Changelog\nAll notable changes to this project will be documented in this file.\n\nThe format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),\nand this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).\n\n## [Unreleased]\n\n## [1.0.0] - YYYY-MM-DD\n### Added\n- Autotask plugin with comprehensive ticket management skill\n- Autotask Projects skill for managing project workflows\n- Autotask Contracts skill for contract management\n- Autotask CRM skill for company and contact management\n- Autotask Time Entries skill for time tracking\n- Autotask API Patterns skill documenting query operations and authentication\n- Autotask Configuration Items skill for asset tracking\n- Shared MSP Terminology skill with industry-specific knowledge\n- Shared Ticket Triage skill for vendor-agnostic ticket handling\n- Command: [command name] for [purpose]\n- Command: [command name] for [purpose]\n- Command: [command name] for [purpose]\n- ConnectWise plugin placeholder for future implementation\n- Comprehensive contribution templates and standards\n\n[Unreleased]: https://github.com/username/repo/compare/v1.0.0...HEAD\n[1.0.0]: https://github.com/username/repo/releases/tag/v1.0.0\n```\n\nEnsure the changelog accurately reflects all current features and components of the project as documented in the existing tasks.",
+        "testStrategy": "To verify the CHANGELOG.md file is correctly implemented:\n\n1. Validate the format against the Keep a Changelog specification:\n   - Check that all required sections are present (header, unreleased, initial release)\n   - Verify the correct categorization (Added, Changed, Deprecated, etc.)\n   - Ensure proper Markdown formatting and hierarchy\n\n2. Verify content accuracy:\n   - Cross-reference the listed features with the actual implemented features\n   - Confirm all 7 Autotask skills are accurately described\n   - Verify all 3 commands are correctly documented\n   - Ensure shared skills are properly listed\n   - Confirm the ConnectWise placeholder is mentioned\n   - Validate that all contribution infrastructure is documented\n\n3. Test the Markdown rendering:\n   - Use a Markdown previewer to ensure the file renders correctly\n   - Check that links are properly formatted and will work when the repository is created\n   - Verify that the version comparison links at the bottom are correctly structured\n\n4. Peer review:\n   - Have team members review the changelog for completeness and accuracy\n   - Ensure the changelog provides clear value to users trying to understand project history\n\n5. Future-proofing:\n   - Verify the Unreleased section is ready for future entries\n   - Confirm the format can be easily maintained as the project evolves",
+        "status": "done",
+        "dependencies": [
+          "15"
+        ],
+        "priority": "high",
+        "subtasks": [],
+        "updatedAt": "2026-02-04T20:37:21.652Z"
+      },
+      {
+        "id": "22",
+        "title": "Enhance README.md with Comprehensive Project Documentation",
+        "description": "Update the existing README.md with comprehensive project documentation including badges, feature highlights, installation instructions, plugin directory overview, usage examples, architecture diagrams, and contribution guidelines.",
+        "details": "Enhance the existing README.md file with the following comprehensive documentation elements:\n\n1. Add project badges section at the top:\n   - Build status badge (GitHub Actions/CircleCI)\n   - License badge linking to LICENSE file\n   - npm version badge\n   - Code coverage badge\n\n2. Create a feature highlights section with:\n   - Screenshots of the system in action\n   - Diagrams illustrating key workflows\n   - Bullet points of core capabilities\n   - Value proposition for MSPs\n\n3. Develop a quick start guide with:\n   - Prerequisites\n   - Installation commands\n   - Basic configuration steps\n   - First-use examples\n\n4. Add detailed installation instructions:\n   - npm/yarn installation commands\n   - Manual installation steps\n   - Environment configuration requirements\n   - Troubleshooting common installation issues\n\n5. Create a plugin directory overview:\n   - Table listing all available plugins\n   - Brief description of each plugin's purpose\n   - Links to each plugin's detailed documentation\n   - Status indicators (stable, beta, etc.)\n\n6. Add usage examples for each plugin:\n   - Code snippets showing common operations\n   - Example output/responses\n   - Configuration options\n   - Best practices\n\n7. Include an architecture diagram showing:\n   - Vendor/plugin/skill structure\n   - Data flow between components\n   - Integration points with external systems\n   - Extension mechanisms\n\n8. Create a contributing section:\n   - Link to CONTRIBUTING.md\n   - Quick overview of contribution process\n   - Recognition of contributors\n   - Development environment setup\n\n9. Add license information with badge and link to LICENSE file\n\n10. Include links to:\n    - Full documentation site\n    - Community forums/Discord\n    - Issue tracker\n    - Roadmap\n\nEnsure all documentation follows a consistent style and tone, with proper formatting using Markdown features like headers, lists, code blocks, and tables.",
+        "testStrategy": "To verify the enhanced README.md is correctly implemented:\n\n1. Visual inspection:\n   - Confirm all required sections are present and properly formatted\n   - Verify all badges are displaying correctly and linking to appropriate resources\n   - Check that all images, diagrams, and screenshots are properly rendered\n   - Ensure consistent styling throughout the document\n\n2. Functional testing:\n   - Validate all links to ensure they point to correct destinations\n   - Test installation instructions by following them on a clean environment\n   - Verify code examples work as documented\n   - Confirm the quick start guide can be followed by a new user\n\n3. Content review:\n   - Have team members review for technical accuracy\n   - Check for completeness of plugin documentation\n   - Verify architecture diagram correctly represents the system\n   - Ensure contributing guidelines match CONTRIBUTING.md\n\n4. User testing:\n   - Have someone unfamiliar with the project follow the README\n   - Collect feedback on clarity and completeness\n   - Identify any confusing sections or missing information\n   - Verify they can successfully install and use the system\n\n5. Accessibility check:\n   - Ensure alt text for all images and diagrams\n   - Check color contrast for any custom styling\n   - Verify proper heading hierarchy for screen readers\n\n6. Markdown validation:\n   - Use a Markdown linter to check for syntax errors\n   - Test rendering on GitHub to ensure proper display\n   - Verify table formatting is consistent",
+        "status": "done",
+        "dependencies": [
+          "15"
+        ],
+        "priority": "high",
+        "subtasks": [],
+        "updatedAt": "2026-02-04T20:38:41.277Z"
+      },
+      {
+        "id": "23",
+        "title": "Enhance CONTRIBUTING.md with Detailed Contribution Workflow",
+        "description": "Update the existing CONTRIBUTING.md with comprehensive workflow instructions including environment setup, development guides for skills and commands, PR processes, and community guidelines.",
+        "details": "Enhance the existing CONTRIBUTING.md file with the following detailed sections:\n\n1. Repository Workflow\n   - Detailed fork and clone instructions with screenshots\n   - Branch naming conventions (feature/, bugfix/, docs/, etc.)\n   - Git workflow best practices for this project\n\n2. Development Environment Setup\n   - Required dependencies and tools with version requirements\n   - Step-by-step installation instructions for different operating systems\n   - Configuration of environment variables and settings\n   - Troubleshooting common setup issues\n\n3. Testing Requirements\n   - Unit testing expectations and framework usage\n   - Integration testing procedures\n   - Test coverage requirements\n   - How to run the test suite locally\n\n4. PR Template and Process\n   - Explanation of the PR template fields\n   - Screenshots of properly completed PR examples\n   - Required reviewers and approval process\n   - CI/CD pipeline explanation\n\n5. Code Review Process\n   - Review standards and expectations\n   - Common review feedback and how to address it\n   - Timeline expectations for reviews and responses\n\n6. Skill Development Guide\n   - Step-by-step tutorial with examples from existing skills (Autotask CRM, Tickets, etc.)\n   - Best practices for skill structure and documentation\n   - Common pitfalls to avoid\n   - Examples of well-implemented skills from the codebase\n\n7. Command Development Guide\n   - Command structure and architecture overview\n   - Parameter handling and validation patterns\n   - Error handling best practices\n   - Examples from existing commands (like time-entry)\n\n8. MCP Server Integration Guide\n   - How skills and commands interact with the MCP server\n   - Authentication and security considerations\n   - Performance optimization guidelines\n   - Debugging integration issues\n\n9. PRD Requirements Checklist\n   - Detailed explanation of each PRD section\n   - Examples of well-written PRDs\n   - Validation criteria for PRD approval\n\n10. Style Guide Enforcement\n    - Code style and formatting requirements\n    - Documentation style guidelines\n    - Linting and automated style checking tools\n    - How to configure editors for automatic compliance\n\n11. Issue Templates\n    - How to use the bug report template\n    - How to use the feature request template\n    - How to use the skill proposal template\n    - Examples of well-written issues\n\n12. Community Guidelines\n    - Communication channels and norms\n    - Meeting schedules and participation guidelines\n    - Mentorship opportunities\n    - Recognition program for contributors\n\nEach section should include concrete examples, code snippets where appropriate, and links to relevant resources or existing implementations in the codebase.",
+        "testStrategy": "To verify the enhanced CONTRIBUTING.md is correctly implemented:\n\n1. Document Review:\n   - Have at least three team members review the document for clarity, completeness, and accuracy\n   - Verify all sections listed in the implementation details are present and comprehensive\n   - Check that all links to external resources and internal documentation are valid\n\n2. Practical Testing:\n   - Have a new contributor follow the instructions to set up their environment and make a contribution\n   - Document any points of confusion or steps that need clarification\n   - Verify the contributor can successfully complete the entire workflow from fork to merged PR\n\n3. Technical Validation:\n   - Ensure all code examples are syntactically correct and follow project standards\n   - Validate that the development environment setup instructions work on all supported platforms\n   - Confirm that following the testing requirements results in tests that pass CI/CD\n\n4. Usability Testing:\n   - Create a survey for contributors to rate the clarity and usefulness of each section\n   - Track time-to-first-contribution for new contributors before and after the enhanced documentation\n   - Collect feedback on which sections were most helpful and which need improvement\n\n5. Integration Testing:\n   - Verify that the PR template usage instructions align with the actual template in the repository\n   - Ensure the style guide enforcement section matches the actual linting and formatting tools used\n   - Confirm that the issue templates described match those configured in the repository\n\n6. Documentation Maintenance Plan:\n   - Establish a process for keeping the CONTRIBUTING.md updated as project practices evolve\n   - Create a schedule for regular reviews and updates of the contribution guidelines",
+        "status": "done",
+        "dependencies": [
+          "3"
+        ],
+        "priority": "high",
+        "subtasks": [],
+        "updatedAt": "2026-02-04T20:40:23.606Z"
+      },
+      {
+        "id": "24",
+        "title": "Create Astro documentation site with Starlight theme",
+        "description": "Develop a comprehensive documentation site using Astro with the Starlight theme in the docs/ directory, featuring project overview, guides, references, and modern web features.",
+        "details": "Set up and implement a documentation site using Astro and the Starlight theme with the following structure and features:\n\n1. Project Setup:\n   - Initialize a new Astro project in the docs/ directory\n   - Install and configure the Starlight theme\n   - Set up GitHub Pages deployment configuration\n\n2. Site Structure:\n   - Home page: Create an engaging landing page with project overview, key features, and quick navigation links\n   - Getting Started guide:\n     - Installation instructions with code examples\n     - First plugin setup walkthrough with screenshots\n   - Plugin Catalog:\n     - Dedicated sections for each plugin (Autotask, ConnectWise)\n     - List of skills and commands for each plugin with brief descriptions\n     - Links to detailed reference pages\n   - Skill Reference:\n     - Complete API documentation for each skill\n     - Parameters, return values, and examples\n     - Organized by plugin and category\n   - Command Reference:\n     - Usage examples with command syntax\n     - Parameter descriptions and sample outputs\n     - Common use cases\n   - Developer Guide:\n     - Step-by-step instructions for creating skills\n     - Step-by-step instructions for creating commands\n     - MCP integration guidelines\n   - API Patterns Reference:\n     - Authentication patterns\n     - Request/response formats\n     - Error handling\n   - Contributing Guide:\n     - Contribution workflow\n     - Code standards\n     - PR process\n   - Changelog page:\n     - Integration with CHANGELOG.md content\n     - Version history with release dates\n\n3. Features to implement:\n   - Search functionality using Starlight's built-in search capabilities\n   - Dark/light mode toggle with system preference detection\n   - Mobile responsive design with appropriate breakpoints\n   - Sidebar navigation with collapsible sections\n   - GitHub Pages deployment configuration in .github/workflows/\n\n4. Technical implementation:\n   - Use Markdown for content with Astro's MDX support for interactive components\n   - Implement consistent styling across all pages\n   - Create reusable components for common elements (code blocks, callouts, etc.)\n   - Set up proper metadata for SEO\n   - Ensure accessibility compliance throughout the site",
+        "testStrategy": "To verify the documentation site is correctly implemented:\n\n1. Build and functionality testing:\n   - Run the build process and ensure it completes without errors\n   - Test local development server to confirm all pages render correctly\n   - Verify all links work and navigation is functional\n   - Test search functionality with various queries to ensure relevant results\n   - Confirm dark/light mode toggle works correctly\n   - Test responsive design across multiple device sizes (mobile, tablet, desktop)\n\n2. Content verification:\n   - Review all pages for content accuracy and completeness\n   - Ensure code examples are correct and properly formatted\n   - Verify that all sections described in the requirements are present\n   - Check that the changelog correctly reflects the content from CHANGELOG.md\n\n3. Cross-browser testing:\n   - Test the site in Chrome, Firefox, Safari, and Edge\n   - Verify functionality and appearance is consistent across browsers\n\n4. Deployment testing:\n   - Test the GitHub Pages deployment workflow\n   - Verify the site is accessible at the correct URL\n   - Check that all assets (images, styles, scripts) load correctly in production\n\n5. Performance testing:\n   - Run Lighthouse tests to check performance, accessibility, SEO, and best practices\n   - Ensure page load times are acceptable\n   - Verify that images are optimized for web\n\n6. User testing:\n   - Have team members navigate the documentation to find specific information\n   - Collect feedback on usability and content clarity\n   - Make adjustments based on user feedback",
+        "status": "pending",
+        "dependencies": [
+          "15",
+          "21",
+          "4",
+          "17"
+        ],
+        "priority": "high",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Set up Astro project with Starlight theme",
+            "description": "Initialize the Astro project in the docs/ directory and configure the Starlight theme with basic settings",
+            "dependencies": [],
+            "details": "Create a new Astro project in the docs/ directory using 'npm create astro@latest'. Install the Starlight theme with 'npm install @astrojs/starlight'. Configure the astro.config.mjs file with Starlight integration. Set up basic site configuration in starlight.config.js including site title, description, and social links. Initialize the GitHub Pages deployment configuration in .github/workflows/ directory.",
+            "status": "pending",
+            "testStrategy": "Verify the project builds successfully with 'npm run build'. Check that the Starlight theme is properly applied by running the development server and confirming the default layout appears. Validate the GitHub Pages workflow configuration.",
+            "parentId": "undefined"
+          },
+          {
+            "id": 2,
+            "title": "Implement core site structure and navigation",
+            "description": "Create the main site structure including home page, sidebar navigation, and primary content sections",
+            "dependencies": [
+              1
+            ],
+            "details": "Design and implement the home page with project overview, key features, and navigation links. Set up the sidebar navigation structure with collapsible sections for all major content areas. Create the basic page templates for Getting Started, Plugin Catalog, Skill Reference, Command Reference, Developer Guide, API Patterns Reference, Contributing Guide, and Changelog. Implement mobile responsive design with appropriate breakpoints and ensure the navigation works on all device sizes.",
+            "status": "pending",
+            "testStrategy": "Test navigation on multiple device sizes to verify responsive design. Ensure all links in the sidebar correctly navigate to their respective pages. Validate the structure against the requirements to confirm all sections are included.",
+            "parentId": "undefined"
+          },
+          {
+            "id": 3,
+            "title": "Develop content for guides and references",
+            "description": "Create comprehensive content for all documentation sections using Markdown and MDX",
+            "dependencies": [
+              2
+            ],
+            "details": "Write detailed content for each section using Markdown with MDX for interactive components. Implement the Getting Started guide with installation instructions and setup walkthrough. Create the Plugin Catalog with sections for each plugin. Develop the Skill Reference with complete API documentation. Build the Command Reference with usage examples and parameter descriptions. Write the Developer Guide with step-by-step instructions. Create the API Patterns Reference with authentication patterns and formats. Integrate the CHANGELOG.md content into the Changelog page.",
+            "status": "pending",
+            "testStrategy": "Review all content for accuracy, completeness, and adherence to documentation standards. Test all code examples to ensure they work as described. Verify that the CHANGELOG integration correctly displays the version history.",
+            "parentId": "undefined"
+          },
+          {
+            "id": 4,
+            "title": "Implement advanced features and components",
+            "description": "Add search functionality, dark/light mode toggle, and reusable components",
+            "dependencies": [
+              2,
+              3
+            ],
+            "details": "Configure Starlight's built-in search capabilities for the documentation site. Implement dark/light mode toggle with system preference detection. Create reusable components for common elements such as code blocks, callouts, warning messages, and information panels. Ensure consistent styling across all pages by implementing a unified design system. Set up proper metadata for SEO optimization including page titles, descriptions, and Open Graph tags.",
+            "status": "pending",
+            "testStrategy": "Test search functionality with various queries to ensure relevant results appear. Verify dark/light mode toggle works correctly and respects system preferences. Test all reusable components across different contexts to ensure they render properly. Validate SEO metadata using testing tools.",
+            "parentId": "undefined"
+          },
+          {
+            "id": 5,
+            "title": "Finalize deployment and quality assurance",
+            "description": "Complete GitHub Pages deployment configuration and perform comprehensive testing",
+            "dependencies": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "details": "Finalize the GitHub Pages deployment workflow in .github/workflows/ directory. Configure custom domain settings if applicable. Perform comprehensive testing of the entire documentation site including all links, navigation, search functionality, and responsive design. Ensure accessibility compliance throughout the site by testing with screen readers and following WCAG guidelines. Optimize performance by minimizing asset sizes and implementing proper caching strategies. Create a final review checklist to verify all requirements have been met.",
+            "status": "pending",
+            "testStrategy": "Run automated accessibility tests using tools like axe or Lighthouse. Test the complete GitHub Pages deployment process to ensure the site builds and deploys correctly. Perform cross-browser testing in Chrome, Firefox, Safari, and Edge. Validate that all features work as expected in the production environment.",
+            "parentId": "undefined"
+          }
+        ]
+      },
+      {
+        "id": "25",
+        "title": "Create GitHub Repository with PSA/RMM Provider Plugin Issues",
+        "description": "Set up a GitHub repository and create detailed TODO issues for additional PSA/RMM provider plugins including Datto Autotask alternative, ConnectWise Automate, Datto RMM, NinjaOne, Syncro, HaloPSA, SuperOps, Atera, Freshdesk, and Zendesk for MSPs.",
+        "details": "1. Create a new GitHub repository for the project with an appropriate name that reflects the MSP integration focus.\n\n2. Set up the repository with:\n   - Proper README.md (can be based on Task #15)\n   - LICENSE file (recommend MIT or Apache 2.0)\n   - .gitignore appropriate for the project's tech stack\n   - CONTRIBUTING.md guidelines\n\n3. Configure repository settings:\n   - Branch protection rules for main/master branch\n   - Issue templates\n   - Pull request templates\n\n4. Create the following issue labels:\n   - enhancement\n   - good-first-issue\n   - help-wanted\n   - plus any additional organizational labels needed\n\n5. Create detailed TODO issues for each of the following PSA/RMM providers:\n   - Datto Autotask alternative\n   - ConnectWise Automate (RMM)\n   - Datto RMM\n   - NinjaOne (NinjaRMM)\n   - Syncro\n   - HaloPSA\n   - SuperOps\n   - Atera\n   - Freshdesk\n   - Zendesk for MSPs\n\n6. Each issue should follow a consistent template including:\n   - **Plugin Scope**: Clear definition of what functionality the plugin should cover\n   - **Key Entities**: List of primary data objects/entities to be supported\n   - **Suggested Skills**: Breakdown of individual skills needed for the plugin\n   - **MCP Integration Points**: How the plugin connects with the Multi-Cloud Platform\n   - **API Documentation**: Links to official API documentation and any helpful resources\n   - **Estimated Complexity**: Rating of implementation difficulty\n   - **Prerequisites**: Any dependencies or requirements\n\n7. Apply appropriate labels to each issue (enhancement, good-first-issue, help-wanted) based on complexity and suitability for new contributors.\n\n8. Create a project board to organize and track progress on these issues, with columns for:\n   - Backlog\n   - Ready for Development\n   - In Progress\n   - Review\n   - Done",
+        "testStrategy": "1. Verify the GitHub repository is properly set up:\n   - Confirm all basic files are present (README.md, LICENSE, .gitignore, CONTRIBUTING.md)\n   - Check that branch protection rules are properly configured\n   - Ensure issue and PR templates are working correctly\n\n2. Validate the issue labels:\n   - Confirm all required labels (enhancement, good-first-issue, help-wanted) exist\n   - Verify labels have appropriate descriptions and colors\n\n3. Review each provider issue for completeness:\n   - Check that all 10 provider issues have been created\n   - Verify each issue follows the template structure\n   - Confirm all sections (Plugin Scope, Key Entities, etc.) are filled out with detailed information\n   - Validate that API documentation links are accurate and working\n\n4. Test the issue organization:\n   - Ensure issues are properly labeled\n   - Verify issues appear correctly on the project board\n   - Check that issues can be filtered and searched effectively\n\n5. Conduct a peer review:\n   - Have at least one team member review all issues for accuracy and completeness\n   - Verify that the technical information provided is correct for each provider\n   - Ensure the suggested skills align with the project's skill template structure\n\n6. Document completion:\n   - Create a summary document listing all issues created with links\n   - Note any challenges or special considerations for specific providers\n   - Share the repository link and summary with the team",
+        "status": "in-progress",
+        "dependencies": [
+          "15",
+          "2",
+          "4"
+        ],
+        "priority": "medium",
+        "subtasks": [],
+        "updatedAt": "2026-02-04T20:40:30.411Z"
       }
     ],
     "metadata": {
       "version": "1.0.0",
-      "lastModified": "2026-02-04T15:20:34.827Z",
-      "taskCount": 20,
-      "completedCount": 20,
+      "lastModified": "2026-02-04T20:40:30.412Z",
+      "taskCount": 25,
+      "completedCount": 23,
       "tags": [
         "master"
       ]
