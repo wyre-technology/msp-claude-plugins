@@ -1,23 +1,35 @@
 {
-  "name": "msp-claude-plugins-marketplace",
-  "version": "0.1.0",
-  "description": "A community-driven marketplace of Claude plugins for MSP tools",
-  "author": "MSP Claude Plugins Community",
-  "license": "Apache-2.0",
-  "documentation_url": "https://github.com/msp-claude-plugins/msp-claude-plugins",
-  "vendors": [
-    "kaseya",
-    "connectwise",
-    "halopsa",
-    "ninjaone",
-    "superops",
-    "datto"
-  ],
-  "categories": [
-    "psa",
-    "rmm",
-    "documentation",
-    "billing",
-    "reporting"
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "msp-claude-plugins",
+  "description": "Community-driven Claude Code plugins for Managed Service Providers. Integrates with PSA, RMM, and documentation tools.",
+  "version": "1.0.0",
+  "owner": {
+    "name": "Aaron Sachs"
+  },
+  "plugins": [
+    {
+      "name": "autotask",
+      "source": "./kaseya/autotask",
+      "description": "Kaseya Autotask PSA integration with tickets, CRM, projects, contracts, time entries, and configuration items",
+      "version": "1.0.0",
+      "category": "psa",
+      "tags": ["kaseya", "autotask", "psa", "tickets", "msp"]
+    },
+    {
+      "name": "connectwise-manage",
+      "source": "./connectwise/manage",
+      "description": "ConnectWise Manage PSA integration (planned)",
+      "version": "0.1.0",
+      "category": "psa",
+      "tags": ["connectwise", "psa", "tickets", "msp"]
+    },
+    {
+      "name": "shared-skills",
+      "source": "./shared",
+      "description": "Vendor-agnostic MSP skills including terminology and ticket triage",
+      "version": "1.0.0",
+      "category": "knowledge",
+      "tags": ["msp", "terminology", "triage", "shared"]
+    }
   ]
 }
