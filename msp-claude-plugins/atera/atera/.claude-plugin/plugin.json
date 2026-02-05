@@ -1,23 +1,9 @@
 {
-  "name": "atera-plugin",
+  "name": "atera",
   "version": "0.1.0",
-  "description": "Claude plugins for Atera RMM/PSA - tickets, agents, customers, alerts, devices",
+  "description": "Claude Code plugin for Atera RMM/PSA - tickets, agents, customers, alerts",
   "author": "MSP Claude Plugins Community",
-  "vendor": "atera",
-  "product": "atera",
-  "api_version": "v3",
-  "requires_api_key": true,
-  "documentation_url": "https://app.atera.com/apidocs/",
-  "skills": [
-    "tickets",
-    "agents",
-    "customers",
-    "alerts",
-    "devices",
-    "api-patterns"
-  ],
-  "commands": [
-    "create-ticket",
-    "search-agents"
-  ]
+  "homepage": "https://github.com/asachs01/msp-claude-plugins",
+  "repository": "https://github.com/asachs01/msp-claude-plugins",
+  "license": "Apache-2.0"
 }

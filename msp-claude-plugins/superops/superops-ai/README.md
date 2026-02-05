@@ -12,31 +12,18 @@ This plugin provides Claude with deep knowledge of SuperOps.ai, enabling:
 - **Alert Handling** - Monitor, acknowledge, and resolve alerts
 - **Runbook Execution** - Execute automation scripts on assets
 
-## Prerequisites
-
-### API Credentials
-
-You need a SuperOps.ai API token with the following:
-
-- API Token (generated from profile settings)
-- Customer Subdomain
-- Region (US or EU)
-
-### Environment Variables
-
-Set the following environment variables:
-
-```bash
-export SUPEROPS_API_KEY="your-api-token"
-export SUPEROPS_SUBDOMAIN="your-subdomain"
-export SUPEROPS_REGION="us"  # or "eu"
-```
-
 ## Installation
 
-1. Clone this plugin to your Claude plugins directory
-2. Configure environment variables
-3. The MCP server will be automatically started when needed
+```bash
+# Clone the repository
+git clone https://github.com/asachs01/msp-claude-plugins.git
+
+# Navigate to plugin
+cd msp-claude-plugins/superops/superops-ai
+
+# Use with Claude Code
+claude --plugin .
+```
 
 ## Available Skills
 
@@ -56,25 +43,13 @@ export SUPEROPS_REGION="us"  # or "eu"
 | `/create-ticket` | Create a new service ticket |
 | `/list-assets` | List and filter assets |
 
-## API Endpoints
+## API Reference
 
-SuperOps.ai provides region-specific endpoints:
-
-**MSP Platform:**
-- US: `https://api.superops.ai/msp`
-- EU: `https://euapi.superops.ai/msp`
-
-**IT Platform:**
-- US: `https://api.superops.ai/it`
-- EU: `https://euapi.superops.ai/it`
-
-## API Documentation
-
-- [SuperOps.ai API Documentation](https://developer.superops.ai/)
-- [SuperOps.ai Help Center](https://support.superops.com/en/collections/3666305-api-documentation)
+- **Base URL**: `https://api.superops.ai/graphql` (US) or `https://euapi.superops.ai/graphql` (EU)
+- **Auth**: Bearer token + `CustomerSubDomain` header
+- **Rate Limit**: 800 requests per minute
+- **Docs**: [SuperOps.ai API Documentation](https://developer.superops.ai/)
 
 ## Contributing
 
 See the main [CONTRIBUTING.md](../../CONTRIBUTING.md) for guidelines.
-
-All contributions require a PRD in the `prd/` directory before implementation.

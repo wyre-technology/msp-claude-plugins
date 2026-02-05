@@ -12,43 +12,18 @@ This plugin provides Claude with deep knowledge of HaloPSA, enabling:
 - **Contract Management** - Service agreements, billing, and recurring items
 - **API Patterns** - OAuth 2.0 Client Credentials flow, pagination, rate limiting
 
-## Prerequisites
-
-### API Application Setup
-
-You need to create an API application in HaloPSA:
-
-1. Navigate to **Configuration > Integrations > HaloPSA API > View Applications**
-2. Create a new application with **Client ID and Secret (Services)** authentication
-3. Enable required permissions on the **Permissions** tab (recommend "all" for full access)
-4. Note the **Client ID** and **Client Secret**
-
-### Server URLs
-
-Find these in **Configuration > Integrations > HaloPSA API > API Details**:
-
-- **Resource Server URL**: `https://yourcompany.halopsa.com/api`
-- **Authorization Server URL**: `https://yourcompany.halopsa.com/auth`
-- **Tenant**: Your tenant name (for cloud-hosted instances)
-
-### Environment Variables
-
-Set the following environment variables:
-
-```bash
-export HALOPSA_CLIENT_ID="your-client-id"
-export HALOPSA_CLIENT_SECRET="your-client-secret"
-export HALOPSA_BASE_URL="https://yourcompany.halopsa.com"
-export HALOPSA_TENANT="yourcompany"
-```
-
-**Note:** For self-hosted HaloPSA instances, the tenant may be left blank.
-
 ## Installation
 
-1. Clone this plugin to your Claude plugins directory
-2. Configure environment variables
-3. The MCP server will be automatically started when needed
+```bash
+# Clone the repository
+git clone https://github.com/asachs01/msp-claude-plugins.git
+
+# Navigate to plugin
+cd msp-claude-plugins/halopsa/halopsa
+
+# Use with Claude Code
+claude --plugin .
+```
 
 ## Available Skills
 
@@ -67,29 +42,13 @@ export HALOPSA_TENANT="yourcompany"
 | `/create-ticket` | Create a new service ticket |
 | `/search-tickets` | Search for tickets by criteria |
 
-## Authentication
+## API Reference
 
-HaloPSA uses **OAuth 2.0 Client Credentials** flow for API authentication:
-
-```bash
-# Token request
-curl -X POST "https://yourcompany.halopsa.com/auth/token?tenant=yourcompany" \
-  -H "Content-Type: application/x-www-form-urlencoded" \
-  -d "grant_type=client_credentials" \
-  -d "client_id=YOUR_CLIENT_ID" \
-  -d "client_secret=YOUR_CLIENT_SECRET" \
-  -d "scope=all"
-```
-
-The access token is then used in the `Authorization: Bearer <token>` header for all API requests.
-
-## API Documentation
-
-- [HaloPSA API Documentation](https://halopsa.com/apidoc/)
-- [HaloPSA Guides](https://halopsa.com/guides/)
+- **Base URL**: `https://{tenant}.halopsa.com/api`
+- **Auth**: OAuth 2.0 Client Credentials
+- **Rate Limit**: 500 requests per 3 minutes
+- **Docs**: [HaloPSA API Documentation](https://halopsa.com/apidocs/)
 
 ## Contributing
 
 See the main [CONTRIBUTING.md](../../CONTRIBUTING.md) for guidelines.
-
-All contributions require a PRD in the `prd/` directory before implementation.

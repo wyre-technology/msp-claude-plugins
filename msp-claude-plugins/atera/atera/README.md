@@ -12,29 +12,18 @@ This plugin provides Claude with deep knowledge of Atera RMM/PSA, enabling:
 - **Alert Management** - View, acknowledge, and resolve alerts
 - **Device Monitoring** - HTTP, SNMP, and TCP device monitors
 
-## Prerequisites
-
-### API Credentials
-
-You need an Atera API key from your Atera account:
-
-1. Log into Atera
-2. Navigate to Admin > API
-3. Generate or copy your API key
-
-### Environment Variables
-
-Set the following environment variable:
-
-```bash
-export ATERA_API_KEY="your-api-key-here"
-```
-
 ## Installation
 
-1. Clone this plugin to your Claude plugins directory
-2. Configure the environment variable
-3. The MCP server will be automatically started when needed
+```bash
+# Clone the repository
+git clone https://github.com/asachs01/msp-claude-plugins.git
+
+# Navigate to plugin
+cd msp-claude-plugins/atera/atera
+
+# Use with Claude Code
+claude --plugin .
+```
 
 ## Available Skills
 
@@ -54,17 +43,13 @@ export ATERA_API_KEY="your-api-key-here"
 | `/create-ticket` | Create a new service ticket |
 | `/search-agents` | Search for agents by customer or machine name |
 
-## Rate Limits
+## API Reference
 
-Atera enforces a rate limit of **700 requests per minute**. The MCP server includes automatic throttling to stay within limits.
-
-## API Documentation
-
-- [Atera API Documentation](https://app.atera.com/apidocs/)
-- [Atera Support - APIs](https://support.atera.com/hc/en-us/articles/219083397-APIs)
+- **Base URL**: `https://app.atera.com/api/v3`
+- **Auth**: `X-API-KEY` header
+- **Rate Limit**: 700 requests per minute
+- **Docs**: [Atera API Documentation](https://app.atera.com/apidocs/)
 
 ## Contributing
 
 See the main [CONTRIBUTING.md](../../CONTRIBUTING.md) for guidelines.
-
-All contributions require a PRD in the `prd/` directory before implementation.

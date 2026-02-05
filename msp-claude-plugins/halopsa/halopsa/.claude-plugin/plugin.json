@@ -1,23 +1,9 @@
 {
   "name": "halopsa",
   "version": "0.1.0",
-  "description": "Claude plugins for HaloPSA - tickets, clients, assets, contracts",
+  "description": "Claude Code plugin for HaloPSA - tickets, clients, assets, contracts",
   "author": "MSP Claude Plugins Community",
-  "vendor": "halopsa",
-  "product": "halopsa",
-  "api_version": "v1",
-  "requires_api_key": true,
-  "auth_type": "oauth2_client_credentials",
-  "documentation_url": "https://halopsa.com/apidoc/",
-  "skills": [
-    "tickets",
-    "clients",
-    "assets",
-    "contracts",
-    "api-patterns"
-  ],
-  "commands": [
-    "create-ticket",
-    "search-tickets"
-  ]
+  "homepage": "https://github.com/asachs01/msp-claude-plugins",
+  "repository": "https://github.com/asachs01/msp-claude-plugins",
+  "license": "Apache-2.0"
 }
