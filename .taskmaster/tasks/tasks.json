@@ -483,60 +483,60 @@
         ]
       },
       {
-        "id": 49,
-        "title": "Deploy MCP Gateway to AWS ECS",
-        "description": "Deploy the MCP Gateway to AWS ECS using the existing Terraform configuration from the MCP Gateway Registry.",
-        "details": "1. Set up AWS account and configure credentials\n2. Review and customize the existing Terraform configuration\n3. Configure domain and SSL certificates for mcp.wyre.ai\n4. Set up AWS ECS cluster\n5. Configure load balancer and auto-scaling\n6. Set up database (PostgreSQL or MongoDB) for session storage\n7. Configure Redis for caching and rate limiting\n8. Implement monitoring and alerting\n9. Set up CI/CD pipeline for automated deployment\n10. Document deployment process and infrastructure",
-        "testStrategy": "Infrastructure testing with Terraform validation. Load testing for auto-scaling. Failover testing for high availability. Security testing for AWS configuration. End-to-end testing of deployed gateway.",
-        "priority": "medium",
+        "id": "49",
+        "title": "Deploy MCP Gateway to Azure Container Apps",
+        "description": "Deploy the MCP Gateway to Azure Container Apps using the existing Terraform configuration from the MCP Gateway Registry.",
+        "status": "pending",
         "dependencies": [
           43,
           47,
           48
         ],
-        "status": "pending",
+        "priority": "medium",
+        "details": "1. Set up Azure account and configure credentials\n2. Review and customize the existing Terraform/Bicep configuration\n3. Configure domain and SSL certificates for mcp.wyre.ai\n4. Set up Azure Container Apps environment\n5. Configure load balancer and auto-scaling\n6. Set up Azure Database for PostgreSQL for session storage\n7. Configure Azure Cache for Redis for caching and rate limiting\n8. Implement monitoring and alerting\n9. Set up CI/CD pipeline for automated deployment\n10. Document deployment process and infrastructure",
+        "testStrategy": "Infrastructure testing with Terraform/Bicep validation. Load testing for auto-scaling. Failover testing for high availability. Security testing for Azure configuration. End-to-end testing of deployed gateway.",
         "subtasks": [
           {
             "id": 1,
-            "title": "Set up AWS infrastructure with Terraform",
-            "description": "Configure AWS account credentials and initialize the Terraform environment using the existing configuration from MCP Gateway Registry.",
+            "title": "Set up Azure infrastructure with Terraform/Bicep",
+            "description": "Configure Azure account credentials and initialize the Terraform/Bicep environment using the existing configuration from MCP Gateway Registry.",
             "dependencies": [],
-            "details": "Set up AWS CLI with proper credentials, clone the Terraform configuration from MCP Gateway Registry, initialize Terraform workspace, and customize variables for our deployment. Ensure AWS permissions are properly configured for ECS deployment.",
+            "details": "Set up Azure CLI with proper credentials, clone the Terraform/Bicep configuration from MCP Gateway Registry, initialize Terraform workspace or Bicep modules, and customize variables for our deployment. Ensure Azure permissions are properly configured for Container Apps deployment.",
             "status": "pending",
-            "testStrategy": "Validate Terraform configuration using 'terraform validate' and 'terraform plan' to ensure no errors before deployment."
+            "testStrategy": "Validate Terraform configuration using 'terraform validate' and 'terraform plan' or Bicep using 'az deployment what-if' to ensure no errors before deployment."
           },
           {
             "id": 2,
             "title": "Configure networking and security components",
-            "description": "Set up VPC, subnets, security groups, and configure domain with SSL certificates for mcp.wyre.ai.",
+            "description": "Set up Virtual Network, subnets, network security groups, and configure domain with SSL certificates for mcp.wyre.ai.",
             "dependencies": [
               1
             ],
-            "details": "Create or update VPC configuration, configure public and private subnets, set up security groups with proper ingress/egress rules, register domain in Route53, request SSL certificate through ACM, and validate domain ownership for the certificate.",
+            "details": "Create or update Virtual Network configuration, configure subnets, set up network security groups with proper inbound/outbound rules, register domain in Azure DNS, request SSL certificate through Azure App Service certificates or import existing certificates, and validate domain ownership for the certificate.",
             "status": "pending",
-            "testStrategy": "Verify DNS resolution, SSL certificate validity, and security group configurations through AWS console and CLI tools."
+            "testStrategy": "Verify DNS resolution, SSL certificate validity, and network security group configurations through Azure portal and CLI tools."
           },
           {
             "id": 3,
-            "title": "Deploy ECS cluster with load balancing",
-            "description": "Create ECS cluster, task definitions, services, and configure load balancer with auto-scaling capabilities.",
+            "title": "Deploy Azure Container Apps with load balancing",
+            "description": "Create Azure Container Apps environment, container app definitions, and configure load balancing with auto-scaling capabilities.",
             "dependencies": [
               2
             ],
-            "details": "Define ECS task definitions based on MCP Gateway container requirements, create ECS service with desired count, configure Application Load Balancer with target groups, set up auto-scaling policies based on CPU/memory utilization, and ensure proper health checks are in place.",
+            "details": "Define Container Apps based on MCP Gateway container requirements, create Container Apps environment with desired replicas, configure Application Gateway or Azure Front Door for load balancing, set up auto-scaling policies based on CPU/memory utilization, and ensure proper health checks are in place.",
             "status": "pending",
             "testStrategy": "Test load balancer functionality, verify auto-scaling triggers under load, and confirm container health checks are functioning correctly."
           },
           {
             "id": 4,
-            "title": "Set up supporting services (PostgreSQL and Redis)",
-            "description": "Deploy and configure PostgreSQL for session storage and Redis for caching and rate limiting.",
+            "title": "Set up supporting services (Azure Database for PostgreSQL and Azure Cache for Redis)",
+            "description": "Deploy and configure Azure Database for PostgreSQL for session storage and Azure Cache for Redis for caching and rate limiting.",
             "dependencies": [
               2
             ],
-            "details": "Create RDS PostgreSQL instance or use Amazon Aurora, configure security groups for database access, set up Redis using ElastiCache, configure backup policies, implement encryption at rest, and integrate connection strings with MCP Gateway configuration.",
+            "details": "Create Azure Database for PostgreSQL instance, configure firewall rules for database access, set up Azure Cache for Redis, configure backup policies, implement encryption at rest, and integrate connection strings with MCP Gateway configuration.",
             "status": "pending",
-            "testStrategy": "Verify database connectivity from ECS tasks, test Redis caching functionality, and validate data persistence across container restarts."
+            "testStrategy": "Verify database connectivity from Container Apps, test Redis caching functionality, and validate data persistence across container restarts."
           },
           {
             "id": 5,
@@ -546,7 +546,7 @@
               3,
               4
             ],
-            "details": "Create GitHub Actions or AWS CodePipeline workflow for automated builds and deployments, configure CloudWatch for logs and metrics collection, set up alarms for critical metrics, implement X-Ray for distributed tracing, and document the entire deployment process and infrastructure for future reference.",
+            "details": "Create GitHub Actions or Azure DevOps pipeline workflow for automated builds and deployments to Azure Container Registry and Container Apps, configure Azure Monitor for logs and metrics collection, set up alerts for critical metrics, implement Application Insights for distributed tracing, and document the entire deployment process and infrastructure for future reference.",
             "status": "pending",
             "testStrategy": "Verify CI/CD pipeline by making test commits, validate monitoring dashboards show appropriate metrics, and test alerting by triggering threshold violations."
           }

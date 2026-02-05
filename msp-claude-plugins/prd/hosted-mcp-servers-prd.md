@@ -1,6 +1,6 @@
 # Hosted MCP Servers PRD
 
-> Version: 1.4.0
+> Version: 1.5.0
 > Created: 2026-02-05
 > Updated: 2026-02-05
 > Status: Draft - Awaiting Review
@@ -193,7 +193,7 @@ github.com/wyre-mcp/
 │   ├── Python/FastAPI gateway
 │   ├── OAuth 2.1 + PKCE
 │   ├── Credential store
-│   └── Terraform for AWS ECS
+│   └── Terraform for Azure Container Apps
 │
 ├── autotask-mcp/             # TypeScript MCP server
 │   ├── Uses autotask-node
@@ -286,7 +286,7 @@ Each MCP server repository should include:
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│                    AWS ECS / Docker Compose                      │
+│                  Azure Container Apps / Docker Compose           │
 │                    https://mcp.wyre.ai                           │
 └─────────────────────────────────────────────────────────────────┘
 ```
@@ -336,7 +336,7 @@ After deeper evaluation, **[MCP Gateway Registry](https://github.com/agentic-com
 4. **Token refresh service exists** - Background refresher with configurable expiry buffer
 5. **Secure file storage** - `.oauth-tokens/` with proper permissions
 6. **700+ tests** - Solid test coverage
-7. **AWS ECS Terraform ready** - Deploy to production quickly
+7. **Infrastructure as Code ready** - Terraform/Bicep adaptable for Azure
 8. **Keycloak/Entra integration** - Enterprise SSO if needed later
 
 **What's already built:**
@@ -520,7 +520,7 @@ Priority order based on:
 | **MCP Servers** | Node.js/TypeScript | Use our existing node-* libraries |
 | Auth Layer | OAuth 2.1 + PKCE | MCP spec compliant (June 2025), already in Gateway Registry |
 | Credential Store | File-based (encrypted) or Vault | Gateway Registry uses `.oauth-tokens/` with 0600 perms |
-| Hosting | **Option A**: AWS ECS Fargate | Terraform included in Gateway Registry |
+| Hosting | **Option A**: Azure Container Apps | Matches existing Wyre Azure footprint |
 | | **Option B**: Fly.io or Railway | Simpler deployment, lower ops burden |
 | | **Option C**: Docker Compose | Development and small deployments |
 | Database | PostgreSQL or MongoDB | Sessions, audit logs (Gateway Registry supports both) |
@@ -737,7 +737,7 @@ Headers:
 - [ ] Configure org settings (member permissions, required reviews)
 - [ ] Create org-level issue/PR templates
 - [ ] Set up GitHub Container Registry (ghcr.io/wyre-mcp)
-- [ ] Create org secrets for CI/CD (AWS credentials, registry tokens)
+- [ ] Create org secrets for CI/CD (Azure credentials, registry tokens)
 - [ ] Fork `agentic-community/mcp-gateway-registry` → `wyre-mcp/mcp-gateway`
 
 ### Phase 0b: Fork & Customize MCP Gateway (Week 1-2)
@@ -747,7 +747,7 @@ Headers:
 - [ ] Add MSP-specific vendor configs to `oauth_providers.yaml` equivalent
 - [ ] Create vendor credential entry UI (FastAPI routes + Jinja2 templates)
 - [ ] Customize branding/domain for `mcp.wyre.ai`
-- [ ] Deploy to AWS ECS using existing Terraform (or Fly.io for simpler ops)
+- [ ] Deploy to Azure Container Apps using Terraform/Bicep
 - [ ] Validate ingress auth works with Keycloak or custom OAuth
 
 ### Phase 1: Datto RMM MCP Server (Week 3)
@@ -808,7 +808,7 @@ Headers:
 3. **Self-hosting option**: Provide Docker images for on-prem deployment?
 4. **Local fallback**: Keep local MCP server option for air-gapped environments?
 5. **Multi-tenant**: Support MSP managing multiple client credentials?
-6. ~~**Hosting provider**: AWS (Lambda + API Gateway) vs Fly.io vs Railway vs Kubernetes?~~ → **Resolved: AWS ECS (Terraform included in MCP Gateway Registry) or Fly.io for simpler ops**
+6. ~~**Hosting provider**: AWS (Lambda + API Gateway) vs Fly.io vs Railway vs Kubernetes?~~ → **Resolved: Azure Container Apps (matches existing Wyre footprint)**
 7. ~~**Gateway vs Individual Servers**~~ → **Resolved: Unified gateway using MCP Gateway Registry as foundation**
 8. **Fork strategy**: Fork entire repo or extract just credentials-provider?
 9. ~~**GitHub Organization**~~ → **Resolved: `wyre-mcp` org with separate repos per MCP server**
@@ -844,7 +844,7 @@ Headers:
 ## References
 
 ### Recommended Foundation
-- **[MCP Gateway Registry](https://github.com/agentic-community/mcp-gateway-registry)** - Apache-2.0, Python/FastAPI, 700+ tests, AWS ECS ready (RECOMMENDED)
+- **[MCP Gateway Registry](https://github.com/agentic-community/mcp-gateway-registry)** - Apache-2.0, Python/FastAPI, 700+ tests (RECOMMENDED)
 - [Awesome MCP Gateways](https://github.com/e2b-dev/awesome-mcp-gateways) - Comprehensive list of gateway solutions
 
 ### MCP Protocol & SDK
