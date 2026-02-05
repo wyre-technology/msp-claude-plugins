@@ -13,3 +13,12 @@ To enable GitHub Pages with workflow-based builds: `gh api repos/OWNER/REPO/page
 
 ### Parallel File Creator Agents for Documentation
 When creating many documentation files (e.g., 20+ pages for a docs site), use multiple Task agents with `subagent_type=file-creator` in parallel, grouping files by logical section (getting-started, reference, commands, etc.) for efficient generation.
+
+### Claude Code Marketplace Manifest Structure
+The marketplace requires `.claude-plugin/marketplace.json` with `$schema`, `name`, `owner`, and `plugins` array. Each plugin entry needs `name`, `source` (relative path like `./kaseya/autotask`), and `description`. Users install via `/plugin marketplace add owner/repo`.
+
+### Starlight Valid Icon Names
+Starlight uses a specific icon set. Use `seti:folder` for folder icons (not `folder`). Common valid icons: `open-book`, `rocket`, `setting`, `add-document`, `github`. Invalid icons render as colored squares.
+
+### GitHub Actions Workflow Location for Monorepos
+When the git repo root differs from the docs directory (e.g., repo at `/mspMarketPlace/` but docs at `/mspMarketPlace/msp-claude-plugins/docs/`), the `.github/workflows/` must be at the repo root, and workflow paths must reference the full path (e.g., `msp-claude-plugins/docs/`).
