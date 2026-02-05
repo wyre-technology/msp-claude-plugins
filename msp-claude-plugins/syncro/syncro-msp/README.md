@@ -11,6 +11,63 @@ This plugin provides Claude with domain knowledge of Syncro MSP, enabling:
 - **Asset Management** - Asset tracking and RMM integration
 - **Invoice Management** - Invoice generation, payments, and billing
 
+## Configuration
+
+### Claude Code Settings (Recommended)
+
+Add your credentials to `~/.claude/settings.json` (user scope, encrypted on macOS):
+
+```json
+{
+  "env": {
+    "SYNCRO_SUBDOMAIN": "acmemsp",
+    "SYNCRO_API_KEY": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+  }
+}
+```
+
+For project-specific configuration, use `.claude/settings.local.json` (gitignored):
+
+```json
+{
+  "env": {
+    "SYNCRO_SUBDOMAIN": "acmemsp",
+    "SYNCRO_API_KEY": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+  }
+}
+```
+
+### Environment Variables Reference
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `SYNCRO_SUBDOMAIN` | Yes | Your Syncro subdomain (from `https://{subdomain}.syncromsp.com`) |
+| `SYNCRO_API_KEY` | Yes | API key from Admin > API Tokens |
+
+### Obtaining API Credentials
+
+1. **Log into Syncro**
+   - Navigate to your Syncro instance at `https://your-subdomain.syncromsp.com`
+
+2. **Generate an API Token**
+   - Go to **Admin > API Tokens**
+   - Click **Create Token**
+   - Give your token a descriptive name (e.g., "Claude Code Integration")
+   - Copy the generated API key (it will only be shown once)
+
+3. **Find Your Subdomain**
+   - Your subdomain is the first part of your Syncro URL
+   - Example: If your URL is `https://acmemsp.syncromsp.com`, your subdomain is `acmemsp`
+
+### Testing Your Connection
+
+Once configured in Claude Code settings, test the connection:
+
+```bash
+# Test connection (env vars injected by Claude Code)
+curl -s "https://${SYNCRO_SUBDOMAIN}.syncromsp.com/api/v1/me?api_key=${SYNCRO_API_KEY}" | jq
+```
+
 ## Installation
 
 ```bash

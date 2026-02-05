@@ -1,0 +1,189 @@
+# MSP Claude Plugins
+
+Community-driven Claude Code plugins for Managed Service Providers.
+
+## Quick Start
+
+```bash
+/plugin marketplace add asachs01/msp-claude-plugins
+```
+
+## Available Plugins
+
+| Plugin | Vendor | Category | Status | Description |
+|--------|--------|----------|--------|-------------|
+| `autotask` | Kaseya | PSA | ✅ Validated | Tickets, CRM, projects, contracts |
+| `datto-rmm` | Kaseya | RMM | ✅ Validated | Devices, alerts, jobs, patches |
+| `it-glue` | Kaseya | Documentation | ✅ Validated | Organizations, assets, passwords, documents |
+| `syncro` | Syncro | PSA/RMM | 🧪 Community | Tickets, customers, assets, invoicing |
+| `atera` | Atera | PSA/RMM | 🧪 Community | Tickets, agents, alerts, monitors |
+| `superops` | SuperOps | PSA/RMM | 🧪 Community | Tickets, assets, alerts, runbooks (GraphQL) |
+| `halopsa` | Halo | PSA | 🧪 Community | Tickets, clients, assets, contracts (OAuth 2.0) |
+| `connectwise-psa` | ConnectWise | PSA | 🧪 Community | Tickets, companies, projects, time |
+| `connectwise-automate` | ConnectWise | RMM | 🧪 Community | Computers, scripts, monitors |
+| `shared-skills` | — | Knowledge | ✅ Validated | Vendor-agnostic MSP terminology and ticket triage |
+
+**✅ Validated** - Tested against production APIs. **🧪 Community** - Follows validated patterns, may need adjustments for your environment.
+
+## Commands (71 total)
+
+### Autotask (14 commands)
+
+| Command | Description |
+|---------|-------------|
+| `/create-ticket` | Create a new service ticket |
+| `/search-tickets` | Search for tickets by criteria |
+| `/update-ticket` | Update ticket fields |
+| `/my-tickets` | List your assigned tickets |
+| `/add-note` | Add a note to a ticket |
+| `/time-entry` | Log time against a ticket or project |
+| `/lookup-company` | Find company by name or ID |
+| `/lookup-contact` | Find contact by name or email |
+| `/lookup-asset` | Find configuration item |
+| `/check-contract` | Check contract status and billing |
+| `/reassign-ticket` | Reassign ticket to another resource |
+
+### Syncro (10 commands)
+
+| Command | Description |
+|---------|-------------|
+| `/create-ticket` | Create a new service ticket |
+| `/search-tickets` | Search for tickets by criteria |
+| `/update-ticket` | Update ticket status or fields |
+| `/add-ticket-comment` | Add comment to a ticket |
+| `/log-time` | Log time entry on a ticket |
+| `/get-customer` | Get customer details |
+| `/list-alerts` | List active RMM alerts |
+| `/resolve-alert` | Resolve an alert |
+| `/search-assets` | Search for assets |
+| `/create-appointment` | Create calendar appointment |
+
+### HaloPSA (10 commands)
+
+| Command | Description |
+|---------|-------------|
+| `/create-ticket` | Create a new service ticket |
+| `/search-tickets` | Search for tickets by criteria |
+| `/update-ticket` | Update ticket fields |
+| `/show-ticket` | Get detailed ticket information |
+| `/add-action` | Add an action to a ticket |
+| `/sla-dashboard` | View SLA status dashboard |
+| `/search-clients` | Search for clients |
+| `/search-assets` | Search for assets |
+| `/kb-search` | Search knowledge base |
+| `/contract-status` | Check contract status |
+
+### Atera (10 commands)
+
+| Command | Description |
+|---------|-------------|
+| `/create-ticket` | Create a new service ticket |
+| `/search-agents` | Search for agents |
+| `/update-ticket` | Update ticket fields |
+| `/list-alerts` | List active alerts |
+| `/resolve-alert` | Resolve an alert |
+| `/run-powershell` | Run PowerShell script on agent |
+| `/search-customers` | Search for customers |
+| `/create-monitor` | Create HTTP/SNMP/TCP monitor |
+| `/get-kb-articles` | Search knowledge base |
+| `/log-time` | Log time entry |
+
+### SuperOps (10 commands)
+
+| Command | Description |
+|---------|-------------|
+| `/create-ticket` | Create a new service ticket |
+| `/list-assets` | List and filter assets |
+| `/update-ticket` | Update ticket fields |
+| `/add-ticket-note` | Add note to a ticket |
+| `/log-time` | Log time entry |
+| `/list-alerts` | List active alerts |
+| `/acknowledge-alert` | Acknowledge an alert |
+| `/resolve-alert` | Resolve an alert |
+| `/run-script` | Run script on asset |
+| `/get-asset` | Get asset details |
+
+### ConnectWise PSA (10 commands)
+
+| Command | Description |
+|---------|-------------|
+| `/create-ticket` | Create a new service ticket |
+| `/search-tickets` | Search tickets with conditions |
+| `/get-ticket` | Get ticket details |
+| `/update-ticket` | Update ticket fields |
+| `/add-note` | Add note to a ticket |
+| `/close-ticket` | Close a ticket |
+| `/log-time` | Log time entry |
+| `/lookup-config` | Look up configuration item |
+| `/check-agreement` | Check agreement status |
+| `/schedule-entry` | Create schedule entry |
+
+### ConnectWise Automate (2 commands)
+
+| Command | Description |
+|---------|-------------|
+| `/list-computers` | List computers by client |
+| `/run-script` | Run script on computer |
+
+### Datto RMM (4 commands)
+
+| Command | Description |
+|---------|-------------|
+| `/device-lookup` | Look up device by name or ID |
+| `/resolve-alert` | Resolve an alert |
+| `/run-job` | Run a job on device |
+| `/site-devices` | List devices at a site |
+
+### IT Glue (4 commands)
+
+| Command | Description |
+|---------|-------------|
+| `/lookup-asset` | Look up configuration asset |
+| `/search-docs` | Search documents |
+| `/get-password` | Retrieve password (requires access) |
+| `/find-organization` | Find organization by name |
+
+## Skills (57 total)
+
+Skills provide domain knowledge without requiring API calls. They help Claude understand vendor-specific concepts, best practices, and terminology.
+
+| Vendor | Skills |
+|--------|--------|
+| Autotask | tickets, crm, projects, contracts, time-entries, configuration-items, api-patterns |
+| Syncro | tickets, customers, assets, invoices, api-patterns |
+| HaloPSA | tickets, clients, assets, contracts, api-patterns |
+| Atera | tickets, agents, customers, alerts, devices, api-patterns |
+| SuperOps | tickets, assets, clients, alerts, runbooks, api-patterns |
+| ConnectWise PSA | tickets, companies, contacts, projects, time-entries, api-patterns |
+| ConnectWise Automate | computers, clients, scripts, monitors, alerts, api-patterns |
+| Datto RMM | devices, alerts, sites, jobs, audit, variables, api-patterns |
+| IT Glue | organizations, configurations, contacts, passwords, documents, flexible-assets, api-patterns |
+| Shared | msp-terminology, ticket-triage |
+
+## Configuration
+
+Each plugin requires API credentials. See the individual plugin READMEs for configuration:
+
+| Plugin | Configuration Guide |
+|--------|---------------------|
+| Autotask | [kaseya/autotask/README.md](./kaseya/autotask/README.md#configuration) |
+| Syncro | [syncro/syncro-msp/README.md](./syncro/syncro-msp/README.md#configuration) |
+| HaloPSA | [halopsa/halopsa/README.md](./halopsa/halopsa/README.md#configuration) |
+| Atera | [atera/atera/README.md](./atera/atera/README.md#configuration) |
+| SuperOps | [superops/superops-ai/README.md](./superops/superops-ai/README.md#configuration) |
+| ConnectWise PSA | [connectwise/manage/README.md](./connectwise/manage/README.md#configuration) |
+| ConnectWise Automate | [connectwise/automate/README.md](./connectwise/automate/README.md) |
+| Datto RMM | [kaseya/datto-rmm/README.md](./kaseya/datto-rmm/README.md) |
+| IT Glue | [kaseya/it-glue/README.md](./kaseya/it-glue/README.md) |
+
+## Documentation
+
+Full documentation: [https://asachs01.github.io/msp-claude-plugins/](https://asachs01.github.io/msp-claude-plugins/)
+
+## Contributing
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
+
+## License
+
+MIT License - see [LICENSE](./LICENSE) for details.

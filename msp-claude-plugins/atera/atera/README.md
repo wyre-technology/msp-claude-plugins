@@ -12,6 +12,61 @@ This plugin provides Claude with deep knowledge of Atera RMM/PSA, enabling:
 - **Alert Management** - View, acknowledge, and resolve alerts
 - **Device Monitoring** - HTTP, SNMP, and TCP device monitors
 
+## Configuration
+
+### Claude Code Settings (Recommended)
+
+Add your credentials to `~/.claude/settings.json` (user scope, encrypted on macOS):
+
+```json
+{
+  "env": {
+    "ATERA_API_KEY": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  }
+}
+```
+
+For project-specific configuration, use `.claude/settings.local.json` (gitignored):
+
+```json
+{
+  "env": {
+    "ATERA_API_KEY": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  }
+}
+```
+
+### Environment Variables Reference
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `ATERA_API_KEY` | Yes | API key from Admin > API |
+
+### Obtaining API Credentials
+
+1. **Log into Atera**
+   - Navigate to [https://app.atera.com](https://app.atera.com)
+
+2. **Generate an API Key**
+   - Go to **Admin > API**
+   - Click **Generate API Key**
+   - Copy the generated key (it will only be shown once)
+
+3. **API Key Permissions**
+   - The API key inherits the permissions of the user who created it
+   - Ensure your user has appropriate permissions for the operations you need
+
+### Testing Your Connection
+
+Once configured in Claude Code settings, test the connection (env vars injected by Claude Code):
+
+```bash
+# Test connection
+curl -s "https://app.atera.com/api/v3/customers" \
+  -H "X-API-KEY: ${ATERA_API_KEY}" \
+  -H "Accept: application/json" | jq
+```
+
 ## Installation
 
 ```bash

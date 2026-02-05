@@ -12,6 +12,101 @@ This plugin provides Claude with deep knowledge of HaloPSA, enabling:
 - **Contract Management** - Service agreements, billing, and recurring items
 - **API Patterns** - OAuth 2.0 Client Credentials flow, pagination, rate limiting
 
+## Configuration
+
+### Claude Code Settings (Recommended)
+
+Add your credentials to `~/.claude/settings.json` (user scope, encrypted on macOS):
+
+```json
+{
+  "env": {
+    "HALOPSA_TENANT": "acmemsp",
+    "HALOPSA_CLIENT_ID": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+    "HALOPSA_CLIENT_SECRET": "your-client-secret"
+  }
+}
+```
+
+For project-specific configuration, use `.claude/settings.local.json` (gitignored):
+
+```json
+{
+  "env": {
+    "HALOPSA_TENANT": "acmemsp",
+    "HALOPSA_CLIENT_ID": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+    "HALOPSA_CLIENT_SECRET": "your-client-secret"
+  }
+}
+```
+
+### Environment Variables Reference
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `HALOPSA_TENANT` | Yes | Your HaloPSA tenant name (from `https://{tenant}.halopsa.com`) |
+| `HALOPSA_CLIENT_ID` | Yes | OAuth 2.0 Client ID |
+| `HALOPSA_CLIENT_SECRET` | Yes | OAuth 2.0 Client Secret |
+| `HALOPSA_AUTH_SERVER` | No | Auth server URL (defaults to `https://{tenant}.halopsa.com/auth`) |
+
+### Obtaining API Credentials
+
+1. **Log into HaloPSA**
+   - Navigate to your HaloPSA instance at `https://your-tenant.halopsa.com`
+
+2. **Create an API Application**
+   - Go to **Configuration > Integrations > HaloPSA API**
+   - Click **View Applications**
+   - Click **New** to create a new application
+   - Configure the application:
+     - **Name**: Claude Code Integration
+     - **Grant Type**: Client Credentials
+     - **Permissions**: Select the permissions your integration needs
+   - Save and note the **Client ID** and **Client Secret**
+
+3. **Find Your Tenant Name**
+   - Your tenant is the first part of your HaloPSA URL
+   - Example: If your URL is `https://acmemsp.halopsa.com`, your tenant is `acmemsp`
+
+### OAuth Token Retrieval
+
+HaloPSA uses OAuth 2.0 Client Credentials flow. Here's how to obtain a token:
+
+```bash
+# Get access token
+curl -X POST "https://${HALOPSA_TENANT}.halopsa.com/auth/token" \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "grant_type=client_credentials" \
+  -d "client_id=${HALOPSA_CLIENT_ID}" \
+  -d "client_secret=${HALOPSA_CLIENT_SECRET}" \
+  -d "scope=all"
+```
+
+**Response:**
+```json
+{
+  "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "token_type": "Bearer",
+  "expires_in": 3600
+}
+```
+
+### Testing Your Connection
+
+Once configured in Claude Code settings, test the connection (env vars injected by Claude Code):
+
+```bash
+# Get token
+TOKEN=$(curl -s -X POST "https://${HALOPSA_TENANT}.halopsa.com/auth/token" \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "grant_type=client_credentials&client_id=${HALOPSA_CLIENT_ID}&client_secret=${HALOPSA_CLIENT_SECRET}&scope=all" \
+  | jq -r '.access_token')
+
+# Test API call
+curl -s "https://${HALOPSA_TENANT}.halopsa.com/api/Tickets?count=1" \
+  -H "Authorization: Bearer ${TOKEN}" | jq
+```
+
 ## Installation
 
 ```bash

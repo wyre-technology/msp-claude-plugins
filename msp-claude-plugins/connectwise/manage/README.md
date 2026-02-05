@@ -12,34 +12,91 @@ This plugin provides Claude with deep knowledge of ConnectWise PSA, enabling:
 - **Project Management** - Project creation, phases, templates, and resource allocation
 - **Time Entry Tracking** - Log billable and non-billable time with work types
 
-## Prerequisites
+## Configuration
 
-### API Credentials
+### Claude Code Settings (Recommended)
 
-You need ConnectWise PSA API credentials:
+Add your credentials to `~/.claude/settings.json` (user scope, encrypted on macOS):
 
-- **Company ID** - Your ConnectWise company identifier (codebase)
-- **Public Key** - API member public key
-- **Private Key** - API member private key
-- **Client ID** - Registered application client ID
+```json
+{
+  "env": {
+    "CW_COMPANY_ID": "acmemsp",
+    "CW_PUBLIC_KEY": "xxxxxxxxxxxxxxxx",
+    "CW_PRIVATE_KEY": "xxxxxxxxxxxxxxxx",
+    "CW_CLIENT_ID": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+    "CW_API_URL": "api-na.myconnectwise.net"
+  }
+}
+```
 
-To obtain credentials:
-1. Log into ConnectWise PSA
-2. Navigate to System > Members > API Members
-3. Create or select an API member
-4. Generate public/private key pair
-5. Register your application to get a Client ID at the [ConnectWise Developer Portal](https://developer.connectwise.com/)
+For project-specific configuration, use `.claude/settings.local.json` (gitignored):
 
-### Environment Variables
+```json
+{
+  "env": {
+    "CW_COMPANY_ID": "acmemsp",
+    "CW_PUBLIC_KEY": "xxxxxxxxxxxxxxxx",
+    "CW_PRIVATE_KEY": "xxxxxxxxxxxxxxxx",
+    "CW_CLIENT_ID": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+    "CW_API_URL": "api-na.myconnectwise.net"
+  }
+}
+```
 
-Set the following environment variables:
+### Environment Variables Reference
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `CW_COMPANY_ID` | Yes | Your ConnectWise company identifier (codebase) |
+| `CW_PUBLIC_KEY` | Yes | API member public key |
+| `CW_PRIVATE_KEY` | Yes | API member private key |
+| `CW_CLIENT_ID` | Yes | Registered application client ID |
+| `CW_API_URL` | Yes | Regional API endpoint (e.g., `api-na.myconnectwise.net`) |
+
+### Obtaining API Credentials
+
+1. **Get Your Company ID**
+   - Your company ID (codebase) is visible in your ConnectWise URL
+   - Example: In `https://na.myconnectwise.net/v4_6_release/services/system_io/router/openrecord.rails?companyName=acmemsp`, the company ID is `acmemsp`
+
+2. **Create an API Member**
+   - Log into ConnectWise PSA as an administrator
+   - Navigate to **System > Members > API Members**
+   - Click **+** to create a new API member
+   - Fill in required fields (First Name, Last Name, Member ID)
+   - Set appropriate security role and permissions
+   - Save the member
+
+3. **Generate API Keys**
+   - Open the API member you just created
+   - Navigate to the **API Keys** tab
+   - Click **+** to generate a new key pair
+   - Copy the **Public Key** and **Private Key** (private key shown only once)
+
+4. **Register for Client ID**
+   - Go to [ConnectWise Developer Portal](https://developer.connectwise.com/)
+   - Create an account or log in
+   - Register a new application to get your **Client ID**
+
+5. **Determine Your API URL**
+   - **North America**: `api-na.myconnectwise.net`
+   - **Europe**: `api-eu.myconnectwise.net`
+   - **Australia**: `api-au.myconnectwise.net`
+
+### Testing Your Connection
+
+Once configured in Claude Code settings, test the connection (env vars injected by Claude Code):
 
 ```bash
-export CONNECTWISE_COMPANY_ID="your-company-id"
-export CONNECTWISE_PUBLIC_KEY="your-public-key"
-export CONNECTWISE_PRIVATE_KEY="your-private-key"
-export CONNECTWISE_CLIENT_ID="your-client-id"
-export CONNECTWISE_SITE="api-na.myconnectwise.net"  # or api-eu, api-au
+# Build authorization header (Base64 of company+publicKey:privateKey)
+AUTH=$(echo -n "${CW_COMPANY_ID}+${CW_PUBLIC_KEY}:${CW_PRIVATE_KEY}" | base64)
+
+# Test connection
+curl -s "https://${CW_API_URL}/v4_6_release/apis/3.0/system/info" \
+  -H "Authorization: Basic ${AUTH}" \
+  -H "clientId: ${CW_CLIENT_ID}" \
+  -H "Content-Type: application/json" | jq
 ```
 
 ## Installation

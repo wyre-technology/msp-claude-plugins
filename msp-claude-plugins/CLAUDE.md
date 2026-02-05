@@ -40,3 +40,11 @@ Custom Astro sites require manually building navigation, search (Pagefind), dark
 
 ### Marketplace.json Plugin Entries
 Each plugin needs `name` (for `--plugin` flag), `source` (relative path like `./kaseya/autotask`), `description`, `version`, `category`, and `tags`. The `source` path must start with `./`.
+
+## Learnings - 2026-02-05
+
+### Claude Code Plugin Authentication Pattern
+Plugins should use `~/.claude/settings.json` with an `env` section for credentials (encrypted in macOS Keychain), not raw shell env vars. Project-specific secrets go in `.claude/settings.local.json` (gitignored). MCP servers access credentials via `${VAR}` syntax in `.mcp.json`. Precedence: managed → CLI → local → project → user.
+
+### Validation Status Badges for Plugin Quality
+Use status badges (✅ Validated, 🧪 Community) rather than disclaimer paragraphs to set expectations. Brief footnote: "Validated = tested against production APIs. Community = follows patterns, may need adjustments." No hedging or apologies.
