@@ -1,0 +1,22 @@
+{
+  "name": "syncro-msp",
+  "version": "0.1.0",
+  "description": "Claude plugins for Syncro MSP - tickets, customers, assets, invoices, contracts",
+  "author": "MSP Claude Plugins Community",
+  "vendor": "syncro",
+  "product": "syncro-msp",
+  "api_version": "v1",
+  "requires_api_key": true,
+  "documentation_url": "https://api-docs.syncromsp.com/",
+  "skills": [
+    "tickets",
+    "customers",
+    "assets",
+    "invoices",
+    "api-patterns"
+  ],
+  "commands": [
+    "create-ticket",
+    "search-tickets"
+  ]
+}
