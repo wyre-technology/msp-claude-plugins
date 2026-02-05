@@ -1,0 +1,119 @@
+---
+import DocsLayout from '@/layouts/DocsLayout.astro';
+import InstallCommand from '@/components/InstallCommand.astro';
+---
+
+<DocsLayout title="Installation">
+  <h1>Installation</h1>
+
+  <p class="lead text-lg text-[var(--muted)] mb-8">
+    Multiple ways to install MSP Claude Plugins, from one-command install to manual setup.
+  </p>
+
+  <h2>Recommended: Marketplace Install</h2>
+
+  <p>
+    The easiest way to install all plugins is through the Claude Code marketplace.
+    Run this command in Claude Code:
+  </p>
+
+  <div class="not-prose my-6">
+    <InstallCommand />
+  </div>
+
+  <p>Then restart Claude Code to activate the plugins.</p>
+
+  <h2>Install Individual Plugins</h2>
+
+  <p>If you only need specific plugins, you can install them individually:</p>
+
+  <div class="not-prose my-6 space-y-3">
+    <InstallCommand command="/plugin marketplace add asachs01/msp-claude-plugins --plugin autotask" size="sm" />
+    <InstallCommand command="/plugin marketplace add asachs01/msp-claude-plugins --plugin syncro" size="sm" />
+    <InstallCommand command="/plugin marketplace add asachs01/msp-claude-plugins --plugin connectwise-psa" size="sm" />
+  </div>
+
+  <h3>Available Plugin IDs</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Plugin ID</th>
+        <th>Name</th>
+        <th>Vendor</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><code>autotask</code></td><td>Autotask PSA</td><td>Kaseya</td></tr>
+      <tr><td><code>datto-rmm</code></td><td>Datto RMM</td><td>Kaseya</td></tr>
+      <tr><td><code>it-glue</code></td><td>IT Glue</td><td>Kaseya</td></tr>
+      <tr><td><code>syncro</code></td><td>Syncro MSP</td><td>Syncro</td></tr>
+      <tr><td><code>atera</code></td><td>Atera</td><td>Atera</td></tr>
+      <tr><td><code>superops</code></td><td>SuperOps.ai</td><td>SuperOps</td></tr>
+      <tr><td><code>halopsa</code></td><td>HaloPSA</td><td>Halo</td></tr>
+      <tr><td><code>connectwise-psa</code></td><td>ConnectWise PSA</td><td>ConnectWise</td></tr>
+      <tr><td><code>connectwise-automate</code></td><td>ConnectWise Automate</td><td>ConnectWise</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Manual Installation (Advanced)</h2>
+
+  <p>
+    For developers who want to contribute or modify plugins, you can install manually:
+  </p>
+
+  <pre><code class="language-bash"># Clone the repository
+git clone https://github.com/asachs01/msp-claude-plugins.git
+
+# Navigate to a specific plugin
+cd msp-claude-plugins/syncro/syncro-msp
+
+# Install as local plugin
+claude plugin add .</code></pre>
+
+  <h2>Verify Installation</h2>
+
+  <p>After installation, verify the plugins are active:</p>
+
+  <pre><code class="language-bash"># List installed plugins
+/plugins
+
+# Check a specific skill is available
+/skill autotask:tickets</code></pre>
+
+  <h2>Updating Plugins</h2>
+
+  <p>To update to the latest version:</p>
+
+  <div class="not-prose my-6">
+    <InstallCommand command="/plugin marketplace update asachs01/msp-claude-plugins" />
+  </div>
+
+  <h2>Uninstalling</h2>
+
+  <p>To remove the plugins:</p>
+
+  <div class="not-prose my-6">
+    <InstallCommand command="/plugin marketplace remove asachs01/msp-claude-plugins" />
+  </div>
+
+  <h2>Troubleshooting</h2>
+
+  <h3>Plugins not appearing after install</h3>
+  <p>
+    Make sure to restart Claude Code after installation. The plugins only become
+    active after a restart.
+  </p>
+
+  <h3>Command not found errors</h3>
+  <p>
+    Verify the plugin is installed with <code>/plugins</code>. If listed but commands
+    don&apos;t work, try reinstalling the specific plugin.
+  </p>
+
+  <h3>API authentication errors</h3>
+  <p>
+    Each plugin requires API credentials set as environment variables. Check the
+    specific plugin documentation for required variables.
+  </p>
+</DocsLayout>

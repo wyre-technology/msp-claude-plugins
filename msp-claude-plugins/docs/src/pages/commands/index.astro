@@ -1,0 +1,247 @@
+---
+import DocsLayout from '@/layouts/DocsLayout.astro';
+import { plugins } from '@/data/plugins';
+
+const baseUrl = import.meta.env.BASE_URL;
+
+// Group commands by type
+const commandCategories = [
+  {
+    name: 'Ticket Commands',
+    description: 'Commands for creating and searching service tickets.',
+    commands: plugins.flatMap(p =>
+      p.commands
+        .filter(c => c.name.includes('ticket'))
+        .map(c => ({ ...c, plugin: p }))
+    )
+  },
+  {
+    name: 'Asset & Device Commands',
+    description: 'Commands for looking up assets, devices, and running automation.',
+    commands: plugins.flatMap(p =>
+      p.commands
+        .filter(c =>
+          c.name.includes('asset') ||
+          c.name.includes('device') ||
+          c.name.includes('lookup') ||
+          c.name.includes('computer') ||
+          c.name.includes('agent') ||
+          c.name.includes('site')
+        )
+        .map(c => ({ ...c, plugin: p }))
+    )
+  },
+  {
+    name: 'Automation Commands',
+    description: 'Commands for running scripts, jobs, and automation tasks.',
+    commands: plugins.flatMap(p =>
+      p.commands
+        .filter(c =>
+          c.name.includes('job') ||
+          c.name.includes('script') ||
+          c.name.includes('run')
+        )
+        .map(c => ({ ...c, plugin: p }))
+    )
+  },
+  {
+    name: 'Alert Commands',
+    description: 'Commands for managing and resolving alerts.',
+    commands: plugins.flatMap(p =>
+      p.commands
+        .filter(c => c.name.includes('alert') || c.name.includes('resolve'))
+        .map(c => ({ ...c, plugin: p }))
+    )
+  },
+  {
+    name: 'Documentation Commands',
+    description: 'Commands for searching docs, passwords, and organizations.',
+    commands: plugins.flatMap(p =>
+      p.commands
+        .filter(c =>
+          c.name.includes('doc') ||
+          c.name.includes('password') ||
+          c.name.includes('organization') ||
+          c.name.includes('find')
+        )
+        .map(c => ({ ...c, plugin: p }))
+    )
+  },
+  {
+    name: 'Other Commands',
+    description: 'Time entries, projects, accounts, and other operations.',
+    commands: plugins.flatMap(p =>
+      p.commands
+        .filter(c =>
+          c.name.includes('time') ||
+          c.name.includes('project') ||
+          c.name.includes('account') ||
+          c.name.includes('update')
+        )
+        .map(c => ({ ...c, plugin: p }))
+    )
+  }
+];
+
+// Get all commands with their plugins
+const allCommands = plugins.flatMap(p =>
+  p.commands.map(c => ({ ...c, plugin: p }))
+);
+---
+
+<DocsLayout title="Commands Reference">
+  <h1>Commands Reference</h1>
+
+  <p class="lead text-lg text-[var(--muted)] mb-8">
+    Slash commands provide structured prompts for common MSP tasks.
+    There are {allCommands.length} commands across all plugins.
+  </p>
+
+  <h2>What are Commands?</h2>
+
+  <p>
+    Commands are slash commands that provide structured templates for common tasks.
+    They guide Claude to ask the right questions and use the correct API operations.
+  </p>
+
+  <pre><code class="language-text">/create-ticket "Email sync issue for John at Acme Corp"</code></pre>
+
+  <p>
+    Claude will extract the relevant information and prompt for any missing details
+    like priority, category, or assigned technician.
+  </p>
+
+  <h2>Commands by Category</h2>
+
+  {commandCategories.filter(cat => cat.commands.length > 0).map(category => (
+    <div class="mb-8">
+      <h3>{category.name}</h3>
+      <p class="text-[var(--muted)]">{category.description}</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Command</th>
+            <th>Plugin</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          {category.commands.map(cmd => (
+            <tr>
+              <td><code>{cmd.name}</code></td>
+              <td><a href={`${baseUrl}plugins/${cmd.plugin.id}/`}>{cmd.plugin.name}</a></td>
+              <td>{cmd.description}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  ))}
+
+  <h2>All Commands by Plugin</h2>
+
+  {plugins.map(plugin => (
+    <div class="mb-8">
+      <h3><a href={`${baseUrl}plugins/${plugin.id}/`}>{plugin.name}</a></h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Command</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          {plugin.commands.map(cmd => (
+            <tr>
+              <td><code>{cmd.name}</code></td>
+              <td>{cmd.description}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  ))}
+
+  <h2>Command Examples</h2>
+
+  <h3>Creating Tickets</h3>
+
+  <pre><code class="language-text"># Simple ticket creation
+/create-ticket "Printer not working for Jane at Contoso"
+
+# With more context
+/create-ticket "VPN connectivity issues for remote workers at Acme Corp.
+Multiple users reporting disconnections during video calls.
+Started after the network upgrade yesterday."</code></pre>
+
+  <h3>Searching Tickets</h3>
+
+  <pre><code class="language-text"># Search by keyword
+/search-tickets "email sync"
+
+# Search with filters
+/search-tickets "open tickets for Acme Corp this week"
+
+# Search by status
+/search-tickets "high priority unassigned tickets"</code></pre>
+
+  <h3>Device Operations</h3>
+
+  <pre><code class="language-text"># Look up a device
+/device-lookup "ACME-DC01"
+/lookup-asset "192.168.1.100"
+
+# List devices at a site
+/site-devices "Acme Corporation"
+
+# Run automation
+/run-job "ACME-DC01" "Clear Temp Files"
+/run-script "CONTOSO-WS01" "Disk Cleanup" --params "days=30"</code></pre>
+
+  <h3>Documentation Operations</h3>
+
+  <pre><code class="language-text"># Search documentation
+/search-docs "backup procedure" --organization "Acme Corp"
+
+# Find an organization
+/find-organization "Acme"
+
+# Get a password (IT Glue)
+/get-password "Domain Admin" --organization "Acme Corp"</code></pre>
+
+  <h2>Tips for Effective Commands</h2>
+
+  <h3>Provide Context</h3>
+
+  <p>
+    The more context you provide, the better Claude can help:
+  </p>
+
+  <pre><code class="language-text"># Less effective
+/create-ticket "printer issue"
+
+# More effective
+/create-ticket "HP LaserJet 4000 at front desk not printing.
+Customer: Acme Corp
+Contact: Jane Smith
+Error: Paper jam light flashing but no jam visible"</code></pre>
+
+  <h3>Use Natural Language</h3>
+
+  <p>
+    Commands understand natural language, so you can describe what you need:
+  </p>
+
+  <pre><code class="language-text">/search-tickets "show me all tickets from last week that are still open
+and haven't been touched in 24 hours"</code></pre>
+
+  <h3>Chain Operations</h3>
+
+  <p>
+    You can describe multi-step workflows and Claude will execute them:
+  </p>
+
+  <pre><code class="language-text">Search for the server ACME-DC01 in IT Glue, then check its alerts in Datto RMM,
+and create a ticket in Autotask if there are any critical alerts.</code></pre>
+</DocsLayout>

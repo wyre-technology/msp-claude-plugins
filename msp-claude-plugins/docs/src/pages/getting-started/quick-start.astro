@@ -1,0 +1,116 @@
+---
+import DocsLayout from '@/layouts/DocsLayout.astro';
+import InstallCommand from '@/components/InstallCommand.astro';
+
+const baseUrl = import.meta.env.BASE_URL;
+---
+
+<DocsLayout title="Quick Start">
+  <h1>Quick Start</h1>
+
+  <p class="lead text-lg text-[var(--muted)] mb-8">
+    Get your first MSP workflow running in under 5 minutes.
+  </p>
+
+  <h2>Step 1: Install the Plugins</h2>
+
+  <p>If you haven&apos;t already, install the plugins:</p>
+
+  <div class="not-prose my-6">
+    <InstallCommand />
+  </div>
+
+  <p>Restart Claude Code after installation.</p>
+
+  <h2>Step 2: Configure API Access</h2>
+
+  <p>
+    Set environment variables for the platforms you use. Here&apos;s an example for Autotask:
+  </p>
+
+  <pre><code class="language-bash"># Add to your shell profile (.bashrc, .zshrc, etc.)
+export AUTOTASK_USERNAME="your-api-user@company.com"
+export AUTOTASK_SECRET="your-api-secret"
+export AUTOTASK_INTEGRATION_CODE="your-integration-code"
+export AUTOTASK_ZONE="webservices5"</code></pre>
+
+  <p>
+    See the specific <a href={`${baseUrl}plugins/`}>plugin documentation</a> for
+    required environment variables.
+  </p>
+
+  <h2>Step 3: Try Your First Command</h2>
+
+  <p>Once configured, try a simple command:</p>
+
+  <pre><code class="language-text">/search-tickets "high priority"</code></pre>
+
+  <p>Claude will understand your request and search for high priority tickets using the appropriate API.</p>
+
+  <h2>Example Workflows</h2>
+
+  <h3>Create a Ticket from an Email</h3>
+
+  <pre><code class="language-text">Create a ticket from this email:
+
+From: john@acmecorp.com
+Subject: Can't access email on phone
+Body: My email stopped syncing on my iPhone yesterday...</code></pre>
+
+  <p>
+    Claude will extract the relevant information and use the <code>/create-ticket</code>
+    command with appropriate fields.
+  </p>
+
+  <h3>Triage Open Tickets</h3>
+
+  <pre><code class="language-text">Show me open tickets for Acme Corp that haven't been updated in 24 hours</code></pre>
+
+  <p>Claude uses the tickets skill to search with appropriate filters.</p>
+
+  <h3>Look Up Asset Information</h3>
+
+  <pre><code class="language-text">/lookup-asset "ACME-DC01"</code></pre>
+
+  <p>For IT Glue users, this retrieves configuration item details.</p>
+
+  <h3>Run a Script on Devices</h3>
+
+  <pre><code class="language-text">/run-job "ACME-DC01" "Clear Temp Files"</code></pre>
+
+  <p>For Datto RMM or ConnectWise Automate, execute scripts on managed devices.</p>
+
+  <h2>Using Skills</h2>
+
+  <p>
+    Skills provide domain knowledge that Claude can reference. You can invoke them directly
+    or Claude will automatically use them when relevant.
+  </p>
+
+  <h3>Direct Skill Invocation</h3>
+
+  <pre><code class="language-text">/skill autotask:tickets
+
+What are the common ticket statuses and their meanings?</code></pre>
+
+  <h3>Automatic Skill Usage</h3>
+
+  <p>
+    When you ask Claude about MSP workflows, it automatically references relevant skills:
+  </p>
+
+  <pre><code class="language-text">How do I configure a priority-based SLA in Autotask?</code></pre>
+
+  <p>
+    Claude will reference the tickets skill to provide accurate information about
+    Autotask&apos;s SLA configuration.
+  </p>
+
+  <h2>Next Steps</h2>
+
+  <ul>
+    <li><a href={`${baseUrl}plugins/`}>Explore all plugins</a> - See what each plugin offers</li>
+    <li><a href={`${baseUrl}skills/`}>Skills reference</a> - Deep dive into available skills</li>
+    <li><a href={`${baseUrl}commands/`}>Commands reference</a> - All available slash commands</li>
+  </ul>
+</DocsLayout>

@@ -1,0 +1,183 @@
+---
+import DocsLayout from '@/layouts/DocsLayout.astro';
+import { plugins } from '@/data/plugins';
+
+const baseUrl = import.meta.env.BASE_URL;
+
+// Group skills by type
+const skillCategories = [
+  {
+    name: 'Ticket Management',
+    description: 'Skills for creating, searching, and managing service tickets.',
+    skills: plugins.flatMap(p =>
+      p.skills
+        .filter(s => s.name === 'tickets')
+        .map(s => ({ ...s, plugin: p }))
+    )
+  },
+  {
+    name: 'Customer/Client Management',
+    description: 'Skills for managing customers, companies, contacts, and organizations.',
+    skills: plugins.flatMap(p =>
+      p.skills
+        .filter(s => ['crm', 'customers', 'clients', 'companies', 'contacts', 'organizations'].includes(s.name))
+        .map(s => ({ ...s, plugin: p }))
+    )
+  },
+  {
+    name: 'Asset & Device Management',
+    description: 'Skills for managing devices, computers, configurations, and assets.',
+    skills: plugins.flatMap(p =>
+      p.skills
+        .filter(s => ['devices', 'assets', 'computers', 'configurations', 'agents'].includes(s.name))
+        .map(s => ({ ...s, plugin: p }))
+    )
+  },
+  {
+    name: 'Monitoring & Alerts',
+    description: 'Skills for alert handling, monitoring, and device status.',
+    skills: plugins.flatMap(p =>
+      p.skills
+        .filter(s => ['alerts', 'monitors'].includes(s.name))
+        .map(s => ({ ...s, plugin: p }))
+    )
+  },
+  {
+    name: 'Automation & Scripts',
+    description: 'Skills for running scripts, jobs, and automation workflows.',
+    skills: plugins.flatMap(p =>
+      p.skills
+        .filter(s => ['jobs', 'scripts', 'runbooks'].includes(s.name))
+        .map(s => ({ ...s, plugin: p }))
+    )
+  },
+  {
+    name: 'API Patterns',
+    description: 'Skills covering authentication, pagination, rate limiting, and error handling.',
+    skills: plugins.flatMap(p =>
+      p.skills
+        .filter(s => s.name === 'api-patterns')
+        .map(s => ({ ...s, plugin: p }))
+    )
+  }
+];
+
+// Get all skills with their plugins
+const allSkills = plugins.flatMap(p =>
+  p.skills.map(s => ({ ...s, plugin: p }))
+);
+---
+
+<DocsLayout title="Skills Reference">
+  <h1>Skills Reference</h1>
+
+  <p class="lead text-lg text-[var(--muted)] mb-8">
+    Skills provide domain knowledge that teaches Claude about MSP platforms,
+    terminology, and best practices. There are {allSkills.length} skills across
+    all plugins.
+  </p>
+
+  <h2>What are Skills?</h2>
+
+  <p>
+    Skills are markdown documents that contain structured information about specific
+    domains. When you ask Claude about MSP topics, it automatically references
+    relevant skills to provide accurate, platform-specific answers.
+  </p>
+
+  <p>You can also invoke skills directly:</p>
+
+  <pre><code class="language-text">/skill autotask:tickets
+
+What ticket statuses are available?</code></pre>
+
+  <h2>Skills by Category</h2>
+
+  {skillCategories.filter(cat => cat.skills.length > 0).map(category => (
+    <div class="mb-8">
+      <h3>{category.name}</h3>
+      <p class="text-[var(--muted)]">{category.description}</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Skill</th>
+            <th>Plugin</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          {category.skills.map(skill => (
+            <tr>
+              <td><code>{skill.plugin.id}:{skill.name}</code></td>
+              <td><a href={`${baseUrl}plugins/${skill.plugin.id}/`}>{skill.plugin.name}</a></td>
+              <td>{skill.description}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  ))}
+
+  <h2>All Skills by Plugin</h2>
+
+  {plugins.map(plugin => (
+    <div class="mb-8">
+      <h3><a href={`${baseUrl}plugins/${plugin.id}/`}>{plugin.name}</a></h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Skill</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          {plugin.skills.map(skill => (
+            <tr>
+              <td><code>{skill.name}</code></td>
+              <td>{skill.description}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  ))}
+
+  <h2>Using Skills Effectively</h2>
+
+  <h3>Automatic Usage</h3>
+
+  <p>
+    Claude automatically references relevant skills when you ask about MSP topics.
+    Just ask naturally:
+  </p>
+
+  <pre><code class="language-text">How do I handle SLA breaches in ConnectWise?</code></pre>
+
+  <p>
+    Claude will reference the <code>connectwise-psa:tickets</code> skill to provide
+    accurate information.
+  </p>
+
+  <h3>Direct Invocation</h3>
+
+  <p>For specific questions, invoke skills directly:</p>
+
+  <pre><code class="language-text">/skill it-glue:passwords
+
+What security measures should I follow when using the password API?</code></pre>
+
+  <h3>Combining Skills</h3>
+
+  <p>
+    For complex workflows, Claude can combine knowledge from multiple skills:
+  </p>
+
+  <pre><code class="language-text">I need to create a ticket in Autotask and link it to the asset in IT Glue.
+How should I structure this workflow?</code></pre>
+
+  <p>
+    Claude will reference both <code>autotask:tickets</code> and <code>it-glue:configurations</code>
+    to provide a comprehensive answer.
+  </p>
+</DocsLayout>

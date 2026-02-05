@@ -1,0 +1,73 @@
+---
+import DocsLayout from '@/layouts/DocsLayout.astro';
+import PluginCard from '@/components/PluginCard.astro';
+import { plugins, getPluginsByCategory } from '@/data/plugins';
+
+const psaPlugins = getPluginsByCategory('psa');
+const rmmPlugins = getPluginsByCategory('rmm');
+const docPlugins = getPluginsByCategory('documentation');
+---
+
+<DocsLayout title="Plugin Catalog">
+  <h1>Plugin Catalog</h1>
+
+  <p class="lead text-lg text-[var(--muted)] mb-8">
+    Browse all {plugins.length} MSP Claude Plugins. Each plugin provides skills,
+    commands, and deep API knowledge for its platform.
+  </p>
+
+  <h2>PSA Platforms ({psaPlugins.length})</h2>
+
+  <p>Professional Services Automation plugins for ticket management, CRM, and billing.</p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 not-prose my-6">
+    {psaPlugins.map(plugin => (
+      <PluginCard plugin={plugin} />
+    ))}
+  </div>
+
+  <h2>RMM Platforms ({rmmPlugins.length})</h2>
+
+  <p>Remote Monitoring and Management plugins for device management and automation.</p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 not-prose my-6">
+    {rmmPlugins.map(plugin => (
+      <PluginCard plugin={plugin} />
+    ))}
+  </div>
+
+  <h2>Documentation Platforms ({docPlugins.length})</h2>
+
+  <p>Documentation and knowledge base plugins for asset tracking and password management.</p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 not-prose my-6">
+    {docPlugins.map(plugin => (
+      <PluginCard plugin={plugin} />
+    ))}
+  </div>
+
+  <h2>All Plugins at a Glance</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Plugin</th>
+        <th>Vendor</th>
+        <th>Category</th>
+        <th>Skills</th>
+        <th>Commands</th>
+      </tr>
+    </thead>
+    <tbody>
+      {plugins.map(plugin => (
+        <tr>
+          <td><a href={`${import.meta.env.BASE_URL}plugins/${plugin.id}/`}>{plugin.name}</a></td>
+          <td>{plugin.vendor}</td>
+          <td class="capitalize">{plugin.category}</td>
+          <td>{plugin.skills.length}</td>
+          <td>{plugin.commands.length}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</DocsLayout>

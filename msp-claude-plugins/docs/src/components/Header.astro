@@ -1,0 +1,89 @@
+---
+const baseUrl = import.meta.env.BASE_URL;
+const currentPath = Astro.url.pathname;
+
+const navLinks = [
+  { href: `${baseUrl}`, label: 'Home' },
+  { href: `${baseUrl}getting-started/`, label: 'Getting Started' },
+  { href: `${baseUrl}plugins/`, label: 'Plugins' },
+  { href: `${baseUrl}skills/`, label: 'Skills' },
+  { href: `${baseUrl}commands/`, label: 'Commands' },
+];
+
+function isActive(href: string): boolean {
+  if (href === baseUrl) {
+    return currentPath === baseUrl || currentPath === baseUrl.slice(0, -1);
+  }
+  return currentPath.startsWith(href);
+}
+---
+
+<header class="sticky top-0 z-50 bg-[var(--background)]/80 backdrop-blur-md border-b border-[var(--border)]">
+  <div class="container">
+    <div class="flex items-center justify-between h-16">
+      <a href={baseUrl} class="flex items-center gap-2 font-semibold text-lg">
+        <svg class="w-8 h-8 text-accent" viewBox="0 0 32 32" fill="currentColor">
+          <path d="M16 2L2 9l14 7 14-7-14-7zM2 23l14 7 14-7M2 16l14 7 14-7"/>
+        </svg>
+        <span>MSP Claude Plugins</span>
+      </a>
+
+      <nav class="hidden lg:flex items-center gap-6">
+        {navLinks.map(link => (
+          <a
+            href={link.href}
+            class={isActive(link.href) ? 'nav-link-active' : 'nav-link'}
+          >
+            {link.label}
+          </a>
+        ))}
+      </nav>
+
+      <div class="flex items-center gap-4">
+        <button
+          id="search-button"
+          class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] hover:border-[var(--text)] transition-colors"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="m21 21-4.35-4.35"/>
+          </svg>
+          <span class="hidden sm:inline text-sm">Search</span>
+          <kbd class="hidden sm:inline text-xs bg-[var(--border)] px-1.5 py-0.5 rounded">Ctrl K</kbd>
+        </button>
+
+        <button data-theme-toggle class="p-2 rounded-lg hover:bg-[var(--border)] transition-colors">
+          <svg class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5"/>
+            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+          </svg>
+          <svg class="w-5 h-5 dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+
+        <a
+          href="https://github.com/asachs01/msp-claude-plugins"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="p-2 rounded-lg hover:bg-[var(--border)] transition-colors"
+        >
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+  // Search shortcut
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+      e.preventDefault();
+      // Future: Open search dialog
+      console.log('Search triggered');
+    }
+  });
+</script>

@@ -1,0 +1,187 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #fafafa;
+    --text: #171717;
+    --accent: #2563eb;
+    --success: #16a34a;
+    --border: #e5e5e5;
+    --muted: #737373;
+  }
+
+  .dark {
+    --background: #0a0a0a;
+    --text: #ededed;
+    --border: #262626;
+    --muted: #a3a3a3;
+  }
+
+  html {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-[var(--background)] text-[var(--text)] antialiased;
+  }
+
+  code, pre {
+    font-family: 'JetBrains Mono', 'SF Mono', Menlo, Monaco, Consolas, monospace;
+  }
+}
+
+@layer components {
+  .container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium transition-colors duration-200;
+  }
+
+  .btn-primary {
+    @apply bg-accent text-white hover:bg-blue-700;
+  }
+
+  .btn-secondary {
+    @apply bg-[var(--border)] text-[var(--text)] hover:bg-neutral-200 dark:hover:bg-neutral-700;
+  }
+
+  .card {
+    @apply bg-white dark:bg-neutral-900 border border-[var(--border)] rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-200;
+  }
+
+  .code-block {
+    @apply bg-neutral-900 text-neutral-100 rounded-lg p-4 overflow-x-auto font-mono text-sm;
+  }
+
+  .install-command {
+    @apply bg-neutral-900 text-green-400 rounded-lg px-4 py-3 font-mono text-base flex items-center justify-between;
+  }
+
+  .nav-link {
+    @apply text-[var(--muted)] hover:text-[var(--text)] transition-colors duration-200;
+  }
+
+  .nav-link-active {
+    @apply text-accent font-medium;
+  }
+
+  .sidebar-link {
+    @apply block py-2 px-3 rounded-lg text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--border)] transition-colors duration-200;
+  }
+
+  .sidebar-link-active {
+    @apply bg-blue-50 dark:bg-blue-900/20 text-accent font-medium;
+  }
+
+  .prose {
+    @apply max-w-none;
+  }
+
+  .prose h1 {
+    @apply text-3xl font-bold mb-6 mt-8;
+  }
+
+  .prose h2 {
+    @apply text-2xl font-semibold mb-4 mt-8;
+  }
+
+  .prose h3 {
+    @apply text-xl font-semibold mb-3 mt-6;
+  }
+
+  .prose p {
+    @apply mb-4 leading-relaxed;
+  }
+
+  .prose ul, .prose ol {
+    @apply mb-4 pl-6;
+  }
+
+  .prose li {
+    @apply mb-2;
+  }
+
+  .prose code:not(pre code) {
+    @apply bg-neutral-100 dark:bg-neutral-800 px-1.5 py-0.5 rounded text-sm;
+  }
+
+  .prose pre {
+    @apply my-4 rounded-lg overflow-x-auto;
+  }
+
+  .prose table {
+    @apply w-full border-collapse mb-4;
+  }
+
+  .prose th {
+    @apply text-left py-2 px-4 border-b border-[var(--border)] font-semibold;
+  }
+
+  .prose td {
+    @apply py-2 px-4 border-b border-[var(--border)];
+  }
+
+  .prose a {
+    @apply text-accent hover:underline;
+  }
+
+  .prose blockquote {
+    @apply border-l-4 border-accent pl-4 italic text-[var(--muted)];
+  }
+}
+
+/* Copy button for code blocks */
+.copy-button {
+  @apply absolute top-2 right-2 p-2 rounded-md bg-neutral-700 hover:bg-neutral-600 text-neutral-300 hover:text-white transition-colors duration-200;
+}
+
+/* Search dialog */
+.search-dialog {
+  @apply fixed inset-0 z-50 flex items-start justify-center pt-[20vh] bg-black/50;
+}
+
+.search-input {
+  @apply w-full bg-white dark:bg-neutral-900 border border-[var(--border)] rounded-lg px-4 py-3 text-lg focus:outline-none focus:ring-2 focus:ring-accent;
+}
+
+/* Mobile navigation */
+.mobile-nav {
+  @apply fixed bottom-0 left-0 right-0 bg-white dark:bg-neutral-900 border-t border-[var(--border)] lg:hidden z-40;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+}
+
+/* Pagefind styles */
+.pagefind-ui {
+  --pagefind-ui-scale: 1;
+  --pagefind-ui-primary: #2563eb;
+  --pagefind-ui-text: var(--text);
+  --pagefind-ui-background: var(--background);
+  --pagefind-ui-border: var(--border);
+  --pagefind-ui-tag: var(--border);
+  --pagefind-ui-border-width: 1px;
+  --pagefind-ui-border-radius: 8px;
+  --pagefind-ui-font: inherit;
+}

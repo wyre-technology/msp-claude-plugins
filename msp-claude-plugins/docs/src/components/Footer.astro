@@ -1,0 +1,63 @@
+---
+const baseUrl = import.meta.env.BASE_URL;
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="border-t border-[var(--border)] mt-auto">
+  <div class="container py-12">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div class="md:col-span-2">
+        <a href={baseUrl} class="flex items-center gap-2 font-semibold text-lg mb-4">
+          <svg class="w-8 h-8 text-accent" viewBox="0 0 32 32" fill="currentColor">
+            <path d="M16 2L2 9l14 7 14-7-14-7zM2 23l14 7 14-7M2 16l14 7 14-7"/>
+          </svg>
+          <span>MSP Claude Plugins</span>
+        </a>
+        <p class="text-[var(--muted)] max-w-md">
+          Community-driven Claude Code plugins for Managed Service Providers.
+          Supercharge your MSP workflows with AI-powered automation.
+        </p>
+      </div>
+
+      <div>
+        <h3 class="font-semibold mb-4">Documentation</h3>
+        <ul class="space-y-2 text-[var(--muted)]">
+          <li><a href={`${baseUrl}getting-started/`} class="hover:text-[var(--text)]">Getting Started</a></li>
+          <li><a href={`${baseUrl}plugins/`} class="hover:text-[var(--text)]">Plugin Catalog</a></li>
+          <li><a href={`${baseUrl}skills/`} class="hover:text-[var(--text)]">Skills Reference</a></li>
+          <li><a href={`${baseUrl}commands/`} class="hover:text-[var(--text)]">Commands Reference</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="font-semibold mb-4">Community</h3>
+        <ul class="space-y-2 text-[var(--muted)]">
+          <li>
+            <a href="https://github.com/asachs01/msp-claude-plugins" target="_blank" rel="noopener noreferrer" class="hover:text-[var(--text)]">
+              GitHub
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/asachs01/msp-claude-plugins/issues" target="_blank" rel="noopener noreferrer" class="hover:text-[var(--text)]">
+              Report an Issue
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/asachs01/msp-claude-plugins/discussions" target="_blank" rel="noopener noreferrer" class="hover:text-[var(--text)]">
+              Discussions
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/asachs01/msp-claude-plugins/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer" class="hover:text-[var(--text)]">
+              Contributing
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="border-t border-[var(--border)] mt-8 pt-8 text-center text-[var(--muted)] text-sm">
+      <p>&copy; {currentYear} MSP Claude Plugins. Built with Astro.</p>
+    </div>
+  </div>
+</footer>

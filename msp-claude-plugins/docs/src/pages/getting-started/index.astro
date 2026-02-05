@@ -1,0 +1,77 @@
+---
+import DocsLayout from '@/layouts/DocsLayout.astro';
+import InstallCommand from '@/components/InstallCommand.astro';
+
+const baseUrl = import.meta.env.BASE_URL;
+---
+
+<DocsLayout title="Getting Started">
+  <h1>Getting Started</h1>
+
+  <p class="lead text-lg text-[var(--muted)] mb-8">
+    MSP Claude Plugins supercharge Claude Code for Managed Service Provider workflows.
+    Get up and running in under 60 seconds.
+  </p>
+
+  <h2>What are MSP Claude Plugins?</h2>
+
+  <p>
+    MSP Claude Plugins is a collection of Claude Code plugins designed specifically for
+    Managed Service Providers. Each plugin provides:
+  </p>
+
+  <ul>
+    <li><strong>Skills</strong> - Domain knowledge that teaches Claude about MSP platforms, terminology, and best practices</li>
+    <li><strong>Commands</strong> - Slash commands that provide structured prompts for common tasks</li>
+    <li><strong>API Patterns</strong> - Knowledge of authentication, rate limiting, and error handling for each platform</li>
+  </ul>
+
+  <h2>Quick Install</h2>
+
+  <p>The fastest way to get started is with the marketplace command:</p>
+
+  <div class="not-prose my-6">
+    <InstallCommand />
+  </div>
+
+  <p>This installs all 9 plugins at once. After installation, restart Claude Code to activate.</p>
+
+  <h2>What&apos;s Included</h2>
+
+  <p>The plugin collection includes support for:</p>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 not-prose my-6">
+    <div class="card">
+      <h3 class="font-semibold mb-2">Kaseya</h3>
+      <ul class="text-sm text-[var(--muted)] space-y-1">
+        <li>Autotask PSA</li>
+        <li>Datto RMM</li>
+        <li>IT Glue</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 class="font-semibold mb-2">ConnectWise</h3>
+      <ul class="text-sm text-[var(--muted)] space-y-1">
+        <li>ConnectWise PSA</li>
+        <li>ConnectWise Automate</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 class="font-semibold mb-2">Others</h3>
+      <ul class="text-sm text-[var(--muted)] space-y-1">
+        <li>Syncro MSP</li>
+        <li>Atera</li>
+        <li>SuperOps.ai</li>
+        <li>HaloPSA</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Next Steps</h2>
+
+  <ul>
+    <li><a href={`${baseUrl}getting-started/installation/`}>Installation Guide</a> - Detailed installation options</li>
+    <li><a href={`${baseUrl}getting-started/quick-start/`}>Quick Start</a> - Your first workflow with plugins</li>
+    <li><a href={`${baseUrl}plugins/`}>Browse Plugins</a> - Explore all available plugins</li>
+  </ul>
+</DocsLayout>

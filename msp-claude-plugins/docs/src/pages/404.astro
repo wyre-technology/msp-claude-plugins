@@ -1,0 +1,26 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+
+const baseUrl = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title="Page Not Found">
+  <Header />
+
+  <main class="flex-1 flex items-center justify-center py-20">
+    <div class="text-center">
+      <h1 class="text-6xl font-bold text-accent mb-4">404</h1>
+      <p class="text-xl text-[var(--muted)] mb-8">Page not found</p>
+      <p class="text-[var(--muted)] mb-8 max-w-md mx-auto">
+        The page you&apos;re looking for doesn&apos;t exist or has been moved.
+      </p>
+      <a href={baseUrl} class="btn btn-primary">
+        Go to Homepage
+      </a>
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>

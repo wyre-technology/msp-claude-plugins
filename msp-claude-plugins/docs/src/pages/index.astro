@@ -1,0 +1,120 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import PluginCard from '@/components/PluginCard.astro';
+import InstallCommand from '@/components/InstallCommand.astro';
+import { plugins } from '@/data/plugins';
+
+const baseUrl = import.meta.env.BASE_URL;
+
+const features = [
+  {
+    icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>',
+    title: 'One-Command Install',
+    description: 'Install all MSP plugins with a single marketplace command. No configuration required.'
+  },
+  {
+    icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>',
+    title: 'Production Ready',
+    description: 'Battle-tested plugins with proper error handling, rate limiting, and security best practices.'
+  },
+  {
+    icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>',
+    title: 'Deep Domain Knowledge',
+    description: 'Each plugin includes comprehensive skills that teach Claude MSP terminology and workflows.'
+  },
+  {
+    icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>',
+    title: 'Community Driven',
+    description: 'Open source plugins built by MSPs, for MSPs. Contributions welcome!'
+  }
+];
+---
+
+<BaseLayout title="Home">
+  <Header />
+
+  <!-- Hero Section -->
+  <section class="py-20 lg:py-32 bg-gradient-to-b from-blue-50 to-transparent dark:from-blue-950/20">
+    <div class="container text-center">
+      <h1 class="text-4xl lg:text-6xl font-bold mb-6 tracking-tight">
+        MSP Claude Plugins
+      </h1>
+      <p class="text-xl lg:text-2xl text-[var(--muted)] max-w-3xl mx-auto mb-8">
+        One command to supercharge Claude for MSP workflows.
+      </p>
+
+      <div class="max-w-2xl mx-auto mb-8">
+        <InstallCommand size="lg" />
+      </div>
+
+      <div class="flex flex-wrap justify-center gap-4">
+        <a href={`${baseUrl}getting-started/`} class="btn btn-primary">
+          Get Started
+        </a>
+        <a href={`${baseUrl}plugins/`} class="btn btn-secondary">
+          Browse Plugins
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="py-20">
+    <div class="container">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {features.map(feature => (
+          <div class="text-center">
+            <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-accent/10 text-accent mb-4" set:html={feature.icon} />
+            <h3 class="font-semibold text-lg mb-2">{feature.title}</h3>
+            <p class="text-[var(--muted)] text-sm">{feature.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Plugin Grid -->
+  <section class="py-20 bg-neutral-50 dark:bg-neutral-900/50">
+    <div class="container">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold mb-4">9 Plugins, One Ecosystem</h2>
+        <p class="text-[var(--muted)] max-w-2xl mx-auto">
+          Comprehensive support for the most popular MSP platforms. Each plugin includes skills,
+          commands, and deep API knowledge.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {plugins.map(plugin => (
+          <PluginCard plugin={plugin} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Start CTA -->
+  <section class="py-20">
+    <div class="container">
+      <div class="card max-w-4xl mx-auto text-center p-12">
+        <h2 class="text-2xl font-bold mb-4">Ready to Get Started?</h2>
+        <p class="text-[var(--muted)] mb-8 max-w-xl mx-auto">
+          Install all MSP plugins with a single command, then restart Claude Code to activate.
+        </p>
+
+        <div class="max-w-xl mx-auto mb-6">
+          <InstallCommand />
+        </div>
+
+        <p class="text-sm text-[var(--muted)]">
+          Or <a href={`${baseUrl}getting-started/installation/`} class="text-accent hover:underline">
+            install individual plugins
+          </a> if you only need one.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</BaseLayout>

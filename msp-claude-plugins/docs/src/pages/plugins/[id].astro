@@ -1,0 +1,158 @@
+---
+import DocsLayout from '@/layouts/DocsLayout.astro';
+import InstallCommand from '@/components/InstallCommand.astro';
+import { plugins, getPluginById } from '@/data/plugins';
+
+export function getStaticPaths() {
+  return plugins.map(plugin => ({
+    params: { id: plugin.id },
+    props: { plugin }
+  }));
+}
+
+const { plugin } = Astro.props;
+const baseUrl = import.meta.env.BASE_URL;
+
+const categoryColors = {
+  psa: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
+  rmm: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
+  documentation: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400'
+};
+
+const categoryLabels = {
+  psa: 'PSA',
+  rmm: 'RMM',
+  documentation: 'Documentation'
+};
+---
+
+<DocsLayout title={plugin.name} description={plugin.description}>
+  <div class="flex items-center gap-3 mb-2">
+    <span class={`text-xs font-medium px-2 py-1 rounded-full ${categoryColors[plugin.category]}`}>
+      {categoryLabels[plugin.category]}
+    </span>
+    <span class="text-[var(--muted)]">{plugin.vendor}</span>
+  </div>
+
+  <h1>{plugin.name}</h1>
+
+  <p class="lead text-lg text-[var(--muted)] mb-8">
+    {plugin.description}
+  </p>
+
+  <h2>Installation</h2>
+
+  <p>Install this plugin individually:</p>
+
+  <div class="not-prose my-6">
+    <InstallCommand command={`/plugin marketplace add asachs01/msp-claude-plugins --plugin ${plugin.id}`} />
+  </div>
+
+  <p>Or install all MSP plugins at once:</p>
+
+  <div class="not-prose my-6">
+    <InstallCommand />
+  </div>
+
+  <h2>Features</h2>
+
+  <ul>
+    {plugin.features.map(feature => (
+      <li><strong>{feature}</strong></li>
+    ))}
+  </ul>
+
+  <h2>Skills</h2>
+
+  <p>This plugin provides {plugin.skills.length} skills that teach Claude about {plugin.name}:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Skill</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      {plugin.skills.map(skill => (
+        <tr>
+          <td><code>{skill.name}</code></td>
+          <td>{skill.description}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+
+  <h2>Commands</h2>
+
+  <p>Available slash commands:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Command</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      {plugin.commands.map(cmd => (
+        <tr>
+          <td><code>{cmd.name}</code></td>
+          <td>{cmd.description}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+
+  <h2>API Reference</h2>
+
+  <table>
+    <tbody>
+      <tr>
+        <td><strong>Base URL</strong></td>
+        <td><code>{plugin.apiInfo.baseUrl}</code></td>
+      </tr>
+      <tr>
+        <td><strong>Authentication</strong></td>
+        <td>{plugin.apiInfo.auth}</td>
+      </tr>
+      <tr>
+        <td><strong>Rate Limit</strong></td>
+        <td>{plugin.apiInfo.rateLimit}</td>
+      </tr>
+      <tr>
+        <td><strong>Documentation</strong></td>
+        <td><a href={plugin.apiInfo.docsUrl} target="_blank" rel="noopener noreferrer">{plugin.apiInfo.docsUrl}</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Example Usage</h2>
+
+  <h3>Create a Ticket</h3>
+
+  <pre><code class="language-text">{plugin.commands.find(c => c.name.includes('create'))?.name || '/create-ticket'} "Email issue for John at Acme Corp"</code></pre>
+
+  <h3>Search Tickets</h3>
+
+  <pre><code class="language-text">{plugin.commands.find(c => c.name.includes('search'))?.name || '/search-tickets'} "open tickets for Acme"</code></pre>
+
+  <h3>Using Skills</h3>
+
+  <pre><code class="language-text">/skill {plugin.id}:tickets
+
+What are the available ticket statuses?</code></pre>
+
+  <div class="mt-12 pt-8 border-t border-[var(--border)]">
+    <p class="text-[var(--muted)]">
+      <strong>Source:</strong>{' '}
+      <a
+        href={`https://github.com/asachs01/msp-claude-plugins/tree/main/${plugin.path}`}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {plugin.path}
+      </a>
+    </p>
+  </div>
+</DocsLayout>

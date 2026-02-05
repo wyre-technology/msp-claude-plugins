@@ -1,0 +1,52 @@
+---
+interface Props {
+  command?: string;
+  size?: 'sm' | 'md' | 'lg';
+}
+
+const {
+  command = '/plugin marketplace add asachs01/msp-claude-plugins',
+  size = 'md'
+} = Astro.props;
+
+const sizeClasses = {
+  sm: 'text-sm px-3 py-2',
+  md: 'text-base px-4 py-3',
+  lg: 'text-lg px-5 py-4'
+};
+---
+
+<div class={`install-command ${sizeClasses[size]}`}>
+  <code class="flex-1">{command}</code>
+  <button
+    class="copy-btn ml-4 p-1.5 rounded hover:bg-neutral-700 transition-colors"
+    data-command={command}
+  >
+    <svg class="copy-icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+    </svg>
+    <svg class="check-icon w-5 h-5 hidden text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <polyline points="20 6 9 17 4 12"/>
+    </svg>
+  </button>
+</div>
+
+<script>
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const command = btn.getAttribute('data-command');
+      if (command) {
+        await navigator.clipboard.writeText(command);
+        const copyIcon = btn.querySelector('.copy-icon');
+        const checkIcon = btn.querySelector('.check-icon');
+        copyIcon?.classList.add('hidden');
+        checkIcon?.classList.remove('hidden');
+        setTimeout(() => {
+          copyIcon?.classList.remove('hidden');
+          checkIcon?.classList.add('hidden');
+        }, 2000);
+      }
+    });
+  });
+</script>

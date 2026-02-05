@@ -1,0 +1,67 @@
+---
+import type { Plugin } from '@/data/plugins';
+
+interface Props {
+  plugin: Plugin;
+}
+
+const { plugin } = Astro.props;
+const baseUrl = import.meta.env.BASE_URL;
+
+const categoryColors = {
+  psa: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
+  rmm: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
+  documentation: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400'
+};
+
+const categoryLabels = {
+  psa: 'PSA',
+  rmm: 'RMM',
+  documentation: 'Documentation'
+};
+---
+
+<a href={`${baseUrl}plugins/${plugin.id}/`} class="card group block">
+  <div class="flex items-start justify-between mb-3">
+    <div>
+      <h3 class="font-semibold text-lg group-hover:text-accent transition-colors">
+        {plugin.name}
+      </h3>
+      <p class="text-sm text-[var(--muted)]">{plugin.vendor}</p>
+    </div>
+    <span class={`text-xs font-medium px-2 py-1 rounded-full ${categoryColors[plugin.category]}`}>
+      {categoryLabels[plugin.category]}
+    </span>
+  </div>
+
+  <p class="text-[var(--muted)] text-sm mb-4 line-clamp-2">
+    {plugin.description}
+  </p>
+
+  <div class="flex flex-wrap gap-2">
+    {plugin.features.slice(0, 3).map(feature => (
+      <span class="text-xs px-2 py-1 rounded-full bg-[var(--border)] text-[var(--muted)]">
+        {feature}
+      </span>
+    ))}
+    {plugin.features.length > 3 && (
+      <span class="text-xs px-2 py-1 text-[var(--muted)]">
+        +{plugin.features.length - 3} more
+      </span>
+    )}
+  </div>
+
+  <div class="mt-4 pt-4 border-t border-[var(--border)] flex items-center justify-between text-sm text-[var(--muted)]">
+    <span>{plugin.skills.length} skills</span>
+    <span>{plugin.commands.length} commands</span>
+  </div>
+</a>
+
+<style>
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>
