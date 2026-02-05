@@ -52,8 +52,14 @@ export const plugins: Plugin[] = [
     commands: [
       { name: '/create-ticket', description: 'Create a new service ticket' },
       { name: '/search-tickets', description: 'Search for tickets by criteria' },
-      { name: '/update-account', description: 'Update company information' },
-      { name: '/create-project', description: 'Create a new project' },
+      { name: '/update-ticket', description: 'Update ticket fields (status, priority, queue, due date, assignee)' },
+      { name: '/add-note', description: 'Add internal or public notes to tickets' },
+      { name: '/my-tickets', description: 'List tickets assigned to current user with filtering' },
+      { name: '/lookup-company', description: 'Search companies by name or ID' },
+      { name: '/lookup-contact', description: 'Search contacts by name, email, phone, or company' },
+      { name: '/lookup-asset', description: 'Search configuration items/assets' },
+      { name: '/check-contract', description: 'View contract status and entitlements' },
+      { name: '/reassign-ticket', description: 'Reassign ticket to different resource or queue' },
       { name: '/time-entry', description: 'Log time against a ticket or project' }
     ],
     apiInfo: {
@@ -158,7 +164,15 @@ export const plugins: Plugin[] = [
     ],
     commands: [
       { name: '/create-ticket', description: 'Create a new service ticket' },
-      { name: '/search-tickets', description: 'Search for tickets by criteria' }
+      { name: '/search-tickets', description: 'Search for tickets by criteria' },
+      { name: '/update-ticket', description: 'Update ticket fields (status, priority, assignee, due date)' },
+      { name: '/add-ticket-comment', description: 'Add comments with visibility and email notification control' },
+      { name: '/log-time', description: 'Log time entries with billable/non-billable options' },
+      { name: '/get-customer', description: 'Retrieve customer details with optional assets/tickets' },
+      { name: '/list-alerts', description: 'List RMM alerts with severity/status/customer filters' },
+      { name: '/resolve-alert', description: 'Resolve alerts with optional ticket creation' },
+      { name: '/search-assets', description: 'Search assets by name, serial, type, or customer' },
+      { name: '/create-appointment', description: 'Create calendar appointments linked to tickets/customers' }
     ],
     apiInfo: {
       baseUrl: 'https://{subdomain}.syncromsp.com/api/v1',
@@ -191,7 +205,15 @@ export const plugins: Plugin[] = [
     ],
     commands: [
       { name: '/create-ticket', description: 'Create a new service ticket' },
-      { name: '/search-agents', description: 'Search for agents by customer or machine name' }
+      { name: '/search-tickets', description: 'Search for tickets by criteria' },
+      { name: '/update-ticket', description: 'Update ticket fields (status, priority, technician)' },
+      { name: '/list-alerts', description: 'List active RMM alerts with filtering' },
+      { name: '/resolve-alert', description: 'Resolve an RMM alert with optional ticket creation' },
+      { name: '/run-powershell', description: 'Execute PowerShell script on an agent' },
+      { name: '/search-customers', description: 'Search for customers by name or criteria' },
+      { name: '/create-monitor', description: 'Create HTTP, TCP, or SNMP monitors' },
+      { name: '/get-kb-articles', description: 'Search knowledge base articles' },
+      { name: '/log-time', description: 'Log work hours on a ticket' }
     ],
     apiInfo: {
       baseUrl: 'https://app.atera.com/api/v3',
@@ -224,7 +246,15 @@ export const plugins: Plugin[] = [
     ],
     commands: [
       { name: '/create-ticket', description: 'Create a new service ticket' },
-      { name: '/list-assets', description: 'List and filter assets' }
+      { name: '/search-tickets', description: 'Search for tickets by criteria' },
+      { name: '/update-ticket', description: 'Update ticket fields (status, priority, technician)' },
+      { name: '/add-ticket-note', description: 'Add internal or public notes to tickets' },
+      { name: '/log-time', description: 'Log time entries against tickets for billing' },
+      { name: '/list-alerts', description: 'List active RMM alerts with filtering' },
+      { name: '/acknowledge-alert', description: 'Acknowledge alerts to indicate investigation started' },
+      { name: '/resolve-alert', description: 'Resolve alerts with optional ticket creation' },
+      { name: '/run-script', description: 'Execute scripts on remote assets' },
+      { name: '/get-asset', description: 'Retrieve detailed asset information' }
     ],
     apiInfo: {
       baseUrl: 'https://api.superops.ai/graphql',
@@ -255,7 +285,15 @@ export const plugins: Plugin[] = [
     ],
     commands: [
       { name: '/create-ticket', description: 'Create a new service ticket' },
-      { name: '/search-tickets', description: 'Search for tickets by criteria' }
+      { name: '/search-tickets', description: 'Search for tickets by criteria' },
+      { name: '/add-action', description: 'Add actions (notes, updates, phone calls) to tickets' },
+      { name: '/update-ticket', description: 'Update ticket fields (status, priority, category, team, agent)' },
+      { name: '/show-ticket', description: 'Display comprehensive ticket information' },
+      { name: '/sla-dashboard', description: 'View SLA status across tickets (breaching, at-risk, on-track)' },
+      { name: '/search-clients', description: 'Search clients by name, domain, or attributes' },
+      { name: '/search-assets', description: 'Search assets by name, serial, type, or client' },
+      { name: '/kb-search', description: 'Search the knowledge base for articles and solutions' },
+      { name: '/contract-status', description: 'Check contract status and service entitlements' }
     ],
     apiInfo: {
       baseUrl: 'https://{tenant}.halopsa.com/api',
@@ -288,7 +326,15 @@ export const plugins: Plugin[] = [
     ],
     commands: [
       { name: '/create-ticket', description: 'Create a new service ticket with company lookup' },
-      { name: '/search-tickets', description: 'Search tickets with filters' }
+      { name: '/search-tickets', description: 'Search tickets with filters' },
+      { name: '/get-ticket', description: 'Retrieve detailed ticket information' },
+      { name: '/update-ticket', description: 'Update ticket fields (status, priority, board)' },
+      { name: '/add-note', description: 'Add internal or discussion note to ticket' },
+      { name: '/close-ticket', description: 'Close tickets with resolution notes' },
+      { name: '/log-time', description: 'Log time entry against ticket' },
+      { name: '/lookup-config', description: 'Search configuration items/assets' },
+      { name: '/check-agreement', description: 'View agreement status and entitlements' },
+      { name: '/schedule-entry', description: 'Create schedule entry/appointment' }
     ],
     apiInfo: {
       baseUrl: 'https://api-na.myconnectwise.net/{codebase}/apis/3.0/',
