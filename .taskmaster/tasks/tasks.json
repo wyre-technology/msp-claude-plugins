@@ -2,14 +2,14 @@
   "master": {
     "tasks": [
       {
-        "id": 42,
+        "id": "42",
         "title": "Create GitHub Organization and Repository Structure",
         "description": "Set up the 'wyre-mcp' GitHub organization and establish the repository structure for the MCP Gateway and vendor-specific MCP servers.",
         "details": "1. Create the 'wyre-mcp' GitHub organization\n2. Configure organization settings (member permissions, required reviews)\n3. Create organization-level issue/PR templates\n4. Set up GitHub Container Registry (ghcr.io/wyre-mcp)\n5. Create organization secrets for CI/CD (AWS credentials, registry tokens)\n6. Create initial repositories:\n   - mcp-gateway (fork of agentic-community/mcp-gateway-registry)\n   - autotask-mcp (migrate from asachs01/autotask-mcp)\n   - datto-rmm-mcp (new)\n   - itglue-mcp (new)\n   - Additional vendor repos as needed\n7. Establish standard repository structure with README, LICENSE, CI/CD workflows",
         "testStrategy": "Verify organization creation and proper permissions. Confirm repository structure follows the defined pattern. Test CI/CD workflows with sample commits. Ensure GitHub Container Registry is properly configured for Docker image storage.",
         "priority": "high",
         "dependencies": [],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -17,8 +17,10 @@
             "description": "Set up the GitHub organization with proper permissions and settings for team collaboration.",
             "dependencies": [],
             "details": "Create the 'wyre-mcp' GitHub organization. Configure organization settings including member permissions, required reviews, and team structure. Set up organization-level issue and PR templates for standardized contributions. Document organization access procedures for new team members.",
-            "status": "pending",
-            "testStrategy": "Verify organization creation with correct name. Confirm member permission settings match requirements. Test PR template functionality with sample PR. Ensure organization settings align with security best practices."
+            "status": "done",
+            "testStrategy": "Verify organization creation with correct name. Confirm member permission settings match requirements. Test PR template functionality with sample PR. Ensure organization settings align with security best practices.",
+            "parentId": "undefined",
+            "updatedAt": "2026-02-05T14:57:13.571Z"
           },
           {
             "id": 2,
@@ -28,8 +30,10 @@
               1
             ],
             "details": "Set up GitHub Container Registry (ghcr.io/wyre-mcp) for Docker image storage. Create and configure organization secrets for CI/CD pipelines including AWS credentials, registry tokens, and any other required authentication credentials. Document secret management procedures and access controls.",
-            "status": "pending",
-            "testStrategy": "Verify Container Registry is properly configured by pushing and pulling a test image. Confirm secrets are accessible to workflows but properly secured. Test secret rotation procedures."
+            "status": "done",
+            "testStrategy": "Verify Container Registry is properly configured by pushing and pulling a test image. Confirm secrets are accessible to workflows but properly secured. Test secret rotation procedures.",
+            "parentId": "undefined",
+            "updatedAt": "2026-02-05T14:59:26.343Z"
           },
           {
             "id": 3,
@@ -40,8 +44,10 @@
               2
             ],
             "details": "Fork the agentic-community/mcp-gateway-registry repository into the wyre-mcp organization as mcp-gateway. Update repository configuration, README, and documentation to reflect the organization's standards. Set up branch protection rules, required reviewers, and CI/CD workflows. Configure repository-specific settings and access controls.",
-            "status": "pending",
-            "testStrategy": "Verify fork is complete with all original code. Test CI/CD workflows with sample commits. Ensure branch protection rules prevent direct pushes to main branch. Confirm documentation accurately reflects the project."
+            "status": "done",
+            "testStrategy": "Verify fork is complete with all original code. Test CI/CD workflows with sample commits. Ensure branch protection rules prevent direct pushes to main branch. Confirm documentation accurately reflects the project.",
+            "parentId": "undefined",
+            "updatedAt": "2026-02-05T14:57:20.632Z"
           },
           {
             "id": 4,
@@ -52,8 +58,10 @@
               2
             ],
             "details": "Create the following repositories with standardized structure: autotask-mcp (migrate from asachs01/autotask-mcp), datto-rmm-mcp (new), and itglue-mcp (new). Each repository should include standard README, LICENSE, .github workflows directory, and consistent project structure. Set up branch protection and code owners.",
-            "status": "pending",
-            "testStrategy": "Verify all repositories are created with consistent structure. Confirm migration of autotask-mcp preserves commit history. Test repository templates and workflows with sample commits. Ensure all repositories have proper license files."
+            "status": "done",
+            "testStrategy": "Verify all repositories are created with consistent structure. Confirm migration of autotask-mcp preserves commit history. Test repository templates and workflows with sample commits. Ensure all repositories have proper license files.",
+            "parentId": "undefined",
+            "updatedAt": "2026-02-05T14:57:22.210Z"
           },
           {
             "id": 5,
@@ -64,22 +72,25 @@
               4
             ],
             "details": "Develop standardized GitHub Actions workflows for building, testing, and deploying MCP servers. Include workflows for Docker image building and publishing to GitHub Container Registry, automated testing, linting, and security scanning. Implement consistent versioning strategy across repositories. Document CI/CD processes in organization-level documentation.",
-            "status": "pending",
-            "testStrategy": "Test workflows on each repository with sample code changes. Verify Docker images build and publish correctly. Confirm test and linting processes run as expected. Validate security scanning identifies potential vulnerabilities."
+            "status": "done",
+            "testStrategy": "Test workflows on each repository with sample code changes. Verify Docker images build and publish correctly. Confirm test and linting processes run as expected. Validate security scanning identifies potential vulnerabilities.",
+            "parentId": "undefined",
+            "updatedAt": "2026-02-05T14:59:27.940Z"
           }
-        ]
+        ],
+        "updatedAt": "2026-02-05T14:59:27.940Z"
       },
       {
-        "id": 43,
+        "id": "43",
         "title": "Fork and Customize MCP Gateway",
         "description": "Fork the MCP Gateway Registry repository and customize it to support API key storage, MSP-specific vendor configurations, and credential entry UI.",
         "details": "1. Clone fork locally: 'wyre-mcp/mcp-gateway'\n2. Set up local development environment (Docker Compose)\n3. Extend 'credentials-provider/' to support API key storage (not just OAuth tokens)\n4. Add MSP-specific vendor configs to 'oauth_providers.yaml' equivalent\n5. Create vendor credential entry UI (FastAPI routes + Jinja2 templates)\n6. Customize branding/domain for 'mcp.wyre.ai'\n7. Implement session-aware stateful routing to map user sessions to stored credentials\n8. Add support for the following vendor routes:\n   - /v1/autotask/*\n   - /v1/datto-rmm/*\n   - /v1/itglue/*\n   - Additional vendor routes as needed\n9. Implement secure credential storage with AES-256 encryption",
         "testStrategy": "Unit tests for credential storage and retrieval. Integration tests for OAuth flow with PKCE. UI tests for credential entry pages. Security testing for encryption implementation. Load testing for routing performance.",
         "priority": "high",
         "dependencies": [
-          42
+          "42"
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -87,8 +98,10 @@
             "description": "Fork the MCP Gateway Registry repository and set up the local development environment with Docker Compose.",
             "dependencies": [],
             "details": "Clone the repository to 'wyre-mcp/mcp-gateway', configure Git remote to track upstream changes, and set up Docker Compose for local development. Ensure all dependencies are properly installed and the application runs locally.",
-            "status": "pending",
-            "testStrategy": "Verify successful local build and application startup. Test basic functionality to ensure the development environment is working correctly."
+            "status": "done",
+            "testStrategy": "Verify successful local build and application startup. Test basic functionality to ensure the development environment is working correctly.",
+            "parentId": "undefined",
+            "updatedAt": "2026-02-05T15:11:05.975Z"
           },
           {
             "id": 2,
@@ -98,8 +111,10 @@
               1
             ],
             "details": "Extend the existing credential storage system to handle different credential types including API keys. Implement proper data models, storage mechanisms, and retrieval functions. Ensure backward compatibility with existing OAuth token storage.",
-            "status": "pending",
-            "testStrategy": "Unit tests for storing and retrieving different credential types. Security tests for credential encryption and decryption. Integration tests with the existing credential provider."
+            "status": "done",
+            "testStrategy": "Unit tests for storing and retrieving different credential types. Security tests for credential encryption and decryption. Integration tests with the existing credential provider.",
+            "parentId": "undefined",
+            "updatedAt": "2026-02-05T15:11:07.524Z"
           },
           {
             "id": 3,
@@ -109,8 +124,10 @@
               2
             ],
             "details": "Create or modify configuration structures to support MSP-specific vendor settings. Implement a flexible configuration system that allows different MSPs to have their own vendor configurations while maintaining a common interface.",
-            "status": "pending",
-            "testStrategy": "Unit tests for configuration loading and validation. Integration tests with different MSP configurations to ensure proper isolation and functionality."
+            "status": "done",
+            "testStrategy": "Unit tests for configuration loading and validation. Integration tests with different MSP configurations to ensure proper isolation and functionality.",
+            "parentId": "undefined",
+            "updatedAt": "2026-02-05T15:11:09.023Z"
           },
           {
             "id": 4,
@@ -120,8 +137,10 @@
               3
             ],
             "details": "Design and implement FastAPI routes for credential management. Create Jinja2 templates for the UI components. Implement form validation, error handling, and success notifications. Customize branding for 'mcp.wyre.ai' and ensure responsive design.",
-            "status": "pending",
-            "testStrategy": "UI tests for form submission and validation. Accessibility testing. Cross-browser compatibility testing. User experience testing with sample workflows."
+            "status": "done",
+            "testStrategy": "UI tests for form submission and validation. Accessibility testing. Cross-browser compatibility testing. User experience testing with sample workflows.",
+            "parentId": "undefined",
+            "updatedAt": "2026-02-05T15:11:10.557Z"
           },
           {
             "id": 5,
@@ -131,23 +150,26 @@
               4
             ],
             "details": "Implement session management to track user context. Create routing logic that maps sessions to the appropriate stored credentials. Add support for vendor-specific routes including /v1/autotask/*, /v1/datto-rmm/*, /v1/itglue/*, and others as needed. Implement secure credential access with AES-256 encryption for all stored credentials.",
-            "status": "pending",
-            "testStrategy": "Integration tests for routing logic. Security testing for session management. Load testing for routing performance. End-to-end tests for complete workflows with different vendor routes."
+            "status": "done",
+            "testStrategy": "Integration tests for routing logic. Security testing for session management. Load testing for routing performance. End-to-end tests for complete workflows with different vendor routes.",
+            "parentId": "undefined",
+            "updatedAt": "2026-02-05T15:11:12.121Z"
           }
-        ]
+        ],
+        "updatedAt": "2026-02-05T15:11:12.121Z"
       },
       {
-        "id": 44,
+        "id": "44",
         "title": "Implement Datto RMM MCP Server",
         "description": "Create the Datto RMM MCP server repository and implement the required tools to interact with the Datto RMM API.",
         "details": "1. Create repo: 'wyre-mcp/datto-rmm-mcp'\n2. Initialize TypeScript project with MCP SDK and @asachs01/node-datto-rmm\n3. Implement the following tools:\n   - datto_list_devices (GET /api/v2/account/devices)\n   - datto_get_device (GET /api/v2/device/{uid})\n   - datto_list_alerts (GET /api/v2/account/alerts)\n   - datto_resolve_alert (POST /api/v2/alert/{uid}/resolve)\n   - datto_list_sites (GET /api/v2/account/sites)\n   - datto_get_site (GET /api/v2/site/{uid})\n   - datto_run_quickjob (POST /api/v2/device/{uid}/quickjob)\n   - datto_get_audit (GET /api/v2/device/{uid}/audit/{type})\n4. Accept credentials via 'X-API-Key' / 'X-API-Secret' headers from gateway\n5. Create Dockerfile for containerization\n6. Implement error handling and rate limiting\n7. Add comprehensive logging",
         "testStrategy": "Unit tests for each tool implementation. Integration tests with mock Datto RMM API. End-to-end tests with real API credentials (in secure CI environment). Performance testing for response times. Security testing for credential handling.",
         "priority": "high",
         "dependencies": [
-          42,
-          43
+          "42",
+          "43"
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -156,7 +178,8 @@
             "dependencies": [],
             "details": "Create the 'wyre-mcp/datto-rmm-mcp' repository on GitHub. Initialize a new TypeScript project with npm. Install the MCP SDK and @asachs01/node-datto-rmm package. Set up tsconfig.json, package.json, and basic project structure. Configure linting and formatting tools. Set up the initial server structure with Express.",
             "status": "pending",
-            "testStrategy": "Verify project structure and dependency installation. Ensure the project builds without errors."
+            "testStrategy": "Verify project structure and dependency installation. Ensure the project builds without errors.",
+            "parentId": "undefined"
           },
           {
             "id": 2,
@@ -167,7 +190,8 @@
             ],
             "details": "Implement the following tools: datto_list_devices (GET /api/v2/account/devices), datto_get_device (GET /api/v2/device/{uid}), datto_list_sites (GET /api/v2/account/sites), and datto_get_site (GET /api/v2/site/{uid}). Create proper request handling, parameter validation, and response formatting for each endpoint. Implement pagination for list endpoints. Add appropriate error handling and input validation.",
             "status": "pending",
-            "testStrategy": "Unit tests for each tool implementation. Integration tests with mock Datto RMM API responses. Test pagination and error handling scenarios."
+            "testStrategy": "Unit tests for each tool implementation. Integration tests with mock Datto RMM API responses. Test pagination and error handling scenarios.",
+            "parentId": "undefined"
           },
           {
             "id": 3,
@@ -178,7 +202,8 @@
             ],
             "details": "Implement the following tools: datto_list_alerts (GET /api/v2/account/alerts), datto_resolve_alert (POST /api/v2/alert/{uid}/resolve), datto_run_quickjob (POST /api/v2/device/{uid}/quickjob), and datto_get_audit (GET /api/v2/device/{uid}/audit/{type}). Create proper request handling, parameter validation, and response formatting for each endpoint. Implement pagination for list endpoints. Add appropriate error handling and input validation.",
             "status": "pending",
-            "testStrategy": "Unit tests for each tool implementation. Integration tests with mock Datto RMM API responses. Test various input scenarios and error conditions."
+            "testStrategy": "Unit tests for each tool implementation. Integration tests with mock Datto RMM API responses. Test various input scenarios and error conditions.",
+            "parentId": "undefined"
           },
           {
             "id": 4,
@@ -189,7 +214,8 @@
             ],
             "details": "Implement authentication using 'X-API-Key' and 'X-API-Secret' headers from the gateway. Add middleware to validate these credentials before processing requests. Implement rate limiting to prevent API abuse. Add request logging for security auditing. Implement secure error handling that doesn't expose sensitive information. Add input sanitization to prevent injection attacks. Implement proper HTTP security headers.",
             "status": "pending",
-            "testStrategy": "Security testing for credential handling. Test rate limiting functionality. Verify proper error handling with invalid credentials. Test input validation and sanitization."
+            "testStrategy": "Security testing for credential handling. Test rate limiting functionality. Verify proper error handling with invalid credentials. Test input validation and sanitization.",
+            "parentId": "undefined"
           },
           {
             "id": 5,
@@ -202,22 +228,24 @@
             ],
             "details": "Create a Dockerfile for containerization of the Datto RMM MCP server. Implement comprehensive logging throughout the application using a structured logging format. Add health check endpoints for container orchestration. Create documentation for API endpoints and usage. Add README with setup and configuration instructions. Implement graceful shutdown handling. Create CI/CD pipeline configuration for automated testing and deployment.",
             "status": "pending",
-            "testStrategy": "Test Docker build and container functionality. Verify logging works correctly in containerized environment. End-to-end tests with real API credentials in a secure CI environment."
+            "testStrategy": "Test Docker build and container functionality. Verify logging works correctly in containerized environment. End-to-end tests with real API credentials in a secure CI environment.",
+            "parentId": "undefined"
           }
-        ]
+        ],
+        "updatedAt": "2026-02-05T15:23:42.160Z"
       },
       {
-        "id": 45,
+        "id": "45",
         "title": "Implement IT Glue MCP Server",
         "description": "Create the IT Glue MCP server repository and implement the required tools to interact with the IT Glue API.",
         "details": "1. Create repo: 'wyre-mcp/itglue-mcp'\n2. Initialize TypeScript project with MCP SDK and @asachs01/node-it-glue\n3. Implement the following tools:\n   - itglue_search_organizations (GET /organizations)\n   - itglue_get_organization (GET /organizations/{id})\n   - itglue_search_configurations (GET /configurations)\n   - itglue_get_configuration (GET /configurations/{id})\n   - itglue_search_passwords (GET /passwords)\n   - itglue_get_password (GET /passwords/{id})\n   - itglue_search_documents (GET /documents)\n   - itglue_search_flexible_assets (GET /flexible_assets)\n4. Accept credentials via 'X-API-Key' header from gateway\n5. Create Dockerfile for containerization\n6. Implement error handling and rate limiting\n7. Add comprehensive logging",
         "testStrategy": "Unit tests for each tool implementation. Integration tests with mock IT Glue API. End-to-end tests with real API credentials (in secure CI environment). Performance testing for response times. Security testing for credential handling.",
         "priority": "high",
         "dependencies": [
-          42,
-          43
+          "42",
+          "43"
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -226,7 +254,8 @@
             "dependencies": [],
             "details": "Create the 'wyre-mcp/itglue-mcp' repository on GitHub. Initialize a TypeScript project with npm. Install required dependencies including MCP SDK and @asachs01/node-it-glue. Set up tsconfig.json, package.json, and basic project structure. Configure linting and formatting tools.",
             "status": "pending",
-            "testStrategy": "Verify project structure and successful build with no errors. Ensure all dependencies are correctly installed and accessible."
+            "testStrategy": "Verify project structure and successful build with no errors. Ensure all dependencies are correctly installed and accessible.",
+            "parentId": "undefined"
           },
           {
             "id": 2,
@@ -237,7 +266,8 @@
             ],
             "details": "Create implementations for itglue_search_organizations (GET /organizations), itglue_get_organization (GET /organizations/{id}), itglue_search_configurations (GET /configurations), and itglue_get_configuration (GET /configurations/{id}). Include parameter validation, response formatting, and error handling according to MCP specifications. Ensure proper API key handling via 'X-API-Key' header.",
             "status": "pending",
-            "testStrategy": "Unit tests for each tool implementation. Integration tests with mock IT Glue API responses. Test error handling for various API failure scenarios."
+            "testStrategy": "Unit tests for each tool implementation. Integration tests with mock IT Glue API responses. Test error handling for various API failure scenarios.",
+            "parentId": "undefined"
           },
           {
             "id": 3,
@@ -248,7 +278,8 @@
             ],
             "details": "Create implementations for itglue_search_passwords (GET /passwords), itglue_get_password (GET /passwords/{id}), itglue_search_documents (GET /documents), and itglue_search_flexible_assets (GET /flexible_assets). Implement secure handling of sensitive password data. Include parameter validation, response formatting, and error handling according to MCP specifications.",
             "status": "pending",
-            "testStrategy": "Unit tests for each tool implementation. Security testing for password handling. Integration tests with mock IT Glue API responses. Test error handling for various API failure scenarios."
+            "testStrategy": "Unit tests for each tool implementation. Security testing for password handling. Integration tests with mock IT Glue API responses. Test error handling for various API failure scenarios.",
+            "parentId": "undefined"
           },
           {
             "id": 4,
@@ -260,7 +291,8 @@
             ],
             "details": "Implement error handling for all API interactions including network errors, authentication failures, and unexpected responses. Add rate limiting to prevent exceeding IT Glue API limits. Implement retry logic with exponential backoff for transient errors. Create standardized error responses following MCP specifications. Add detailed logging for troubleshooting.",
             "status": "pending",
-            "testStrategy": "Unit tests for error handling scenarios. Performance testing to verify rate limiting effectiveness. Integration tests with simulated API failures and rate limit responses."
+            "testStrategy": "Unit tests for error handling scenarios. Performance testing to verify rate limiting effectiveness. Integration tests with simulated API failures and rate limit responses.",
+            "parentId": "undefined"
           },
           {
             "id": 5,
@@ -271,22 +303,24 @@
             ],
             "details": "Create a Dockerfile for containerizing the IT Glue MCP server. Implement comprehensive logging throughout the application using a structured logging format. Add health check endpoints. Finalize documentation including API usage examples, deployment instructions, and configuration options. Prepare the project for production deployment with proper versioning.",
             "status": "pending",
-            "testStrategy": "Container build and run tests. End-to-end tests with real API credentials in a secure environment. Verify logging output and format. Test container health checks and restart capabilities."
+            "testStrategy": "Container build and run tests. End-to-end tests with real API credentials in a secure environment. Verify logging output and format. Test container health checks and restart capabilities.",
+            "parentId": "undefined"
           }
-        ]
+        ],
+        "updatedAt": "2026-02-05T15:19:47.674Z"
       },
       {
-        "id": 46,
+        "id": "46",
         "title": "Migrate Autotask MCP Server",
         "description": "Migrate the existing Autotask MCP server to the new organization and adapt it to work with the gateway architecture.",
         "details": "1. Fork/transfer 'asachs01/autotask-mcp' to 'wyre-mcp/autotask-mcp'\n2. Adapt to accept credentials via 'X-API-Key' / 'X-API-Secret' headers from gateway\n3. Update the codebase to match the standardized repository structure\n4. Create or update Dockerfile for containerization\n5. Update CI/CD workflow for ghcr.io/wyre-mcp\n6. Create migration guide for existing local MCP users\n7. Ensure compatibility with the gateway routing system\n8. Add comprehensive logging and error handling",
         "testStrategy": "Unit tests for credential handling changes. Integration tests with gateway. Compatibility tests with existing clients. End-to-end tests with real API credentials. Migration testing to verify smooth transition for existing users.",
         "priority": "medium",
         "dependencies": [
-          42,
-          43
+          "42",
+          "43"
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -295,7 +329,8 @@
             "dependencies": [],
             "details": "1. Transfer 'asachs01/autotask-mcp' to 'wyre-mcp/autotask-mcp' organization\n2. Update package.json with new organization details\n3. Update README.md with new organization information\n4. Set up the repository with standardized structure according to organization guidelines\n5. Configure initial project dependencies",
             "status": "pending",
-            "testStrategy": "Verify repository transfer is complete and accessible. Ensure all files are properly transferred and the project structure follows organization standards."
+            "testStrategy": "Verify repository transfer is complete and accessible. Ensure all files are properly transferred and the project structure follows organization standards.",
+            "parentId": "undefined"
           },
           {
             "id": 2,
@@ -306,7 +341,8 @@
             ],
             "details": "1. Update authentication logic to accept 'X-API-Key' and 'X-API-Secret' headers from gateway\n2. Modify credential handling to extract and validate these headers\n3. Implement secure storage and processing of credentials\n4. Add unit tests for the new authentication flow\n5. Ensure backward compatibility with existing authentication methods where necessary",
             "status": "pending",
-            "testStrategy": "Unit tests for credential handling. Integration tests with mock gateway. Security testing for proper credential handling and validation."
+            "testStrategy": "Unit tests for credential handling. Integration tests with mock gateway. Security testing for proper credential handling and validation.",
+            "parentId": "undefined"
           },
           {
             "id": 3,
@@ -317,7 +353,8 @@
             ],
             "details": "1. Create or update Dockerfile for containerization\n2. Configure multi-stage build for optimized container size\n3. Set up GitHub Actions workflow for automated testing\n4. Configure container publishing to ghcr.io/wyre-mcp\n5. Implement versioning strategy for container images\n6. Add container health checks and monitoring",
             "status": "pending",
-            "testStrategy": "Verify container builds successfully. Test container startup and operation. Validate CI/CD pipeline successfully builds and publishes containers."
+            "testStrategy": "Verify container builds successfully. Test container startup and operation. Validate CI/CD pipeline successfully builds and publishes containers.",
+            "parentId": "undefined"
           },
           {
             "id": 4,
@@ -329,7 +366,8 @@
             ],
             "details": "1. Implement compatibility with gateway routing system\n2. Update API endpoints to match gateway routing patterns\n3. Add route configuration for the gateway\n4. Implement request/response transformation as needed\n5. Test integration with the gateway\n6. Document routing configuration for deployment",
             "status": "pending",
-            "testStrategy": "Integration tests with actual gateway. End-to-end tests with sample requests through the gateway. Performance testing to ensure acceptable response times."
+            "testStrategy": "Integration tests with actual gateway. End-to-end tests with sample requests through the gateway. Performance testing to ensure acceptable response times.",
+            "parentId": "undefined"
           },
           {
             "id": 5,
@@ -340,21 +378,23 @@
             ],
             "details": "1. Add structured logging throughout the application\n2. Implement standardized error handling and error responses\n3. Create detailed migration guide for existing MCP users\n4. Document breaking changes and upgrade paths\n5. Provide examples of new authentication method\n6. Create troubleshooting guide for common migration issues\n7. Finalize all documentation",
             "status": "pending",
-            "testStrategy": "Review logs for completeness and usefulness. Test error scenarios to ensure proper handling. Have existing users review migration documentation for clarity and completeness."
+            "testStrategy": "Review logs for completeness and usefulness. Test error scenarios to ensure proper handling. Have existing users review migration documentation for clarity and completeness.",
+            "parentId": "undefined"
           }
-        ]
+        ],
+        "updatedAt": "2026-02-05T15:18:33.614Z"
       },
       {
-        "id": 47,
+        "id": "47",
         "title": "Implement OAuth 2.1 with PKCE Authentication Flow",
         "description": "Implement the OAuth 2.1 with PKCE authentication flow in the MCP Gateway to handle user authentication and credential management.",
         "details": "1. Implement OAuth 2.1 authorization endpoint (/oauth/authorize)\n2. Implement token endpoint (/oauth/token) with PKCE verification\n3. Implement token refresh mechanism\n4. Create credential entry UI for vendors without native OAuth\n5. Implement secure storage for refresh tokens\n6. Add token revocation endpoint (/oauth/revoke)\n7. Implement session management\n8. Add audit logging for all authentication events\n9. Ensure compliance with MCP spec update (June 2025)\n10. Implement proper error handling and user feedback",
         "testStrategy": "Unit tests for PKCE code challenge/verifier. Integration tests for the complete OAuth flow. Security testing for token handling. UI testing for credential entry pages. Compliance testing against MCP specification.",
         "priority": "high",
         "dependencies": [
-          43
+          "43"
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -363,7 +403,8 @@
             "dependencies": [],
             "details": "Implement the authorization endpoint that handles client authentication requests. This includes validating client IDs, generating authorization codes, storing PKCE code challenges, implementing state parameter for CSRF protection, and redirecting users to the appropriate callback URLs. Ensure proper scope validation and user consent flow.",
             "status": "pending",
-            "testStrategy": "Unit tests for parameter validation. Integration tests for the complete authorization flow. Security testing for CSRF protection. Compliance testing against OAuth 2.1 specification."
+            "testStrategy": "Unit tests for parameter validation. Integration tests for the complete authorization flow. Security testing for CSRF protection. Compliance testing against OAuth 2.1 specification.",
+            "parentId": "undefined"
           },
           {
             "id": 2,
@@ -374,7 +415,8 @@
             ],
             "details": "Implement the token endpoint that validates authorization codes, verifies PKCE code verifiers against stored code challenges, and issues access and refresh tokens. Include JWT generation for access tokens with appropriate claims and signatures. Implement proper error handling for invalid requests and failed verifications.",
             "status": "pending",
-            "testStrategy": "Unit tests for PKCE verification logic. Integration tests for token exchange flow. Security testing for token generation. Performance testing for token issuance under load."
+            "testStrategy": "Unit tests for PKCE verification logic. Integration tests for token exchange flow. Security testing for token generation. Performance testing for token issuance under load.",
+            "parentId": "undefined"
           },
           {
             "id": 3,
@@ -385,7 +427,8 @@
             ],
             "details": "Implement the refresh token flow that allows clients to obtain new access tokens without user interaction. Create the token revocation endpoint (/oauth/revoke) that invalidates access and refresh tokens. Implement secure storage for refresh tokens using encryption at rest. Add token lifecycle management including expiration handling and rotation policies.",
             "status": "pending",
-            "testStrategy": "Unit tests for token validation and refresh logic. Integration tests for the complete refresh flow. Security testing for token storage. Compliance testing against OAuth 2.1 specification for token revocation."
+            "testStrategy": "Unit tests for token validation and refresh logic. Integration tests for the complete refresh flow. Security testing for token storage. Compliance testing against OAuth 2.1 specification for token revocation.",
+            "parentId": "undefined"
           },
           {
             "id": 4,
@@ -396,7 +439,8 @@
             ],
             "details": "Design and implement a web-based UI for credential entry and management. Include form validation, secure transmission of credentials, and integration with the secure credential storage system. Implement user feedback for successful/failed operations and provide clear instructions for obtaining API credentials from various vendor platforms.",
             "status": "pending",
-            "testStrategy": "UI testing for form validation and user experience. Integration tests with credential storage. Accessibility testing. Cross-browser compatibility testing. Security testing for credential transmission."
+            "testStrategy": "UI testing for form validation and user experience. Integration tests with credential storage. Accessibility testing. Cross-browser compatibility testing. Security testing for credential transmission.",
+            "parentId": "undefined"
           },
           {
             "id": 5,
@@ -409,22 +453,24 @@
             ],
             "details": "Implement session creation, validation, and expiration handling. Create audit logging system that records all authentication events including login attempts, token issuance, token refresh, and revocation. Ensure logs contain necessary information for security analysis while respecting privacy requirements. Implement proper error handling and user feedback for authentication failures.",
             "status": "pending",
-            "testStrategy": "Unit tests for session management logic. Integration tests for audit logging. Performance testing for high-volume logging. Compliance testing against security standards for audit trails."
+            "testStrategy": "Unit tests for session management logic. Integration tests for audit logging. Performance testing for high-volume logging. Compliance testing against security standards for audit trails.",
+            "parentId": "undefined"
           }
-        ]
+        ],
+        "updatedAt": "2026-02-05T15:18:01.451Z"
       },
       {
-        "id": 48,
+        "id": "48",
         "title": "Implement Secure Credential Storage",
         "description": "Implement a secure credential storage system for the MCP Gateway to safely store and manage vendor API credentials.",
         "details": "1. Design encrypted credential storage schema\n2. Implement AES-256 encryption for credentials at rest\n3. Create key derivation system (per-user encryption keys derived from master key)\n4. Implement secure credential retrieval mechanism\n5. Add audit logging for all credential access\n6. Implement tenant isolation to prevent cross-user data access\n7. Create credential rotation mechanism\n8. Implement secure deletion for user data removal\n9. Add backup and recovery procedures\n10. Document security practices for compliance purposes",
         "testStrategy": "Security testing for encryption implementation. Penetration testing for credential storage. Unit tests for encryption/decryption operations. Integration tests for credential lifecycle. Compliance testing against security standards.",
         "priority": "high",
         "dependencies": [
-          43,
-          47
+          "43",
+          "47"
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -432,8 +478,10 @@
             "description": "Create a secure database schema for storing encrypted vendor API credentials with proper tenant isolation.",
             "dependencies": [],
             "details": "Design a database schema that supports AES-256 encryption for credentials at rest. Include fields for encrypted credential data, initialization vectors, tenant IDs for isolation, creation/modification timestamps, and credential metadata. Implement the database models and migration scripts.",
-            "status": "pending",
-            "testStrategy": "Unit tests for schema validation. Security review of database design. Test data isolation between tenants."
+            "status": "done",
+            "testStrategy": "Unit tests for schema validation. Security review of database design. Test data isolation between tenants.",
+            "parentId": "undefined",
+            "updatedAt": "2026-02-05T15:46:20.006Z"
           },
           {
             "id": 2,
@@ -443,8 +491,10 @@
               1
             ],
             "details": "Implement an encryption service that uses AES-256 for credential encryption. Create a key derivation function that generates per-user encryption keys from a master key. Ensure secure key storage and management. Implement functions for encrypting and decrypting credential data with proper IV handling.",
-            "status": "pending",
-            "testStrategy": "Unit tests for encryption/decryption operations. Security testing of key derivation implementation. Penetration testing for encryption vulnerabilities."
+            "status": "done",
+            "testStrategy": "Unit tests for encryption/decryption operations. Security testing of key derivation implementation. Penetration testing for encryption vulnerabilities.",
+            "parentId": "undefined",
+            "updatedAt": "2026-02-05T15:46:26.642Z"
           },
           {
             "id": 3,
@@ -454,8 +504,10 @@
               2
             ],
             "details": "Implement RESTful API endpoints for credential CRUD operations. Ensure all endpoints require proper authentication and authorization. Implement tenant isolation to prevent cross-user data access. Add input validation and sanitization for all API inputs. Create credential rotation mechanism for periodic updates.",
-            "status": "pending",
-            "testStrategy": "Integration tests for API endpoints. Security testing for authentication and authorization. Load testing for API performance."
+            "status": "done",
+            "testStrategy": "Integration tests for API endpoints. Security testing for authentication and authorization. Load testing for API performance.",
+            "parentId": "undefined",
+            "updatedAt": "2026-02-05T15:46:28.417Z"
           },
           {
             "id": 4,
@@ -465,8 +517,10 @@
               3
             ],
             "details": "Create an audit logging service that records all credential access, modifications, and administrative actions. Log user ID, timestamp, action type, affected credential IDs (without sensitive data), and source IP. Ensure logs are tamper-resistant and stored securely. Implement log rotation and retention policies.",
-            "status": "pending",
-            "testStrategy": "Unit tests for logging functionality. Verification of log completeness for all credential operations. Compliance testing against security standards."
+            "status": "done",
+            "testStrategy": "Unit tests for logging functionality. Verification of log completeness for all credential operations. Compliance testing against security standards.",
+            "parentId": "undefined",
+            "updatedAt": "2026-02-05T15:46:30.612Z"
           },
           {
             "id": 5,
@@ -477,20 +531,23 @@
               3
             ],
             "details": "Implement secure backup procedures for encrypted credentials with proper access controls. Create recovery mechanisms for restoring credentials from backups. Implement secure deletion functionality that ensures complete removal of user data when requested, including from backups. Document all security practices for compliance purposes.",
-            "status": "pending",
-            "testStrategy": "Integration tests for backup and recovery processes. Verification of secure deletion implementation. Documentation review for compliance requirements."
+            "status": "done",
+            "testStrategy": "Integration tests for backup and recovery processes. Verification of secure deletion implementation. Documentation review for compliance requirements.",
+            "parentId": "undefined",
+            "updatedAt": "2026-02-05T15:46:32.594Z"
           }
-        ]
+        ],
+        "updatedAt": "2026-02-05T15:46:32.594Z"
       },
       {
         "id": "49",
         "title": "Deploy MCP Gateway to Azure Container Apps",
         "description": "Deploy the MCP Gateway to Azure Container Apps using the existing Terraform configuration from the MCP Gateway Registry.",
-        "status": "pending",
+        "status": "done",
         "dependencies": [
-          43,
-          47,
-          48
+          "43",
+          "47",
+          "48"
         ],
         "priority": "medium",
         "details": "1. Set up Azure account and configure credentials\n2. Review and customize the existing Terraform/Bicep configuration\n3. Configure domain and SSL certificates for mcp.wyre.ai\n4. Set up Azure Container Apps environment\n5. Configure load balancer and auto-scaling\n6. Set up Azure Database for PostgreSQL for session storage\n7. Configure Azure Cache for Redis for caching and rate limiting\n8. Implement monitoring and alerting\n9. Set up CI/CD pipeline for automated deployment\n10. Document deployment process and infrastructure",
@@ -502,8 +559,10 @@
             "description": "Configure Azure account credentials and initialize the Terraform/Bicep environment using the existing configuration from MCP Gateway Registry.",
             "dependencies": [],
             "details": "Set up Azure CLI with proper credentials, clone the Terraform/Bicep configuration from MCP Gateway Registry, initialize Terraform workspace or Bicep modules, and customize variables for our deployment. Ensure Azure permissions are properly configured for Container Apps deployment.",
-            "status": "pending",
-            "testStrategy": "Validate Terraform configuration using 'terraform validate' and 'terraform plan' or Bicep using 'az deployment what-if' to ensure no errors before deployment."
+            "status": "done",
+            "testStrategy": "Validate Terraform configuration using 'terraform validate' and 'terraform plan' or Bicep using 'az deployment what-if' to ensure no errors before deployment.",
+            "parentId": "undefined",
+            "updatedAt": "2026-02-05T15:56:12.396Z"
           },
           {
             "id": 2,
@@ -513,8 +572,10 @@
               1
             ],
             "details": "Create or update Virtual Network configuration, configure subnets, set up network security groups with proper inbound/outbound rules, register domain in Azure DNS, request SSL certificate through Azure App Service certificates or import existing certificates, and validate domain ownership for the certificate.",
-            "status": "pending",
-            "testStrategy": "Verify DNS resolution, SSL certificate validity, and network security group configurations through Azure portal and CLI tools."
+            "status": "done",
+            "testStrategy": "Verify DNS resolution, SSL certificate validity, and network security group configurations through Azure portal and CLI tools.",
+            "parentId": "undefined",
+            "updatedAt": "2026-02-05T15:56:18.637Z"
           },
           {
             "id": 3,
@@ -524,8 +585,10 @@
               2
             ],
             "details": "Define Container Apps based on MCP Gateway container requirements, create Container Apps environment with desired replicas, configure Application Gateway or Azure Front Door for load balancing, set up auto-scaling policies based on CPU/memory utilization, and ensure proper health checks are in place.",
-            "status": "pending",
-            "testStrategy": "Test load balancer functionality, verify auto-scaling triggers under load, and confirm container health checks are functioning correctly."
+            "status": "done",
+            "testStrategy": "Test load balancer functionality, verify auto-scaling triggers under load, and confirm container health checks are functioning correctly.",
+            "parentId": "undefined",
+            "updatedAt": "2026-02-05T15:56:20.283Z"
           },
           {
             "id": 4,
@@ -535,8 +598,10 @@
               2
             ],
             "details": "Create Azure Database for PostgreSQL instance, configure firewall rules for database access, set up Azure Cache for Redis, configure backup policies, implement encryption at rest, and integrate connection strings with MCP Gateway configuration.",
-            "status": "pending",
-            "testStrategy": "Verify database connectivity from Container Apps, test Redis caching functionality, and validate data persistence across container restarts."
+            "status": "done",
+            "testStrategy": "Verify database connectivity from Container Apps, test Redis caching functionality, and validate data persistence across container restarts.",
+            "parentId": "undefined",
+            "updatedAt": "2026-02-05T15:56:22.108Z"
           },
           {
             "id": 5,
@@ -547,24 +612,27 @@
               4
             ],
             "details": "Create GitHub Actions or Azure DevOps pipeline workflow for automated builds and deployments to Azure Container Registry and Container Apps, configure Azure Monitor for logs and metrics collection, set up alerts for critical metrics, implement Application Insights for distributed tracing, and document the entire deployment process and infrastructure for future reference.",
-            "status": "pending",
-            "testStrategy": "Verify CI/CD pipeline by making test commits, validate monitoring dashboards show appropriate metrics, and test alerting by triggering threshold violations."
+            "status": "done",
+            "testStrategy": "Verify CI/CD pipeline by making test commits, validate monitoring dashboards show appropriate metrics, and test alerting by triggering threshold violations.",
+            "parentId": "undefined",
+            "updatedAt": "2026-02-05T15:56:23.787Z"
           }
-        ]
+        ],
+        "updatedAt": "2026-02-05T15:56:23.787Z"
       },
       {
-        "id": 50,
+        "id": "50",
         "title": "Implement HaloPSA MCP Server with Native OAuth",
         "description": "Create the HaloPSA MCP server repository and implement native OAuth passthrough to leverage HaloPSA's built-in OAuth support.",
         "details": "1. Create repo: 'wyre-mcp/halopsa-mcp'\n2. Initialize TypeScript project with MCP SDK and @asachs01/node-halopsa\n3. Implement native OAuth passthrough to HaloPSA's OAuth system\n4. Configure OAuth client registration with HaloPSA\n5. Implement token refresh handling\n6. Create tools for HaloPSA API interaction\n7. Create Dockerfile for containerization\n8. Implement error handling and logging\n9. Add gateway route configuration for /v1/halopsa/*\n10. Document OAuth configuration requirements",
         "testStrategy": "Unit tests for OAuth implementation. Integration tests with HaloPSA OAuth sandbox. End-to-end tests with real OAuth credentials. Security testing for token handling. Performance testing for response times.",
         "priority": "medium",
         "dependencies": [
-          42,
-          43,
-          47
+          "42",
+          "43",
+          "47"
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -573,7 +641,8 @@
             "dependencies": [],
             "details": "Create the 'wyre-mcp/halopsa-mcp' repository. Initialize a TypeScript project with proper configuration. Install MCP SDK and @asachs01/node-halopsa packages. Set up the project structure following MCP standards. Configure ESLint and Prettier for code quality. Set up Jest for testing.",
             "status": "pending",
-            "testStrategy": "Verify project structure and dependencies. Run basic smoke tests to ensure the project builds correctly."
+            "testStrategy": "Verify project structure and dependencies. Run basic smoke tests to ensure the project builds correctly.",
+            "parentId": "undefined"
           },
           {
             "id": 2,
@@ -584,7 +653,8 @@
             ],
             "details": "Implement OAuth authorization endpoints that pass through to HaloPSA's OAuth system. Create configuration for OAuth client registration with HaloPSA. Implement secure storage for client credentials. Create documentation for the OAuth configuration requirements. Implement proper error handling for OAuth failures.",
             "status": "pending",
-            "testStrategy": "Unit tests for OAuth implementation. Integration tests with HaloPSA OAuth sandbox. Security testing for proper credential handling."
+            "testStrategy": "Unit tests for OAuth implementation. Integration tests with HaloPSA OAuth sandbox. Security testing for proper credential handling.",
+            "parentId": "undefined"
           },
           {
             "id": 3,
@@ -595,7 +665,8 @@
             ],
             "details": "Implement automatic token refresh when tokens expire. Create error handling for failed refreshes. Build a set of utility functions for common HaloPSA API interactions. Implement proper logging for API calls and responses. Create abstraction layer for API interactions to simplify tool development.",
             "status": "pending",
-            "testStrategy": "Unit tests for token refresh logic. Integration tests with mock API responses. Performance testing for API interaction tools."
+            "testStrategy": "Unit tests for token refresh logic. Integration tests with mock API responses. Performance testing for API interaction tools.",
+            "parentId": "undefined"
           },
           {
             "id": 4,
@@ -606,7 +677,8 @@
             ],
             "details": "Create a Dockerfile for containerizing the HaloPSA MCP server. Implement multi-stage builds for optimized container size. Configure environment variables for runtime configuration. Set up health checks and proper signal handling. Create docker-compose configuration for local development. Document container deployment requirements.",
             "status": "pending",
-            "testStrategy": "Build and run container tests. Verify proper environment variable handling. Test container startup and shutdown procedures."
+            "testStrategy": "Build and run container tests. Verify proper environment variable handling. Test container startup and shutdown procedures.",
+            "parentId": "undefined"
           },
           {
             "id": 5,
@@ -619,24 +691,26 @@
             ],
             "details": "Configure gateway routes for /v1/halopsa/* endpoints. Implement proper error handling and logging for all routes. Create comprehensive documentation including setup instructions, OAuth configuration, API usage examples, and troubleshooting guides. Add API endpoint documentation with request/response examples. Create deployment guides for various environments.",
             "status": "pending",
-            "testStrategy": "End-to-end testing with gateway integration. Documentation review and validation. User acceptance testing with documentation."
+            "testStrategy": "End-to-end testing with gateway integration. Documentation review and validation. User acceptance testing with documentation.",
+            "parentId": "undefined"
           }
-        ]
+        ],
+        "updatedAt": "2026-02-05T15:46:35.091Z"
       },
       {
-        "id": 51,
+        "id": "51",
         "title": "Implement Additional Vendor MCP Servers",
         "description": "Create MCP servers for additional vendors: Syncro, Atera, SuperOps, ConnectWise PSA, and ConnectWise Automate.",
         "details": "1. Create repositories for each vendor:\n   - wyre-mcp/syncro-mcp\n   - wyre-mcp/atera-mcp\n   - wyre-mcp/superops-mcp\n   - wyre-mcp/connectwise-psa-mcp\n   - wyre-mcp/connectwise-automate-mcp\n2. Initialize TypeScript projects with MCP SDK and respective node libraries\n3. Implement credential handling for each vendor's authentication method\n4. Create tools for each vendor's API interaction\n5. Create Dockerfiles for containerization\n6. Implement error handling and logging\n7. Add gateway route configurations for each vendor\n8. Create credential entry UI for each vendor\n9. Document API capabilities and limitations\n10. Implement rate limiting and error handling specific to each vendor",
         "testStrategy": "Unit tests for each vendor implementation. Integration tests with mock APIs. End-to-end tests with real credentials (in secure CI environment). Performance testing for response times. Security testing for credential handling.",
         "priority": "low",
         "dependencies": [
-          42,
-          43,
-          47,
-          48
+          "42",
+          "43",
+          "47",
+          "48"
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -645,7 +719,8 @@
             "dependencies": [],
             "details": "Create GitHub repositories for Syncro, Atera, SuperOps, ConnectWise PSA, and ConnectWise Automate. Initialize each with TypeScript, install MCP SDK and respective vendor API libraries. Set up project structure with standard folders (src, tests, config). Configure tsconfig.json, package.json, and basic CI/CD pipeline.",
             "status": "pending",
-            "testStrategy": "Verify repository structure and successful build of each project. Test dependency installation and project initialization scripts."
+            "testStrategy": "Verify repository structure and successful build of each project. Test dependency installation and project initialization scripts.",
+            "parentId": "undefined"
           },
           {
             "id": 2,
@@ -656,7 +731,8 @@
             ],
             "details": "Implement authentication modules for each vendor: OAuth for Syncro and SuperOps, API key for Atera, and complex authentication for ConnectWise products. Integrate with the secure credential storage system from Task 48. Create credential validation and refresh mechanisms. Implement proper error handling for authentication failures.",
             "status": "pending",
-            "testStrategy": "Unit tests for authentication modules. Integration tests with mock credentials. Security testing for proper credential handling and storage."
+            "testStrategy": "Unit tests for authentication modules. Integration tests with mock credentials. Security testing for proper credential handling and storage.",
+            "parentId": "undefined"
           },
           {
             "id": 3,
@@ -667,7 +743,8 @@
             ],
             "details": "Implement API interaction tools for each vendor, focusing on device/asset management, alert handling, and site/customer management. Create standardized interfaces that conform to MCP specifications. Implement rate limiting, pagination handling, and error recovery. Ensure proper logging of API interactions while protecting sensitive data.",
             "status": "pending",
-            "testStrategy": "Unit tests for each API tool. Integration tests with mock API responses. End-to-end tests with sandbox environments where available."
+            "testStrategy": "Unit tests for each API tool. Integration tests with mock API responses. End-to-end tests with sandbox environments where available.",
+            "parentId": "undefined"
           },
           {
             "id": 4,
@@ -678,7 +755,8 @@
             ],
             "details": "Create Dockerfiles for each vendor MCP server with proper base images, security considerations, and optimization. Implement multi-stage builds to minimize image size. Configure environment variables for runtime configuration. Create docker-compose files for local development. Add gateway route configurations for each vendor in the MCP Gateway.",
             "status": "pending",
-            "testStrategy": "Test Docker builds and container startup. Verify proper configuration loading. Test gateway routing and connection to each vendor MCP server."
+            "testStrategy": "Test Docker builds and container startup. Verify proper configuration loading. Test gateway routing and connection to each vendor MCP server.",
+            "parentId": "undefined"
           },
           {
             "id": 5,
@@ -689,15 +767,21 @@
             ],
             "details": "Document API capabilities and limitations for each vendor. Create usage examples and troubleshooting guides. Implement comprehensive test suites including unit tests, integration tests, and end-to-end tests. Create performance benchmarks and security validation tests. Document known issues and vendor-specific quirks or limitations.",
             "status": "pending",
-            "testStrategy": "Review documentation for completeness and accuracy. Verify test coverage meets project standards. Perform security and performance testing against actual vendor APIs in controlled environments."
+            "testStrategy": "Review documentation for completeness and accuracy. Verify test coverage meets project standards. Perform security and performance testing against actual vendor APIs in controlled environments.",
+            "parentId": "undefined"
           }
-        ]
+        ],
+        "updatedAt": "2026-02-05T15:47:19.634Z"
       }
     ],
     "metadata": {
-      "created": "2026-02-05T14:29:59.590Z",
-      "updated": "2026-02-05T14:36:58.052Z",
-      "description": "Tasks for master context"
+      "version": "1.0.0",
+      "lastModified": "2026-02-05T15:56:23.787Z",
+      "taskCount": 10,
+      "completedCount": 10,
+      "tags": [
+        "master"
+      ]
     }
   },
   "node-it-glue": {

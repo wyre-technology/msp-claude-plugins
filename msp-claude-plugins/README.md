@@ -16,7 +16,7 @@ Community-driven Claude Code plugins for Managed Service Providers.
 ## Quick Start
 
 ```bash
-/plugin marketplace add asachs01/msp-claude-plugins
+/plugin marketplace add wyre-technology/msp-claude-plugins
 ```
 
 ## Available Plugins
@@ -191,7 +191,7 @@ Each plugin requires API credentials. See the individual plugin READMEs for conf
 
 ## Documentation
 
-Full documentation: [https://asachs01.github.io/msp-claude-plugins/](https://asachs01.github.io/msp-claude-plugins/)
+Full documentation: [https://wyre-technology.github.io/msp-claude-plugins/](https://wyre-technology.github.io/msp-claude-plugins/)
 
 ## Contributing
 

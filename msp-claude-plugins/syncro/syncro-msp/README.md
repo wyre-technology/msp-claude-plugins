@@ -72,7 +72,7 @@ curl -s "https://${SYNCRO_SUBDOMAIN}.syncromsp.com/api/v1/me?api_key=${SYNCRO_AP
 
 ```bash
 # Clone the repository
-git clone https://github.com/asachs01/msp-claude-plugins.git
+git clone https://github.com/wyre-technology/msp-claude-plugins.git
 
 # Navigate to plugin
 cd msp-claude-plugins/syncro/syncro-msp

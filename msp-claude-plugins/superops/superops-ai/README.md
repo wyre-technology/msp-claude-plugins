@@ -82,7 +82,7 @@ curl -X POST "https://api.superops.ai/graphql" \
 
 ```bash
 # Clone the repository
-git clone https://github.com/asachs01/msp-claude-plugins.git
+git clone https://github.com/wyre-technology/msp-claude-plugins.git
 
 # Navigate to plugin
 cd msp-claude-plugins/superops/superops-ai

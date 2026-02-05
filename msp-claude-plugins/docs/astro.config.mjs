@@ -5,7 +5,7 @@ import mdx from '@astrojs/mdx';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://asachs01.github.io',
+  site: 'https://wyre-technology.github.io',
   base: '/msp-claude-plugins/',
   integrations: [
     tailwind(),

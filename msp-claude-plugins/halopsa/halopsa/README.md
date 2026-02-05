@@ -111,7 +111,7 @@ curl -s "https://${HALOPSA_TENANT}.halopsa.com/api/Tickets?count=1" \
 
 ```bash
 # Clone the repository
-git clone https://github.com/asachs01/msp-claude-plugins.git
+git clone https://github.com/wyre-technology/msp-claude-plugins.git
 
 # Navigate to plugin
 cd msp-claude-plugins/halopsa/halopsa
