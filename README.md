@@ -29,33 +29,26 @@ Inspired by Anthropic's [knowledge-work-plugins](https://github.com/anthropics/k
 ## Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                   MSP Claude Plugins                        │
-├─────────────────────────────────────────────────────────────┤
-│                                                             │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │
-│  │   Kaseya    │  │ ConnectWise │  │   Shared    │         │
-│  │  ┌───────┐  │  │  ┌───────┐  │  │  ┌───────┐  │         │
-│  │  │Autotask│  │  │  │Manage │  │  │  │ MSP   │  │         │
-│  │  │       │  │  │  │       │  │  │  │Termin.│  │         │
-│  │  │Skills │  │  │  │Skills │  │  │  └───────┘  │         │
-│  │  │Commands│  │  │  │Commands│  │  │  ┌───────┐  │         │
-│  │  │MCP    │  │  │  │MCP    │  │  │  │Ticket │  │         │
-│  │  └───────┘  │  │  └───────┘  │  │  │Triage │  │         │
-│  └─────────────┘  └─────────────┘  │  └───────┘  │         │
-│                                     └─────────────┘         │
-│                                                             │
-│  ┌──────────────────────────────────────────────────────┐  │
-│  │                  Quality Standards                    │  │
-│  │  PRD Requirements │ Skill Checklist │ API Docs Guide │  │
-│  └──────────────────────────────────────────────────────┘  │
-│                                                             │
-│  ┌──────────────────────────────────────────────────────┐  │
-│  │                     Templates                         │  │
-│  │   Plugin PRD │ Skill Template │ Command Template     │  │
-│  └──────────────────────────────────────────────────────┘  │
-│                                                             │
-└─────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────────────────────────────────────────┐
+│                        MSP Claude Plugins                              │
+├───────────────────────────────────────────────────────────────────────┤
+│                                                                        │
+│  ┌───────────┐ ┌───────────┐ ┌───────────┐ ┌───────────┐ ┌─────────┐ │
+│  │  Kaseya   │ │   Datto   │ │  IT Glue  │ │  Syncro   │ │  Atera  │ │
+│  │ Autotask  │ │    RMM    │ │           │ │    MSP    │ │         │ │
+│  └───────────┘ └───────────┘ └───────────┘ └───────────┘ └─────────┘ │
+│                                                                        │
+│  ┌───────────┐ ┌───────────┐ ┌───────────┐                           │
+│  │ SuperOps  │ │  HaloPSA  │ │  Shared   │                           │
+│  │    .ai    │ │           │ │  Skills   │                           │
+│  └───────────┘ └───────────┘ └───────────┘                           │
+│                                                                        │
+│  Each plugin provides: Skills • Commands • MCP Integration            │
+│                                                                        │
+│  ┌──────────────────────────────────────────────────────────────────┐ │
+│  │  Quality Standards: PRD Requirements │ Skill Checklists │ Guides │ │
+│  └──────────────────────────────────────────────────────────────────┘ │
+└───────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -71,7 +64,7 @@ Inspired by Anthropic's [knowledge-work-plugins](https://github.com/anthropics/k
 
 ```bash
 # Clone the repository
-git clone https://github.com/OWNER/msp-claude-plugins.git
+git clone https://github.com/asachs01/msp-claude-plugins.git
 cd msp-claude-plugins
 
 # Navigate to your vendor plugin
@@ -123,34 +116,102 @@ Priority: High (2)
 
 ## Plugin Directory
 
-### Kaseya Autotask (Active)
+### Available Plugins
+
+| Plugin | Auth Type | Rate Limit | Skills | Status |
+|--------|-----------|------------|--------|--------|
+| **Kaseya Autotask** | API Key + Integration Code | 500/min | 7 | ✅ Active |
+| **Datto RMM** | API Key (Header) | Varies | 5 | ✅ Active |
+| **IT Glue** | API Key (Header) | 10,000/day | 5 | ✅ Active |
+| **Syncro** | API Key (Query) | 180/min | 5 | ✅ Active |
+| **Atera** | API Key (Header) | 700/min | 6 | ✅ Active |
+| **SuperOps.ai** | Bearer Token | 800/min | 6 | ✅ Active |
+| **HaloPSA** | OAuth 2.0 | 500/3min | 5 | ✅ Active |
+
+### Kaseya Autotask
 
 Full-featured plugin for Autotask PSA with comprehensive API coverage.
 
-| Component | Description | Status |
-|-----------|-------------|--------|
-| **Skills** | | |
-| [Tickets](kaseya/autotask/skills/tickets/SKILL.md) | Status codes, SLA calculations, escalation rules | ✅ Complete |
-| [CRM](kaseya/autotask/skills/crm/SKILL.md) | Company and contact management | ✅ Complete |
-| [Projects](kaseya/autotask/skills/projects/SKILL.md) | Project phases, tasks, resources | ✅ Complete |
-| [Contracts](kaseya/autotask/skills/contracts/SKILL.md) | Service agreements, billing | ✅ Complete |
-| [Time Entries](kaseya/autotask/skills/time-entries/SKILL.md) | Approval workflows, billing calculations | ✅ Complete |
-| [API Patterns](kaseya/autotask/skills/api-patterns/SKILL.md) | All 14 query operators, authentication | ✅ Complete |
-| [Configuration Items](kaseya/autotask/skills/configuration-items/SKILL.md) | Asset management, warranties | ✅ Complete |
-| **Commands** | | |
-| [/create-ticket](kaseya/autotask/commands/create-ticket.md) | Create service tickets | ✅ Complete |
-| [/search-tickets](kaseya/autotask/commands/search-tickets.md) | Search and filter tickets | ✅ Complete |
-| [/time-entry](kaseya/autotask/commands/time-entry.md) | Log time against tickets/projects | ✅ Complete |
+| Component | Description |
+|-----------|-------------|
+| [Tickets](msp-claude-plugins/kaseya/autotask/skills/tickets/SKILL.md) | Status codes, SLA calculations, escalation rules |
+| [CRM](msp-claude-plugins/kaseya/autotask/skills/crm/SKILL.md) | Company and contact management |
+| [Projects](msp-claude-plugins/kaseya/autotask/skills/projects/SKILL.md) | Project phases, tasks, resources |
+| [Contracts](msp-claude-plugins/kaseya/autotask/skills/contracts/SKILL.md) | Service agreements, billing |
+| [API Patterns](msp-claude-plugins/kaseya/autotask/skills/api-patterns/SKILL.md) | Query operators, authentication |
 
-### ConnectWise Manage (Planned)
+### Datto RMM
 
-Placeholder structure ready for community contributions.
+RMM-focused plugin with device management and monitoring.
 
-| Component | Description | Status |
-|-----------|-------------|--------|
-| Plugin Structure | Manifest and MCP config | ✅ Ready |
-| Skills | Service tickets, companies | 📋 Planned |
-| Commands | Ticket operations | 📋 Planned |
+| Component | Description |
+|-----------|-------------|
+| Devices | Device listing, monitoring, patch management |
+| Alerts | Alert management and acknowledgment |
+| Jobs | Job scheduling and execution |
+| API Patterns | Authentication, pagination, filtering |
+
+### IT Glue
+
+Documentation platform integration for asset and password management.
+
+| Component | Description |
+|-----------|-------------|
+| Organizations | Organization CRUD and relationships |
+| Configuration Types | Asset types and custom fields |
+| Passwords | Password management (secure handling) |
+| Flexible Assets | Custom documentation templates |
+| API Patterns | Authentication, filtering, embedding |
+
+### Syncro
+
+All-in-one PSA/RMM with ticket and customer management.
+
+| Component | Description |
+|-----------|-------------|
+| [Tickets](msp-claude-plugins/syncro/syncro-msp/skills/tickets/SKILL.md) | Ticket CRUD, timers, comments |
+| [Customers](msp-claude-plugins/syncro/syncro-msp/skills/customers/SKILL.md) | Customer and contact management |
+| [Assets](msp-claude-plugins/syncro/syncro-msp/skills/assets/SKILL.md) | RMM integration, patch management |
+| [Invoices](msp-claude-plugins/syncro/syncro-msp/skills/invoices/SKILL.md) | Billing and payment tracking |
+| [API Patterns](msp-claude-plugins/syncro/syncro-msp/skills/api-patterns/SKILL.md) | Authentication, pagination |
+
+### Atera
+
+RMM/PSA with agent-based monitoring and ticketing.
+
+| Component | Description |
+|-----------|-------------|
+| [Tickets](msp-claude-plugins/atera/atera/skills/tickets/SKILL.md) | Ticket management with SLA tracking |
+| [Agents](msp-claude-plugins/atera/atera/skills/agents/SKILL.md) | RMM agent monitoring and commands |
+| [Customers](msp-claude-plugins/atera/atera/skills/customers/SKILL.md) | Customer CRUD and custom values |
+| [Alerts](msp-claude-plugins/atera/atera/skills/alerts/SKILL.md) | Alert management and triage |
+| [Devices](msp-claude-plugins/atera/atera/skills/devices/SKILL.md) | HTTP/SNMP/TCP device monitors |
+| [API Patterns](msp-claude-plugins/atera/atera/skills/api-patterns/SKILL.md) | X-API-KEY auth, OData pagination |
+
+### SuperOps.ai
+
+Modern PSA/RMM with GraphQL API.
+
+| Component | Description |
+|-----------|-------------|
+| [Tickets](msp-claude-plugins/superops/superops-ai/skills/tickets/SKILL.md) | Ticket CRUD, notes, time entries |
+| [Assets](msp-claude-plugins/superops/superops-ai/skills/assets/SKILL.md) | Asset inventory, software, scripts |
+| [Clients](msp-claude-plugins/superops/superops-ai/skills/clients/SKILL.md) | Client management, sites, contacts |
+| [Alerts](msp-claude-plugins/superops/superops-ai/skills/alerts/SKILL.md) | Alert handling and ticket creation |
+| [Runbooks](msp-claude-plugins/superops/superops-ai/skills/runbooks/SKILL.md) | Script execution (single/bulk/scheduled) |
+| [API Patterns](msp-claude-plugins/superops/superops-ai/skills/api-patterns/SKILL.md) | GraphQL, cursor pagination |
+
+### HaloPSA
+
+Enterprise PSA with OAuth 2.0 authentication.
+
+| Component | Description |
+|-----------|-------------|
+| [Tickets](msp-claude-plugins/halopsa/halopsa/skills/tickets/SKILL.md) | Ticket management, actions, SLAs |
+| [Clients](msp-claude-plugins/halopsa/halopsa/skills/clients/SKILL.md) | Client hierarchy, sites, contacts |
+| [Assets](msp-claude-plugins/halopsa/halopsa/skills/assets/SKILL.md) | Asset tracking and lifecycle |
+| [Contracts](msp-claude-plugins/halopsa/halopsa/skills/contracts/SKILL.md) | Recurring billing, prepaid hours |
+| [API Patterns](msp-claude-plugins/halopsa/halopsa/skills/api-patterns/SKILL.md) | OAuth 2.0 client credentials |
 
 ### Shared Skills
 
@@ -158,8 +219,8 @@ Vendor-agnostic knowledge applicable across all MSP tools.
 
 | Skill | Description |
 |-------|-------------|
-| [MSP Terminology](shared/skills/msp-terminology/SKILL.md) | Common MSP terms, acronyms, concepts |
-| [Ticket Triage](shared/skills/ticket-triage/SKILL.md) | Best practices for prioritization and routing |
+| [MSP Terminology](msp-claude-plugins/shared/skills/msp-terminology/SKILL.md) | Common MSP terms, acronyms, concepts |
+| [Ticket Triage](msp-claude-plugins/shared/skills/ticket-triage/SKILL.md) | Best practices for prioritization and routing |
 
 ---
 
@@ -222,36 +283,23 @@ msp-claude-plugins/
 ├── .claude-plugin/
 │   └── marketplace.json          # Marketplace manifest
 ├── _standards/                   # Quality standards
-│   ├── prd-requirements.md       # PRD checklist
-│   ├── skill-quality-checklist.md
-│   └── api-documentation-guide.md
 ├── _templates/                   # Contributor templates
-│   ├── plugin-prd-template.md
-│   ├── skill-template/SKILL.md
-│   ├── command-template.md
-│   └── llm-prompts/              # AI-assisted development
 ├── kaseya/
-│   └── autotask/                 # ✅ Active plugin
-│       ├── .claude-plugin/plugin.json
-│       ├── .mcp.json
-│       ├── skills/
-│       │   ├── tickets/
-│       │   ├── crm/
-│       │   ├── projects/
-│       │   ├── contracts/
-│       │   ├── time-entries/
-│       │   ├── api-patterns/
-│       │   └── configuration-items/
-│       └── commands/
-│           ├── create-ticket.md
-│           ├── search-tickets.md
-│           └── time-entry.md
+│   └── autotask/                 # ✅ Autotask PSA
+├── datto/
+│   └── rmm/                      # ✅ Datto RMM
 ├── connectwise/
 │   └── manage/                   # 📋 Planned
+├── syncro/
+│   └── syncro-msp/               # ✅ Syncro PSA/RMM
+├── atera/
+│   └── atera/                    # ✅ Atera RMM/PSA
+├── superops/
+│   └── superops-ai/              # ✅ SuperOps.ai
+├── halopsa/
+│   └── halopsa/                  # ✅ HaloPSA
 ├── shared/
-│   └── skills/
-│       ├── msp-terminology/
-│       └── ticket-triage/
+│   └── skills/                   # Vendor-agnostic skills
 ├── CHANGELOG.md
 ├── CODE_OF_CONDUCT.md
 ├── CONTRIBUTING.md
@@ -331,22 +379,26 @@ Report security vulnerabilities via GitHub Security Advisories.
 
 ## Roadmap
 
-### Current (v1.0.0)
-- ✅ Autotask plugin with 7 skills, 3 commands
+### Current (v1.0.0) ✅
+- ✅ Kaseya Autotask plugin (7 skills, 3 commands)
+- ✅ Datto RMM plugin (5 skills, 2 commands)
+- ✅ IT Glue plugin (5 skills, 2 commands)
+- ✅ Syncro plugin (5 skills, 2 commands)
+- ✅ Atera plugin (6 skills, 2 commands)
+- ✅ SuperOps.ai plugin (6 skills, 2 commands)
+- ✅ HaloPSA plugin (5 skills, 2 commands)
 - ✅ Shared MSP skills
 - ✅ Contribution framework
 
 ### Planned (v1.1.0)
 - 📋 ConnectWise Manage plugin
-- 📋 Documentation site (Astro/Starlight)
-- 📋 GitHub issue templates for new provider requests
+- 📋 NinjaOne plugin
+- 📋 Documentation site enhancements
 
 ### Future
-- 📋 Datto RMM plugin
-- 📋 NinjaOne plugin
-- 📋 HaloPSA plugin
-- 📋 IT Glue plugin
-- 📋 Syncro plugin
+- 📋 Freshdesk plugin
+- 📋 Zendesk plugin
+- 📋 Additional vendor integrations
 
 ---
 
@@ -365,10 +417,14 @@ Report security vulnerabilities via GitHub Security Advisories.
 
 ### Vendor API Documentation
 - [Autotask REST API](https://ww5.autotask.net/help/DeveloperHelp/Content/APIs/REST/REST_API_Home.htm)
-- [ConnectWise Manage API](https://developer.connectwise.com/Products/Manage/REST)
+- [Datto RMM API](https://rmm.datto.com/help/en/Content/4WEBPORTAL/APIv2.htm)
 - [IT Glue API](https://api.itglue.com/developer/)
-- [NinjaOne API](https://app.ninjarmm.com/apidocs/)
+- [Syncro API](https://api-docs.syncromsp.com/)
+- [Atera API](https://app.atera.com/apidocs/)
+- [SuperOps.ai API](https://developer.superops.ai/)
 - [HaloPSA API](https://halopsa.com/apidocs/)
+- [ConnectWise Manage API](https://developer.connectwise.com/Products/Manage/REST)
+- [NinjaOne API](https://app.ninjarmm.com/apidocs/)
 
 ---
 
@@ -391,5 +447,5 @@ This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENS
   <br>
   <a href="CONTRIBUTING.md">Contribute</a> •
   <a href="CHANGELOG.md">Changelog</a> •
-  <a href="https://github.com/OWNER/msp-claude-plugins/issues">Issues</a>
+  <a href="https://github.com/asachs01/msp-claude-plugins/issues">Issues</a>
 </p>
