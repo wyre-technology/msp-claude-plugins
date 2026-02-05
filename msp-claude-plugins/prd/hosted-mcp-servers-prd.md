@@ -1,7 +1,8 @@
 # Hosted MCP Servers PRD
 
-> Version: 1.0.0
+> Version: 1.1.0
 > Created: 2026-02-05
+> Updated: 2026-02-05
 > Status: Draft - Awaiting Review
 
 ## Overview
@@ -16,7 +17,7 @@ This PRD defines the architecture and implementation plan for hosted MCP servers
 
 ### Target State
 
-- Hosted MCP servers at `mcp.{vendor}.wyreworkspace.com` (or similar)
+- Unified MCP Gateway at `mcp.wyre.ai` with path-based routing per vendor
 - OAuth authentication flow - users click "Connect" and authorize via browser
 - No local API key management required
 - Works seamlessly with Claude Desktop and Claude Code
@@ -29,14 +30,19 @@ This PRD defines the architecture and implementation plan for hosted MCP servers
 
 ```
 ┌─────────────────┐     ┌──────────────────────┐     ┌─────────────────┐
-│  Claude Desktop │────▶│  Hosted MCP Server   │────▶│  Vendor API     │
-│  or Claude Code │     │  (mcp.autotask.wyre) │     │  (Autotask API) │
-└─────────────────┘     └──────────────────────┘     └─────────────────┘
-        │                        │
-        │                        ▼
-        │               ┌──────────────────────┐
-        └──────────────▶│  OAuth Provider      │
-           (browser)    │  (vendor's OAuth)    │
+│  Claude Desktop │────▶│    MCP Gateway       │────▶│  Vendor APIs    │
+│  or Claude Code │     │  (mcp.wyre.ai)       │     │  (Autotask,     │
+└─────────────────┘     │                      │     │   Datto, etc.)  │
+        │               │  - OAuth 2.1 + PKCE  │     └─────────────────┘
+        │               │  - Credential store  │
+        │               │  - Vendor handlers   │
+        └──────────────▶└──────────────────────┘
+           (browser)             │
+                                 ▼
+                        ┌──────────────────────┐
+                        │  Credential Entry UI │
+                        │  (user enters API    │
+                        │   keys one time)     │
                         └──────────────────────┘
 ```
 
@@ -64,6 +70,153 @@ Most MSP vendors don't support OAuth - they use API keys. Our hosted MCP servers
 
 ```
 User ──OAuth──▶ Our Auth ──stores──▶ User's API Keys ──▶ Vendor API
+```
+
+---
+
+## MCP Gateway Architecture (Recommended)
+
+### Why a Gateway?
+
+Instead of deploying individual MCP servers per vendor, a **unified MCP Gateway** provides:
+
+1. **Single entry point** - One URL, one auth flow, multiple vendors
+2. **Simplified infrastructure** - One deployment, not 9+ separate services
+3. **Centralized auth** - OAuth 2.1 with PKCE handled once at gateway level
+4. **Session-aware routing** - Requests routed to correct vendor based on user context
+5. **Easier credential management** - Per-tenant encrypted storage in one place
+
+### Gateway Architecture
+
+```
+┌─────────────────┐     ┌──────────────────────────────────────────────────┐
+│  Claude Desktop │     │              MCP Gateway                          │
+│  or Claude Code │────▶│  https://mcp.wyre.ai                   │
+└─────────────────┘     │                                                  │
+        │               │  ┌─────────────────────────────────────────────┐ │
+        │               │  │           OAuth 2.1 + PKCE Layer            │ │
+        │               │  │  - User authentication                      │ │
+        │               │  │  - Session management                       │ │
+        │               │  │  - Token refresh                            │ │
+        └───────────────│  └─────────────────────────────────────────────┘ │
+           (browser)    │                      │                            │
+                        │                      ▼                            │
+                        │  ┌─────────────────────────────────────────────┐ │
+                        │  │         Credential Store (Encrypted)        │ │
+                        │  │  - Per-user vendor API keys                 │ │
+                        │  │  - AES-256 encryption at rest               │ │
+                        │  │  - Tenant isolation                         │ │
+                        │  └─────────────────────────────────────────────┘ │
+                        │                      │                            │
+                        │  ┌───────┬───────┬───────┬───────┬───────────┐  │
+                        │  │ Auto- │ Datto │  IT   │ Halo  │   ...     │  │
+                        │  │ task  │  RMM  │ Glue  │  PSA  │           │  │
+                        │  │Handler│Handler│Handler│Handler│           │  │
+                        │  └───┬───┴───┬───┴───┬───┴───┬───┴───────────┘  │
+                        └──────│───────│───────│───────│──────────────────┘
+                               ▼       ▼       ▼       ▼
+                        ┌──────────┐ ┌──────────┐ ┌──────────┐
+                        │ Autotask │ │ Datto    │ │ IT Glue  │  ...
+                        │   API    │ │   API    │ │   API    │
+                        └──────────┘ └──────────┘ └──────────┘
+```
+
+### Existing Gateway Solutions Evaluated
+
+| Solution | Type | Auth | Pros | Cons |
+|----------|------|------|------|------|
+| **Microsoft MCP Gateway** | Kubernetes-native | Azure Entra ID | Enterprise-ready, SSO | Azure lock-in, complex |
+| **Docker MCP Gateway** | Open-source | Configurable | Simple orchestration | No built-in auth |
+| **MetaMCP** | Aggregator | None | Combines multiple servers | Docker-only, no auth layer |
+| **MCPHub** | Unified hub | Basic | Vendor-agnostic | Early stage, limited docs |
+
+### Recommendation: Custom Gateway
+
+Build a custom MCP Gateway because:
+
+1. **None support our auth pattern** - We need to store vendor API keys, not federate OAuth
+2. **MCP SDK is TypeScript** - Easy to build unified routing layer
+3. **Full control** - No dependency on third-party gateway lifecycle
+4. **MSP-specific features** - Multi-tenant credential storage, audit logging
+
+### Gateway Endpoint Format
+
+Single gateway with path-based routing:
+```
+https://mcp.wyre.ai/v1/autotask
+https://mcp.wyre.ai/v1/datto-rmm
+https://mcp.wyre.ai/v1/itglue
+https://mcp.wyre.ai/v1/halopsa
+https://mcp.wyre.ai/v1/syncro
+https://mcp.wyre.ai/v1/atera
+https://mcp.wyre.ai/v1/superops
+https://mcp.wyre.ai/v1/connectwise-psa
+https://mcp.wyre.ai/v1/connectwise-automate
+```
+
+### OAuth 2.1 with PKCE
+
+Per MCP spec update (June 2025), use OAuth 2.1 with PKCE:
+
+```
+┌──────────────┐                              ┌───────────────────┐
+│ Claude Client│                              │   MCP Gateway     │
+└──────┬───────┘                              └─────────┬─────────┘
+       │                                                │
+       │  1. GET /v1/datto-rmm (no token)              │
+       │───────────────────────────────────────────────▶│
+       │                                                │
+       │  2. 401 + WWW-Authenticate: Bearer            │
+       │◀───────────────────────────────────────────────│
+       │                                                │
+       │  3. GET /oauth/authorize?                     │
+       │     client_id=claude&                         │
+       │     code_challenge=xxx&                       │
+       │     redirect_uri=...                          │
+       │───────────────────────────────────────────────▶│
+       │                                                │
+       │  4. Redirect to credential entry page         │
+       │◀───────────────────────────────────────────────│
+       │                                                │
+       │  5. User enters vendor API credentials        │
+       │                                                │
+       │  6. Redirect back with auth code              │
+       │◀───────────────────────────────────────────────│
+       │                                                │
+       │  7. POST /oauth/token                         │
+       │     code=xxx&code_verifier=yyy                │
+       │───────────────────────────────────────────────▶│
+       │                                                │
+       │  8. Access token + refresh token              │
+       │◀───────────────────────────────────────────────│
+       │                                                │
+       │  9. GET /v1/datto-rmm (with token)            │
+       │───────────────────────────────────────────────▶│
+       │                                                │
+       │  10. MCP tool results                         │
+       │◀───────────────────────────────────────────────│
+```
+
+### Session-Aware Stateful Routing
+
+Gateway maintains session state to:
+- Map user sessions to stored credentials
+- Route requests to correct vendor handler
+- Handle credential refresh/rotation
+- Track usage for rate limiting
+
+```typescript
+interface GatewaySession {
+  userId: string;
+  connectedVendors: {
+    [vendor: string]: {
+      credentialId: string;  // Reference to encrypted cred
+      lastUsed: Date;
+      tokenExpiry?: Date;
+    }
+  };
+  sessionExpiry: Date;
+}
 ```
 
 ---
@@ -98,59 +251,95 @@ Priority order based on:
 
 ## Technical Specifications
 
-### Infrastructure Requirements
+### Infrastructure Requirements (Gateway Model)
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                     Cloud Infrastructure                     │
-├─────────────────────────────────────────────────────────────┤
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │
-│  │ MCP Server  │  │ MCP Server  │  │ MCP Server  │  ...    │
-│  │ (Autotask)  │  │ (Datto RMM) │  │ (IT Glue)   │         │
-│  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘         │
-│         │                │                │                 │
-│         ▼                ▼                ▼                 │
-│  ┌─────────────────────────────────────────────────────┐   │
-│  │              Shared Auth Service                     │   │
-│  │  - OAuth 2.0 provider (our own)                     │   │
-│  │  - User session management                          │   │
-│  │  - Credential encryption/storage                    │   │
-│  └─────────────────────────────────────────────────────┘   │
-│         │                                                   │
-│         ▼                                                   │
-│  ┌─────────────────────────────────────────────────────┐   │
-│  │              Secure Credential Store                 │   │
-│  │  - Per-user encrypted API keys                      │   │
-│  │  - Tenant isolation                                 │   │
-│  │  - Audit logging                                    │   │
-│  └─────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────┐
+│                     Cloud Infrastructure                         │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  ┌───────────────────────────────────────────────────────────┐  │
+│  │                    MCP Gateway Service                     │  │
+│  │                                                            │  │
+│  │  ┌──────────────────────────────────────────────────────┐ │  │
+│  │  │              OAuth 2.1 + PKCE Provider               │ │  │
+│  │  │  - Authorization endpoint                            │ │  │
+│  │  │  - Token endpoint                                    │ │  │
+│  │  │  - PKCE code challenge verification                  │ │  │
+│  │  └──────────────────────────────────────────────────────┘ │  │
+│  │                           │                                │  │
+│  │  ┌──────────────────────────────────────────────────────┐ │  │
+│  │  │              Session Manager                         │ │  │
+│  │  │  - User session state                                │ │  │
+│  │  │  - Connected vendors tracking                        │ │  │
+│  │  │  - Rate limiting per user                            │ │  │
+│  │  └──────────────────────────────────────────────────────┘ │  │
+│  │                           │                                │  │
+│  │  ┌──────────────────────────────────────────────────────┐ │  │
+│  │  │              Vendor Handler Router                   │ │  │
+│  │  │  /v1/autotask  → AutotaskHandler                     │ │  │
+│  │  │  /v1/datto-rmm → DattoRMMHandler                     │ │  │
+│  │  │  /v1/itglue    → ITGlueHandler                       │ │  │
+│  │  │  /v1/halopsa   → HaloPSAHandler                      │ │  │
+│  │  │  /v1/syncro    → SyncroHandler                       │ │  │
+│  │  │  /v1/atera     → AteraHandler                        │ │  │
+│  │  │  ...                                                 │ │  │
+│  │  └──────────────────────────────────────────────────────┘ │  │
+│  │                                                            │  │
+│  └───────────────────────────────────────────────────────────┘  │
+│                              │                                   │
+│                              ▼                                   │
+│  ┌───────────────────────────────────────────────────────────┐  │
+│  │              Secure Credential Store                       │  │
+│  │  - Per-user encrypted API keys (AES-256)                  │  │
+│  │  - Per-tenant isolation                                   │  │
+│  │  - Audit logging (all credential access)                  │  │
+│  │  - Automatic key rotation support                         │  │
+│  └───────────────────────────────────────────────────────────┘  │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
 ### Technology Stack (Recommended)
 
 | Component | Technology | Rationale |
 |-----------|------------|-----------|
-| MCP Servers | Node.js/TypeScript | MCP SDK is TypeScript-native |
-| Auth Service | OAuth 2.0 (self-hosted) | Industry standard |
+| MCP Gateway | Node.js/TypeScript | MCP SDK is TypeScript-native |
+| Auth Layer | OAuth 2.1 + PKCE | MCP spec compliant (June 2025) |
 | Credential Store | AWS Secrets Manager or Vault | Enterprise-grade encryption |
-| Hosting | AWS Lambda + API Gateway | Serverless, scales to zero |
-| Database | DynamoDB or PostgreSQL | User sessions, audit logs |
+| Hosting | **Option A**: AWS Lambda + API Gateway | Serverless, scales to zero |
+| | **Option B**: Fly.io or Railway | Simpler deployment, lower ops burden |
+| | **Option C**: Kubernetes (EKS/GKE) | Enterprise, multi-region |
+| Database | PostgreSQL (Supabase or RDS) | Sessions, audit logs, user metadata |
+| Cache | Redis (Upstash or ElastiCache) | Session state, rate limiting |
 
-### MCP Server Endpoint Format
+### Gateway Endpoint Format (Recommended)
 
-Following Anthropic's pattern:
+Single domain with versioned path routing:
 ```
-https://mcp.autotask.wyreworkspace.com/mcp
-https://mcp.datto-rmm.wyreworkspace.com/mcp
-https://mcp.itglue.wyreworkspace.com/mcp
+https://mcp.wyre.ai/v1/autotask
+https://mcp.wyre.ai/v1/datto-rmm
+https://mcp.wyre.ai/v1/itglue
+https://mcp.wyre.ai/v1/halopsa
+https://mcp.wyre.ai/v1/syncro
+https://mcp.wyre.ai/v1/atera
+https://mcp.wyre.ai/v1/superops
+https://mcp.wyre.ai/v1/connectwise-psa
+https://mcp.wyre.ai/v1/connectwise-automate
 ```
 
-Or consolidated:
+OAuth endpoints:
 ```
-https://mcp.wyreworkspace.com/autotask/mcp
-https://mcp.wyreworkspace.com/datto-rmm/mcp
-https://mcp.wyreworkspace.com/itglue/mcp
+https://mcp.wyre.ai/oauth/authorize
+https://mcp.wyre.ai/oauth/token
+https://mcp.wyre.ai/oauth/revoke
+```
+
+User management:
+```
+https://mcp.wyre.ai/settings          # Manage connected vendors
+https://mcp.wyre.ai/settings/vendors  # List connected vendors
+https://mcp.wyre.ai/settings/revoke   # Revoke vendor access
 ```
 
 ---
@@ -166,7 +355,7 @@ https://mcp.wyreworkspace.com/itglue/mcp
      "mcpServers": {
        "datto-rmm": {
          "type": "http",
-         "url": "https://mcp.wyreworkspace.com/datto-rmm/mcp"
+         "url": "https://mcp.wyre.ai/datto-rmm/mcp"
        }
      }
    }
@@ -305,43 +494,78 @@ Headers:
 
 ## Implementation Phases
 
-### Phase 1: Foundation (Weeks 1-2)
-- [ ] Set up infrastructure (AWS/hosting)
-- [ ] Implement shared auth service
-- [ ] Implement secure credential store
-- [ ] Create credential entry UI
+### Phase 0: MCP Gateway Foundation (Weeks 1-3)
+- [ ] Set up cloud infrastructure (hosting provider selection)
+- [ ] Implement MCP Gateway core with path-based routing
+- [ ] Build OAuth 2.1 + PKCE authorization server
+- [ ] Implement secure credential store (encrypted at rest)
+- [ ] Create credential entry UI (web pages for API key input)
+- [ ] Build session manager with Redis backing
+- [ ] Set up audit logging and monitoring
+- [ ] Deploy gateway shell to production (no vendor handlers yet)
 
-### Phase 2: Datto RMM (Weeks 3-4)
-- [ ] Build datto-rmm-mcp server
-- [ ] Implement all Datto RMM tools
-- [ ] Integration testing
-- [ ] Deploy to production
+### Phase 1: Datto RMM Handler (Week 4)
+- [ ] Implement DattoRMMHandler in gateway
+- [ ] Add all Datto RMM tools (list_devices, get_device, list_alerts, etc.)
+- [ ] Create Datto RMM credential entry page
+- [ ] Integration testing with real Datto API
+- [ ] Update plugin `.mcp.json` to use gateway URL
 
-### Phase 3: IT Glue (Weeks 4-5)
-- [ ] Build itglue-mcp server
-- [ ] Implement all IT Glue tools
-- [ ] Integration testing
-- [ ] Deploy to production
+### Phase 2: IT Glue Handler (Week 5)
+- [ ] Implement ITGlueHandler in gateway
+- [ ] Add all IT Glue tools (search_organizations, get_password, etc.)
+- [ ] Create IT Glue credential entry page
+- [ ] Integration testing with real IT Glue API
+- [ ] Update plugin `.mcp.json` to use gateway URL
 
-### Phase 4: Autotask Migration (Week 5-6)
-- [ ] Adapt existing autotask-mcp to hosted model
-- [ ] Migration path for existing users
-- [ ] Deploy hosted version
+### Phase 3: Autotask Handler (Week 6)
+- [ ] Port existing autotask-mcp logic to AutotaskHandler
+- [ ] Migrate tools to gateway format
+- [ ] Create Autotask credential entry page
+- [ ] Migration guide for existing local MCP users
+- [ ] Update plugin `.mcp.json` to use gateway URL
 
-### Phase 5: Community Vendors (Weeks 6+)
-- [ ] HaloPSA (native OAuth)
-- [ ] Syncro, Atera, SuperOps
-- [ ] ConnectWise stack
+### Phase 4: Community Vendor Handlers (Weeks 7-10)
+- [ ] HaloPSAHandler (native OAuth passthrough - cleanest)
+- [ ] SyncroHandler (API key)
+- [ ] AteraHandler (API key)
+- [ ] SuperOpsHandler (Bearer token + GraphQL)
+- [ ] ConnectWisePSAHandler (API key + Client ID)
+- [ ] ConnectWiseAutomateHandler (Token-based)
+
+### Phase 5: Production Hardening (Week 11+)
+- [ ] Multi-region deployment for latency
+- [ ] Enhanced monitoring and alerting
+- [ ] Rate limiting per user/vendor
+- [ ] Self-service credential rotation
+- [ ] SOC 2 compliance documentation
 
 ---
 
 ## Open Questions
 
-1. **Domain**: `wyreworkspace.com`? `msp-mcp.com`? `mcp.{yourdomain}`?
+1. ~~**Domain**~~ → **Resolved: `mcp.wyre.ai`**
 2. **Pricing**: Free tier? Per-user? Per-organization?
 3. **Self-hosting option**: Provide Docker images for on-prem deployment?
 4. **Local fallback**: Keep local MCP server option for air-gapped environments?
 5. **Multi-tenant**: Support MSP managing multiple client credentials?
+6. **Hosting provider**: AWS (Lambda + API Gateway) vs Fly.io vs Railway vs Kubernetes?
+7. **Gateway vs Individual Servers**: Gateway recommended (see analysis above), but should we support both deployment models?
+
+## Architecture Decision: Gateway vs Individual Servers
+
+| Aspect | Individual Servers | Unified Gateway (Recommended) |
+|--------|-------------------|------------------------------|
+| Deployment complexity | 9+ separate deployments | Single deployment |
+| Auth implementation | Per-server OAuth | Centralized OAuth once |
+| Credential storage | Per-server stores | Unified credential store |
+| Monitoring | Multiple dashboards | Single observability stack |
+| Latency | Direct to vendor | +10-20ms routing overhead |
+| Scaling | Scale each independently | Scale gateway horizontally |
+| Cost | Higher (multiple services) | Lower (single service) |
+| Maintenance | Higher (9+ codebases) | Lower (one codebase, handlers) |
+
+**Recommendation**: Start with unified gateway. Individual servers remain an option for vendors requiring special handling or for self-hosted deployments.
 
 ---
 
@@ -357,8 +581,23 @@ Headers:
 
 ## References
 
+### MCP Protocol & SDK
 - [MCP SDK Documentation](https://modelcontextprotocol.io/)
+- [MCP OAuth 2.1 Specification (June 2025)](https://spec.modelcontextprotocol.io/specification/2025-03-26/basic/authentication/)
 - [Anthropic knowledge-work-plugins](https://github.com/anthropics/knowledge-work-plugins)
+
+### Gateway Solutions Evaluated
+- [Microsoft MCP Gateway](https://github.com/microsoft/mcp-gateway) - Kubernetes-native, Azure Entra ID
+- [Docker MCP Gateway](https://github.com/docker/mcp-gateway) - Open-source orchestration
+- [MetaMCP](https://github.com/nicholaslee119/metamcp) - Multi-server aggregator
+- [MCPHub](https://github.com/ravitemer/mcphub.nvim) - Unified hub pattern
+
+### Vendor API Documentation
 - [Datto RMM API Docs](https://rmm.datto.com/help/en/Content/2SETUP/APIv2.htm)
 - [IT Glue API Docs](https://api.itglue.com/developer/)
 - [Autotask REST API Docs](https://ww5.autotask.net/help/DeveloperHelp/Content/APIs/REST/REST_API_Home.htm)
+- [HaloPSA API Docs](https://halopsa.com/apidoc/)
+- [Syncro API Docs](https://api-docs.syncromsp.com/)
+- [Atera API Docs](https://app.atera.com/apidocs/)
+- [SuperOps GraphQL API](https://developers.superops.ai/)
+- [ConnectWise Manage API](https://developer.connectwise.com/Products/Manage/REST)
