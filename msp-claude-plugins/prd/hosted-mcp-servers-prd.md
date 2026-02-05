@@ -1,6 +1,6 @@
 # Hosted MCP Servers PRD
 
-> Version: 1.1.0
+> Version: 1.2.0
 > Created: 2026-02-05
 > Updated: 2026-02-05
 > Status: Draft - Awaiting Review
@@ -130,14 +130,30 @@ Instead of deploying individual MCP servers per vendor, a **unified MCP Gateway*
 | **MetaMCP** | Aggregator | None | Combines multiple servers | Docker-only, no auth layer |
 | **MCPHub** | Unified hub | Basic | Vendor-agnostic | Early stage, limited docs |
 
-### Recommendation: Custom Gateway
+### Recommendation: Fork MCP Gateway Registry
 
-Build a custom MCP Gateway because:
+After deeper evaluation, **[MCP Gateway Registry](https://github.com/agentic-community/mcp-gateway-registry)** is the best foundation:
 
-1. **None support our auth pattern** - We need to store vendor API keys, not federate OAuth
-2. **MCP SDK is TypeScript** - Easy to build unified routing layer
-3. **Full control** - No dependency on third-party gateway lifecycle
-4. **MSP-specific features** - Multi-tenant credential storage, audit logging
+1. **Apache-2.0 license** - Full commercial use allowed
+2. **Python/FastAPI** - Familiar stack, easy to extend
+3. **OAuth 2.1 + PKCE already built** - `credentials-provider/oauth/` is production-ready
+4. **Token refresh service exists** - Background refresher with configurable expiry buffer
+5. **Secure file storage** - `.oauth-tokens/` with proper permissions
+6. **700+ tests** - Solid test coverage
+7. **AWS ECS Terraform ready** - Deploy to production quickly
+8. **Keycloak/Entra integration** - Enterprise SSO if needed later
+
+**What's already built:**
+- `credentials-provider/oauth/generic_oauth_flow.py` - Full OAuth 2.0/2.1 with PKCE
+- `credentials-provider/token_refresher.py` - Background token refresh service
+- `oauth_providers.yaml` - Config-driven multi-provider support
+- Automatic MCP config generation for VS Code/Roocode
+
+**What we need to add for MSP vendors:**
+1. **API key storage pattern** - Adapt OAuth token storage for API keys
+2. **Vendor credential entry UI** - Web pages for users to enter Datto/IT Glue/Syncro keys
+3. **Vendor handlers** - Route `/v1/datto-rmm` → DattoHandler using stored credentials
+4. **MSP provider configs** - Add vendor definitions to handle API key auth
 
 ### Gateway Endpoint Format
 
@@ -494,15 +510,15 @@ Headers:
 
 ## Implementation Phases
 
-### Phase 0: MCP Gateway Foundation (Weeks 1-3)
-- [ ] Set up cloud infrastructure (hosting provider selection)
-- [ ] Implement MCP Gateway core with path-based routing
-- [ ] Build OAuth 2.1 + PKCE authorization server
-- [ ] Implement secure credential store (encrypted at rest)
-- [ ] Create credential entry UI (web pages for API key input)
-- [ ] Build session manager with Redis backing
-- [ ] Set up audit logging and monitoring
-- [ ] Deploy gateway shell to production (no vendor handlers yet)
+### Phase 0: Fork & Customize MCP Gateway Registry (Week 1-2)
+- [ ] Fork [agentic-community/mcp-gateway-registry](https://github.com/agentic-community/mcp-gateway-registry)
+- [ ] Set up local development environment (Docker Compose)
+- [ ] Extend `credentials-provider/` to support API key storage (not just OAuth tokens)
+- [ ] Add MSP-specific vendor configs to `oauth_providers.yaml` equivalent
+- [ ] Create vendor credential entry UI (FastAPI routes + Jinja2 templates)
+- [ ] Customize branding/domain for `mcp.wyre.ai`
+- [ ] Deploy to AWS ECS using existing Terraform (or Fly.io for simpler ops)
+- [ ] Validate ingress auth works with Keycloak or custom OAuth
 
 ### Phase 1: Datto RMM Handler (Week 4)
 - [ ] Implement DattoRMMHandler in gateway
@@ -549,8 +565,9 @@ Headers:
 3. **Self-hosting option**: Provide Docker images for on-prem deployment?
 4. **Local fallback**: Keep local MCP server option for air-gapped environments?
 5. **Multi-tenant**: Support MSP managing multiple client credentials?
-6. **Hosting provider**: AWS (Lambda + API Gateway) vs Fly.io vs Railway vs Kubernetes?
-7. **Gateway vs Individual Servers**: Gateway recommended (see analysis above), but should we support both deployment models?
+6. ~~**Hosting provider**: AWS (Lambda + API Gateway) vs Fly.io vs Railway vs Kubernetes?~~ → **Resolved: AWS ECS (Terraform included in MCP Gateway Registry) or Fly.io for simpler ops**
+7. ~~**Gateway vs Individual Servers**~~ → **Resolved: Unified gateway using MCP Gateway Registry as foundation**
+8. **Fork strategy**: Fork entire repo or extract just credentials-provider?
 
 ## Architecture Decision: Gateway vs Individual Servers
 
@@ -581,16 +598,21 @@ Headers:
 
 ## References
 
+### Recommended Foundation
+- **[MCP Gateway Registry](https://github.com/agentic-community/mcp-gateway-registry)** - Apache-2.0, Python/FastAPI, 700+ tests, AWS ECS ready (RECOMMENDED)
+- [Awesome MCP Gateways](https://github.com/e2b-dev/awesome-mcp-gateways) - Comprehensive list of gateway solutions
+
 ### MCP Protocol & SDK
 - [MCP SDK Documentation](https://modelcontextprotocol.io/)
 - [MCP OAuth 2.1 Specification (June 2025)](https://spec.modelcontextprotocol.io/specification/2025-03-26/basic/authentication/)
 - [Anthropic knowledge-work-plugins](https://github.com/anthropics/knowledge-work-plugins)
 
 ### Gateway Solutions Evaluated
+- [MCP Mesh (decocms/mesh)](https://github.com/decocms/mesh) - Token vault, OAuth 2.1, BUT: SUL license
+- [Jetski (hyprmcp)](https://github.com/hyprmcp/jetski) - OAuth 2.1, DCR, BUT: "still in infancy"
+- [Scalekit](https://docs.scalekit.com/mcp/quickstart/) - Commercial, token vault, OAuth 2.1
 - [Microsoft MCP Gateway](https://github.com/microsoft/mcp-gateway) - Kubernetes-native, Azure Entra ID
 - [Docker MCP Gateway](https://github.com/docker/mcp-gateway) - Open-source orchestration
-- [MetaMCP](https://github.com/nicholaslee119/metamcp) - Multi-server aggregator
-- [MCPHub](https://github.com/ravitemer/mcphub.nvim) - Unified hub pattern
 
 ### Vendor API Documentation
 - [Datto RMM API Docs](https://rmm.datto.com/help/en/Content/2SETUP/APIv2.htm)
