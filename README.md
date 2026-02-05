@@ -3,7 +3,7 @@
 > One command to supercharge Claude Code for MSP workflows.
 
 ```
-/plugin marketplace add asachs01/msp-claude-plugins
+/plugin marketplace add wyre-technology/msp-claude-plugins
 ```
 
 Then restart Claude Code. That's it.
@@ -50,9 +50,9 @@ When you ask "create a high priority ticket for Acme Corp", Claude knows:
 Want just one vendor? Install individually:
 
 ```
-/plugin marketplace add asachs01/msp-claude-plugins --plugin autotask
-/plugin marketplace add asachs01/msp-claude-plugins --plugin syncro
-/plugin marketplace add asachs01/msp-claude-plugins --plugin halopsa
+/plugin marketplace add wyre-technology/msp-claude-plugins --plugin autotask
+/plugin marketplace add wyre-technology/msp-claude-plugins --plugin syncro
+/plugin marketplace add wyre-technology/msp-claude-plugins --plugin halopsa
 ```
 
 ---
