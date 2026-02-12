@@ -2,25 +2,10 @@
   "name": "kaseya-datto-rmm",
   "version": "1.0.0",
   "description": "Claude plugins for Datto RMM - devices, alerts, sites, jobs, remote monitoring",
-  "author": "MSP Claude Plugins Community",
-  "vendor": "kaseya",
-  "product": "datto-rmm",
-  "api_version": "v2",
-  "requires_api_key": true,
-  "documentation_url": "https://rmm.datto.com/help/en/Content/2SETUP/APIv2.htm",
-  "skills": [
-    "devices",
-    "alerts",
-    "sites",
-    "jobs",
-    "audit",
-    "variables",
-    "api-patterns"
-  ],
-  "commands": [
-    "device-lookup",
-    "resolve-alert",
-    "run-job",
-    "site-devices"
-  ]
+  "author": {
+    "name": "MSP Claude Plugins Community"
+  },
+  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "license": "Apache-2.0"
 }
