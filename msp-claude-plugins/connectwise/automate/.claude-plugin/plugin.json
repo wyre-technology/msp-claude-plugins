@@ -2,7 +2,9 @@
   "name": "connectwise-automate",
   "version": "1.0.0",
   "description": "Claude plugins for ConnectWise Automate RMM - computers, scripts, monitors, alerts, and client management",
-  "author": "MSP Claude Plugins Community",
+  "author": {
+    "name": "MSP Claude Plugins Community"
+  },
   "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
   "repository": "https://github.com/wyre-technology/msp-claude-plugins",
   "license": "MIT"

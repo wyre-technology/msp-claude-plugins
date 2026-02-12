@@ -9,7 +9,7 @@
   "plugins": [
     {
       "name": "autotask",
-      "source": "./kaseya/autotask",
+      "source": "./msp-claude-plugins/kaseya/autotask",
       "description": "Kaseya Autotask PSA - tickets, CRM, projects, contracts, billing",
       "version": "1.0.0",
       "category": "psa",
@@ -17,7 +17,7 @@
     },
     {
       "name": "datto-rmm",
-      "source": "./kaseya/datto-rmm",
+      "source": "./msp-claude-plugins/kaseya/datto-rmm",
       "description": "Datto RMM - devices, alerts, jobs, patches, monitoring",
       "version": "1.0.0",
       "category": "rmm",
@@ -25,7 +25,7 @@
     },
     {
       "name": "it-glue",
-      "source": "./kaseya/it-glue",
+      "source": "./msp-claude-plugins/kaseya/it-glue",
       "description": "IT Glue - organizations, assets, passwords, flexible assets",
       "version": "1.0.0",
       "category": "documentation",
@@ -33,7 +33,7 @@
     },
     {
       "name": "syncro",
-      "source": "./syncro/syncro-msp",
+      "source": "./msp-claude-plugins/syncro/syncro-msp",
       "description": "Syncro MSP - tickets, customers, assets, invoicing",
       "version": "1.0.0",
       "category": "psa-rmm",
@@ -41,7 +41,7 @@
     },
     {
       "name": "atera",
-      "source": "./atera/atera",
+      "source": "./msp-claude-plugins/atera/atera",
       "description": "Atera - tickets, agents, customers, alerts, SNMP/HTTP monitors",
       "version": "1.0.0",
       "category": "psa-rmm",
@@ -49,7 +49,7 @@
     },
     {
       "name": "superops",
-      "source": "./superops/superops-ai",
+      "source": "./msp-claude-plugins/superops/superops-ai",
       "description": "SuperOps.ai - tickets, assets, clients, runbooks (GraphQL)",
       "version": "1.0.0",
       "category": "psa-rmm",
@@ -57,7 +57,7 @@
     },
     {
       "name": "halopsa",
-      "source": "./halopsa/halopsa",
+      "source": "./msp-claude-plugins/halopsa/halopsa",
       "description": "HaloPSA - tickets, clients, assets, contracts (OAuth 2.0)",
       "version": "1.0.0",
       "category": "psa",
@@ -65,7 +65,7 @@
     },
     {
       "name": "connectwise-psa",
-      "source": "./connectwise/manage",
+      "source": "./msp-claude-plugins/connectwise/manage",
       "description": "ConnectWise PSA - tickets, companies, contacts, projects, time",
       "version": "1.0.0",
       "category": "psa",
@@ -73,7 +73,7 @@
     },
     {
       "name": "connectwise-automate",
-      "source": "./connectwise/automate",
+      "source": "./msp-claude-plugins/connectwise/automate",
       "description": "ConnectWise Automate - computers, clients, scripts, monitors, alerts",
       "version": "1.0.0",
       "category": "rmm",
@@ -81,7 +81,7 @@
     },
     {
       "name": "ninjaone-rmm",
-      "source": "./ninjaone/ninjaone-rmm",
+      "source": "./msp-claude-plugins/ninjaone/ninjaone-rmm",
       "description": "NinjaOne (NinjaRMM) - devices, organizations, alerts, tickets",
       "version": "1.0.0",
       "category": "rmm",
@@ -89,7 +89,7 @@
     },
     {
       "name": "shared-skills",
-      "source": "./shared",
+      "source": "./msp-claude-plugins/shared",
       "description": "Vendor-agnostic MSP skills - terminology and ticket triage",
       "version": "1.0.0",
       "category": "knowledge",
