@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "connectwise-manage": {
+      "type": "http",
+      "url": "https://connectwise-manage-mcp.wyre.workers.dev/mcp",
+      "headers": {
+        "X-CWM-Company-ID": "${CW_MANAGE_COMPANY_ID}",
+        "X-CWM-Public-Key": "${CW_MANAGE_PUBLIC_KEY}",
+        "X-CWM-Private-Key": "${CW_MANAGE_PRIVATE_KEY}",
+        "X-CWM-Client-ID": "${CW_MANAGE_CLIENT_ID}"
+      }
+    }
+  }
+}

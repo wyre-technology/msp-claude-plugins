@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "superops": {
+      "type": "http",
+      "url": "https://superops-mcp.wyre.workers.dev/mcp",
+      "headers": {
+        "X-SuperOps-Token": "${SUPEROPS_API_TOKEN}",
+        "X-SuperOps-Subdomain": "${SUPEROPS_SUBDOMAIN}"
+      }
+    }
+  }
+}

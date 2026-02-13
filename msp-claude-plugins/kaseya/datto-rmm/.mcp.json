@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "datto-rmm": {
+      "type": "http",
+      "url": "https://datto-rmm-mcp.wyre.workers.dev/mcp",
+      "headers": {
+        "X-Datto-API-Key": "${DATTO_API_KEY}",
+        "X-Datto-API-Secret": "${DATTO_API_SECRET}",
+        "X-Datto-Platform": "${DATTO_PLATFORM}"
+      }
+    }
+  }
+}

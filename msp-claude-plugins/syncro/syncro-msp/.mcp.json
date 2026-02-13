@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "syncro": {
+      "type": "http",
+      "url": "https://syncro-mcp.wyre.workers.dev/mcp",
+      "headers": {
+        "X-Syncro-API-Key": "${SYNCRO_API_KEY}",
+        "X-Syncro-Subdomain": "${SYNCRO_SUBDOMAIN}"
+      }
+    }
+  }
+}

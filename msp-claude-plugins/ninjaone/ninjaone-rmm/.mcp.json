@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "ninjaone": {
+      "type": "http",
+      "url": "https://ninjaone-mcp.wyre.workers.dev/mcp",
+      "headers": {
+        "X-Ninja-Client-ID": "${NINJAONE_CLIENT_ID}",
+        "X-Ninja-Client-Secret": "${NINJAONE_CLIENT_SECRET}",
+        "X-Ninja-Region": "${NINJAONE_REGION}"
+      }
+    }
+  }
+}

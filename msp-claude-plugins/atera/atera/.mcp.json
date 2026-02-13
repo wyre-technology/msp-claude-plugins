@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "atera": {
+      "type": "http",
+      "url": "https://atera-mcp.wyre.workers.dev/mcp",
+      "headers": {
+        "X-Atera-API-Key": "${ATERA_API_KEY}"
+      }
+    }
+  }
+}
