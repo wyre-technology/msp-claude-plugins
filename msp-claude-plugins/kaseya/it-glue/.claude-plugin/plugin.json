@@ -3,24 +3,7 @@
   "version": "1.0.0",
   "description": "Claude plugins for IT Glue documentation platform - organizations, assets, passwords, documents",
   "author": "MSP Claude Plugins Community",
-  "vendor": "kaseya",
-  "product": "it-glue",
-  "api_version": "v1",
-  "requires_api_key": true,
-  "documentation_url": "https://api.itglue.com/developer/",
-  "skills": [
-    "organizations",
-    "configurations",
-    "contacts",
-    "passwords",
-    "documents",
-    "flexible-assets",
-    "api-patterns"
-  ],
-  "commands": [
-    "lookup-asset",
-    "search-docs",
-    "get-password",
-    "find-organization"
-  ]
+  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "license": "Apache-2.0"
 }

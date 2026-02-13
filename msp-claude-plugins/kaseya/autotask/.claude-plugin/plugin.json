@@ -3,26 +3,7 @@
   "version": "0.1.0",
   "description": "Claude plugins for Kaseya Autotask PSA - tickets, CRM, projects, contracts",
   "author": "MSP Claude Plugins Community",
-  "vendor": "kaseya",
-  "product": "autotask",
-  "api_version": "1.6",
-  "requires_api_key": true,
-  "documentation_url": "https://ww5.autotask.net/help/DeveloperHelp/Content/APIs/REST/REST_API_Home.htm",
-  "skills": [
-    "tickets",
-    "crm",
-    "projects",
-    "contracts",
-    "api-patterns",
-    "product-catalog"
-  ],
-  "commands": [
-    "create-ticket",
-    "search-tickets",
-    "update-account",
-    "create-project",
-    "time-entry",
-    "search-products",
-    "check-pricing"
-  ]
+  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "license": "Apache-2.0"
 }
