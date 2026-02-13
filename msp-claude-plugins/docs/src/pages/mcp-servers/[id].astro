@@ -28,6 +28,8 @@ const categoryLabels = {
 };
 
 const totalTools = server.domains.reduce((sum, d) => sum + d.tools.length, 0);
+const packageName = server.npmPackage.replace(/^@[^/]+\//, '');
+const ghPackageUrl = `${server.repoUrl}/pkgs/npm/${packageName}`;
 ---
 
 <DocsLayout title={server.name} description={server.description}>
@@ -51,8 +53,8 @@ const totalTools = server.domains.reduce((sum, d) => sum + d.tools.length, 0);
       Source Code
     </a>
     <span class="text-[var(--muted)]">•</span>
-    <a href={`https://www.npmjs.com/package/${server.npmPackage}`} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-[var(--link)] hover:underline">
-      npm
+    <a href={ghPackageUrl} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-[var(--link)] hover:underline">
+      GitHub Package
     </a>
   </div>
 
