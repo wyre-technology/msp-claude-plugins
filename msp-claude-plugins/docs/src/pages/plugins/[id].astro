@@ -80,17 +80,6 @@ const compatibilityBadges = {
     )}
   </div>
 
-  {plugin.mcpRepo && (
-    <div class="flex flex-wrap items-center gap-3 mb-4 not-prose">
-      <a href={`https://cloud.digitalocean.com/apps/new?repo=${plugin.mcpRepo}/tree/main`} target="_blank" rel="noopener noreferrer">
-        <img src="https://www.deploytodo.com/do-btn-blue.svg" alt="Deploy to DigitalOcean" height="32" />
-      </a>
-      <a href={`https://deploy.workers.cloudflare.com/?url=${plugin.mcpRepo}`} target="_blank" rel="noopener noreferrer">
-        <img src="https://deploy.workers.cloudflare.com/button" alt="Deploy to Cloudflare Workers" height="32" />
-      </a>
-    </div>
-  )}
-
   <h1>{plugin.name}</h1>
 
   <p class="lead text-lg text-[var(--muted)] mb-8">
