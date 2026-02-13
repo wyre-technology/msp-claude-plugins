@@ -1,0 +1,312 @@
+---
+import DocsLayout from '@/layouts/DocsLayout.astro';
+import InstallCommand from '@/components/InstallCommand.astro';
+import { mcpServers } from '@/data/mcp-servers';
+
+const baseUrl = import.meta.env.BASE_URL;
+---
+
+<DocsLayout title="Deploying MCP Servers" description="Deploy MSP MCP servers with Docker, DigitalOcean, or Cloudflare Workers.">
+  <h1>Deploying MCP Servers</h1>
+
+  <p class="lead text-lg text-[var(--muted)] mb-8">
+    Each MCP server can run locally via npx, in a Docker container, or deployed to cloud
+    platforms with one click. This guide covers all deployment options.
+  </p>
+
+  <h2>Deployment Options</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Method</th>
+        <th>Best For</th>
+        <th>Requires</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>npx (local)</strong></td>
+        <td>Development, quick testing</td>
+        <td>Node.js 22+</td>
+      </tr>
+      <tr>
+        <td><strong>Docker</strong></td>
+        <td>Self-hosted production, on-premise</td>
+        <td>Docker Engine</td>
+      </tr>
+      <tr>
+        <td><strong>DigitalOcean</strong></td>
+        <td>Managed cloud hosting, team access</td>
+        <td>DigitalOcean account</td>
+      </tr>
+      <tr>
+        <td><strong>Cloudflare Workers</strong></td>
+        <td>Edge deployment, low latency</td>
+        <td>Cloudflare account</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Local (npx)</h2>
+
+  <p>
+    The fastest way to run an MCP server. No installation required — npx downloads and runs the
+    package directly from GitHub Package Registry.
+  </p>
+
+  <pre><code class="language-bash"># Example: run the Syncro MCP server
+npx @wyre-technology/syncro-mcp</code></pre>
+
+  <p>
+    Set the required environment variables before running. Each server's detail page lists the
+    variables it needs.
+  </p>
+
+  <pre><code class="language-bash"># Set credentials, then run
+export SYNCRO_API_KEY="your-api-key"
+export SYNCRO_SUBDOMAIN="yourcompany"
+npx @wyre-technology/syncro-mcp</code></pre>
+
+  <h2>Docker</h2>
+
+  <p>
+    Every MCP server ships with a multi-stage Dockerfile and docker-compose configuration.
+    Docker images are published to GitHub Container Registry (ghcr.io).
+  </p>
+
+  <h3>Pull and run a pre-built image</h3>
+
+  <pre><code class="language-bash"># Pull the latest image
+docker pull ghcr.io/wyre-technology/syncro-mcp:latest
+
+# Run with environment variables
+docker run -d \
+  --name syncro-mcp \
+  -p 8080:8080 \
+  -e SYNCRO_API_KEY="your-api-key" \
+  -e SYNCRO_SUBDOMAIN="yourcompany" \
+  -e MCP_TRANSPORT=http \
+  -e NODE_ENV=production \
+  ghcr.io/wyre-technology/syncro-mcp:latest</code></pre>
+
+  <h3>Using docker-compose</h3>
+
+  <p>
+    Each repo includes a <code>docker-compose.yml</code>. Clone the repo, create a <code>.env</code>
+    file with your credentials, and run:
+  </p>
+
+  <pre><code class="language-bash"># Clone the repo
+git clone https://github.com/wyre-technology/syncro-mcp.git
+cd syncro-mcp
+
+# Create .env with your credentials
+cat &gt; .env &lt;&lt;EOF
+SYNCRO_API_KEY=your-api-key
+SYNCRO_SUBDOMAIN=yourcompany
+EOF
+
+# Start the server
+docker compose up -d</code></pre>
+
+  <p>
+    The compose file includes health checks, automatic restarts, and production defaults.
+    The server will be available at <code>http://localhost:8080</code>.
+  </p>
+
+  <h3>Build from source</h3>
+
+  <pre><code class="language-bash"># Build the production image
+docker compose build
+
+# Or build with Docker directly
+docker build --target production -t syncro-mcp:latest .</code></pre>
+
+  <h3>Docker image details</h3>
+
+  <ul>
+    <li>Base: <code>node:22-alpine</code> (multi-stage build)</li>
+    <li>Runs as non-root user</li>
+    <li>Health check on <code>/health</code> endpoint</li>
+    <li>Exposes port <code>8080</code></li>
+    <li>HTTP transport enabled by default</li>
+  </ul>
+
+  <h2>DigitalOcean App Platform</h2>
+
+  <p>
+    Each MCP server includes a <code>.do/deploy.template.yaml</code> (or <code>.do/app.yaml</code>)
+    for one-click deployment to DigitalOcean App Platform.
+  </p>
+
+  <h3>One-click deploy</h3>
+
+  <p>
+    Click the "Deploy to DigitalOcean" button on any <a href={`${baseUrl}mcp-servers/`}>MCP server page</a>,
+    or use the direct URL pattern:
+  </p>
+
+  <pre><code class="language-text">https://cloud.digitalocean.com/apps/new?repo=https://github.com/wyre-technology/&#123;repo-name&#125;/tree/main</code></pre>
+
+  <h3>What happens</h3>
+
+  <ol>
+    <li>DigitalOcean forks the repo into your account</li>
+    <li>Reads the deploy template for configuration</li>
+    <li>Prompts you to set the required environment variables (API keys, credentials)</li>
+    <li>Builds the Docker image and deploys to a <code>basic-xxs</code> instance</li>
+    <li>Auto-deploys on every push to <code>main</code></li>
+  </ol>
+
+  <h3>Configuration</h3>
+
+  <p>
+    The deploy template sets sensible defaults. You can customize after deployment in the
+    DigitalOcean dashboard:
+  </p>
+
+  <ul>
+    <li><strong>Instance size</strong>: Defaults to <code>basic-xxs</code> (~$5/mo). Scale up for higher traffic.</li>
+    <li><strong>Instance count</strong>: Defaults to 1. Increase for high availability.</li>
+    <li><strong>Environment variables</strong>: Set during deploy. Secrets are encrypted at rest.</li>
+    <li><strong>Auto-deploy</strong>: Enabled by default on push to <code>main</code>.</li>
+  </ul>
+
+  <h2>Cloudflare Workers</h2>
+
+  <p>
+    Each MCP server includes a <code>wrangler.json</code> for deployment to Cloudflare Workers.
+    This runs your server at the edge with low latency globally.
+  </p>
+
+  <h3>One-click deploy</h3>
+
+  <p>
+    Click the "Deploy to Cloudflare Workers" button on any <a href={`${baseUrl}mcp-servers/`}>MCP server page</a>,
+    or use the direct URL pattern:
+  </p>
+
+  <pre><code class="language-text">https://deploy.workers.cloudflare.com/?url=https://github.com/wyre-technology/&#123;repo-name&#125;</code></pre>
+
+  <h3>Manual deploy with Wrangler</h3>
+
+  <pre><code class="language-bash"># Clone and enter the repo
+git clone https://github.com/wyre-technology/syncro-mcp.git
+cd syncro-mcp
+
+# Install dependencies and build
+npm ci && npm run build
+
+# Deploy to Cloudflare Workers
+npx wrangler deploy
+
+# Set secrets
+npx wrangler secret put SYNCRO_API_KEY
+npx wrangler secret put SYNCRO_SUBDOMAIN</code></pre>
+
+  <h2>Connecting Claude to a Deployed Server</h2>
+
+  <p>
+    Once your MCP server is running (locally or in the cloud), configure Claude to connect to it
+    via HTTP transport.
+  </p>
+
+  <h3>Claude Desktop</h3>
+
+  <p>Add to your <code>claude_desktop_config.json</code>:</p>
+
+  <pre><code class="language-json">{JSON.stringify({
+  mcpServers: {
+    "syncro-mcp": {
+      url: "http://localhost:8080/mcp",
+      transport: "streamable-http"
+    }
+  }
+}, null, 2)}</code></pre>
+
+  <p>
+    Replace <code>localhost:8080</code> with your deployed server's URL for cloud deployments
+    (e.g., <code>your-app.ondigitalocean.app</code> or <code>your-worker.workers.dev</code>).
+  </p>
+
+  <h3>Claude Code (.mcp.json)</h3>
+
+  <p>Add to your project's <code>.mcp.json</code>:</p>
+
+  <pre><code class="language-json">{JSON.stringify({
+  mcpServers: {
+    "syncro-mcp": {
+      command: "npx",
+      args: ["@wyre-technology/syncro-mcp"],
+      env: {
+        SYNCRO_API_KEY: "your-api-key",
+        SYNCRO_SUBDOMAIN: "yourcompany"
+      }
+    }
+  }
+}, null, 2)}</code></pre>
+
+  <h2>Available MCP Servers</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Server</th>
+        <th>Package</th>
+        <th>Docker</th>
+      </tr>
+    </thead>
+    <tbody>
+      {mcpServers.map(server => (
+        <tr>
+          <td><a href={`${baseUrl}mcp-servers/${server.id}/`}>{server.name}</a></td>
+          <td><code>{server.npmPackage}</code></td>
+          <td>{server.dockerAvailable ? 'Yes' : 'No'}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+
+  <h2>Environment Variables</h2>
+
+  <p>
+    All deployment methods require the same environment variables. These are always
+    platform-specific API credentials. Check each
+    <a href={`${baseUrl}mcp-servers/`}>MCP server's detail page</a> for the exact variables needed.
+  </p>
+
+  <p>Common patterns across all servers:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Variable</th>
+        <th>Purpose</th>
+        <th>Set By</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>MCP_TRANSPORT</code></td>
+        <td>Transport mode (<code>http</code> for deployed servers)</td>
+        <td>Automatic in Docker/cloud</td>
+      </tr>
+      <tr>
+        <td><code>NODE_ENV</code></td>
+        <td>Runtime environment</td>
+        <td>Automatic in Docker/cloud</td>
+      </tr>
+      <tr>
+        <td><code>LOG_LEVEL</code></td>
+        <td>Logging verbosity (<code>info</code>, <code>debug</code>, <code>error</code>)</td>
+        <td>Optional, defaults to <code>info</code></td>
+      </tr>
+      <tr>
+        <td><code>AUTH_MODE</code></td>
+        <td>Authentication mode (<code>env</code> or <code>gateway</code>)</td>
+        <td>Optional, defaults to <code>env</code></td>
+      </tr>
+    </tbody>
+  </table>
+</DocsLayout>
