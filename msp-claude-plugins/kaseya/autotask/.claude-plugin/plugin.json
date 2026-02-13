@@ -13,13 +13,16 @@
     "crm",
     "projects",
     "contracts",
-    "api-patterns"
+    "api-patterns",
+    "product-catalog"
   ],
   "commands": [
     "create-ticket",
     "search-tickets",
     "update-account",
     "create-project",
-    "time-entry"
+    "time-entry",
+    "search-products",
+    "check-pricing"
   ]
 }
