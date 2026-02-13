@@ -1,0 +1,163 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Setup Plugin Structure and Authentication",
+        "description": "Initialize the plugin project structure and implement authentication with the Salesbuildr API using API keys.",
+        "details": "Create the basic plugin structure following Claude Code plugin standards. Implement the authentication mechanism using API keys as specified in the PRD. The API key should be passed via the 'api-key' header on every request to the Salesbuildr API. Include error handling for authentication failures and implement a mechanism to store and retrieve the API key securely. Base URL for all requests will be 'https://portal.salesbuildr.com/public-api'.\n\nCode structure:\n```javascript\nclass SalesbuildrPlugin {\n  constructor(apiKey) {\n    this.apiKey = apiKey;\n    this.baseUrl = 'https://portal.salesbuildr.com/public-api';\n  }\n\n  async makeRequest(endpoint, method = 'GET', params = {}, body = null) {\n    const url = new URL(`${this.baseUrl}${endpoint}`);\n    \n    // Add query parameters if provided\n    if (method === 'GET' && Object.keys(params).length > 0) {\n      Object.keys(params).forEach(key => {\n        if (params[key] !== undefined && params[key] !== null) {\n          url.searchParams.append(key, params[key]);\n        }\n      });\n    }\n    \n    const options = {\n      method,\n      headers: {\n        'api-key': this.apiKey,\n        'Content-Type': 'application/json'\n      }\n    };\n    \n    if (body && (method === 'POST' || method === 'PATCH')) {\n      options.body = JSON.stringify(body);\n    }\n    \n    try {\n      const response = await fetch(url, options);\n      \n      if (!response.ok) {\n        const errorData = await response.json().catch(() => ({}));\n        throw new Error(`API Error: ${response.status} - ${errorData.message || response.statusText}`);\n      }\n      \n      return await response.json();\n    } catch (error) {\n      console.error('Request failed:', error);\n      throw error;\n    }\n  }\n}\n```",
+        "testStrategy": "1. Unit test the authentication mechanism by mocking API responses for both successful and failed authentication attempts.\n2. Test the makeRequest method with various endpoints and parameters to ensure proper URL construction.\n3. Verify error handling for different HTTP status codes.\n4. Test rate limiting awareness by simulating rapid requests and ensuring the plugin respects the 500 requests per 10 minutes limit.",
+        "priority": "high",
+        "dependencies": [],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 2,
+        "title": "Implement Company Search and Retrieval",
+        "description": "Implement functionality to search companies and retrieve company details by ID using the Salesbuildr API.",
+        "details": "Create methods to search for companies and retrieve company details by ID. The search should support pagination parameters and return formatted results. Implement proper error handling and response formatting.\n\nEndpoints to implement:\n- `GET /companies` - Search companies with parameters: `search`, `from`, `size`\n- `GET /companies/{id}` - Get company by ID\n\n```javascript\n// Add these methods to the SalesbuildrPlugin class\n\nasync searchCompanies(searchTerm, from = 0, size = 20) {\n  const params = {\n    search: searchTerm,\n    from,\n    size: Math.min(size, 100) // Ensure we don't exceed max page size\n  };\n  \n  return this.makeRequest('/companies', 'GET', params);\n}\n\nasync getCompanyById(companyId) {\n  if (!companyId) throw new Error('Company ID is required');\n  return this.makeRequest(`/companies/${companyId}`);\n}\n\n// Helper method to format company results for display\nformatCompanyResults(results) {\n  if (!results || !results.items || results.items.length === 0) {\n    return 'No companies found matching your search criteria.';\n  }\n  \n  return {\n    total: results.total,\n    companies: results.items.map(company => ({\n      id: company.id,\n      name: company.name,\n      email: company.email,\n      phone: company.phone,\n      address: company.address\n    }))\n  };\n}\n```",
+        "testStrategy": "1. Unit test the company search method with various search terms and pagination parameters.\n2. Test the getCompanyById method with valid and invalid IDs.\n3. Verify the formatCompanyResults helper correctly formats the API response.\n4. Test edge cases such as empty search results and maximum page size handling.\n5. Integration test with the actual API to verify correct data retrieval (using test data).",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 3,
+        "title": "Implement Contact Management",
+        "description": "Implement functionality to search contacts, retrieve contact details by ID, and create new contacts in the Salesbuildr CRM.",
+        "details": "Create methods to search for contacts (with optional company filtering), retrieve contact details by ID, and create new contacts. Implement proper validation for required fields when creating contacts.\n\nEndpoints to implement:\n- `GET /contacts` - Search contacts with parameters: `search`, `company_id`, `from`, `size`\n- `GET /contacts/{id}` - Get contact by ID\n- `POST /contacts` - Create contact with required fields: `first_name`, `last_name`, `email`, `company_id`, and optional `phone`\n\n```javascript\n// Add these methods to the SalesbuildrPlugin class\n\nasync searchContacts(searchTerm, companyId = null, from = 0, size = 20) {\n  const params = {\n    search: searchTerm,\n    from,\n    size: Math.min(size, 100)\n  };\n  \n  if (companyId) {\n    params.company_id = companyId;\n  }\n  \n  return this.makeRequest('/contacts', 'GET', params);\n}\n\nasync getContactById(contactId) {\n  if (!contactId) throw new Error('Contact ID is required');\n  return this.makeRequest(`/contacts/${contactId}`);\n}\n\nasync createContact(contactData) {\n  // Validate required fields\n  const requiredFields = ['first_name', 'last_name', 'email', 'company_id'];\n  for (const field of requiredFields) {\n    if (!contactData[field]) {\n      throw new Error(`Missing required field: ${field}`);\n    }\n  }\n  \n  return this.makeRequest('/contacts', 'POST', {}, contactData);\n}\n\n// Helper method to format contact results\nformatContactResults(results) {\n  if (!results || !results.items || results.items.length === 0) {\n    return 'No contacts found matching your search criteria.';\n  }\n  \n  return {\n    total: results.total,\n    contacts: results.items.map(contact => ({\n      id: contact.id,\n      name: `${contact.first_name} ${contact.last_name}`,\n      email: contact.email,\n      phone: contact.phone,\n      companyId: contact.company_id\n    }))\n  };\n}\n```",
+        "testStrategy": "1. Unit test the contact search method with various search terms, company filters, and pagination parameters.\n2. Test the getContactById method with valid and invalid IDs.\n3. Test the createContact method with valid and invalid input data, ensuring validation works correctly.\n4. Verify the formatContactResults helper correctly formats the API response.\n5. Test edge cases such as empty search results and maximum page size handling.\n6. Integration test with the actual API to verify correct data retrieval and creation (using test data).",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 4,
+        "title": "Implement Product Search and Retrieval",
+        "description": "Implement functionality to search products and retrieve product details by ID from the Salesbuildr catalog.",
+        "details": "Create methods to search for products (with optional category filtering) and retrieve product details by ID. The search should support pagination parameters and return formatted results including pricing information.\n\nEndpoints to implement:\n- `GET /products` - Search products with parameters: `search`, `category_id`, `from`, `size`\n- `GET /products/{id}` - Get product by ID\n\n```javascript\n// Add these methods to the SalesbuildrPlugin class\n\nasync searchProducts(searchTerm, categoryId = null, from = 0, size = 20) {\n  const params = {\n    search: searchTerm,\n    from,\n    size: Math.min(size, 100)\n  };\n  \n  if (categoryId) {\n    params.category_id = categoryId;\n  }\n  \n  return this.makeRequest('/products', 'GET', params);\n}\n\nasync getProductById(productId) {\n  if (!productId) throw new Error('Product ID is required');\n  return this.makeRequest(`/products/${productId}`);\n}\n\n// Helper method to format product results\nformatProductResults(results) {\n  if (!results || !results.items || results.items.length === 0) {\n    return 'No products found matching your search criteria.';\n  }\n  \n  return {\n    total: results.total,\n    products: results.items.map(product => ({\n      id: product.id,\n      name: product.name,\n      description: product.description,\n      sku: product.sku,\n      price: product.price,\n      cost: product.cost,\n      categoryId: product.category_id\n    }))\n  };\n}\n```",
+        "testStrategy": "1. Unit test the product search method with various search terms, category filters, and pagination parameters.\n2. Test the getProductById method with valid and invalid IDs.\n3. Verify the formatProductResults helper correctly formats the API response, especially pricing information.\n4. Test edge cases such as empty search results and maximum page size handling.\n5. Integration test with the actual API to verify correct data retrieval (using test data).",
+        "priority": "medium",
+        "dependencies": [
+          1
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 5,
+        "title": "Implement Opportunity Management",
+        "description": "Implement functionality to search opportunities, retrieve opportunity details by ID, create new opportunities, and update opportunity status.",
+        "details": "Create methods to search for opportunities (with optional company and status filtering), retrieve opportunity details by ID, create new opportunities with required fields, and update opportunity status. Implement proper validation for required fields.\n\nEndpoints to implement:\n- `GET /opportunities` - Search opportunities with parameters: `search`, `company_id`, `status`, `from`, `size`\n- `GET /opportunities/{id}` - Get opportunity by ID\n- `POST /opportunities` - Create opportunity with required fields: `name`, `company_id`, `contact_id`, `value`, `stage`, `expected_close_date`\n- `PATCH /opportunities/{id}` - Update opportunity status\n\n```javascript\n// Add these methods to the SalesbuildrPlugin class\n\nasync searchOpportunities(searchTerm, companyId = null, status = null, from = 0, size = 20) {\n  const params = {\n    search: searchTerm,\n    from,\n    size: Math.min(size, 100)\n  };\n  \n  if (companyId) params.company_id = companyId;\n  if (status) params.status = status;\n  \n  return this.makeRequest('/opportunities', 'GET', params);\n}\n\nasync getOpportunityById(opportunityId) {\n  if (!opportunityId) throw new Error('Opportunity ID is required');\n  return this.makeRequest(`/opportunities/${opportunityId}`);\n}\n\nasync createOpportunity(opportunityData) {\n  // Validate required fields\n  const requiredFields = ['name', 'company_id', 'contact_id', 'value', 'stage', 'expected_close_date'];\n  for (const field of requiredFields) {\n    if (!opportunityData[field]) {\n      throw new Error(`Missing required field: ${field}`);\n    }\n  }\n  \n  // Validate date format\n  if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(opportunityData.expected_close_date)) {\n    throw new Error('expected_close_date must be in YYYY-MM-DD format');\n  }\n  \n  return this.makeRequest('/opportunities', 'POST', {}, opportunityData);\n}\n\nasync updateOpportunityStatus(opportunityId, newStatus) {\n  if (!opportunityId) throw new Error('Opportunity ID is required');\n  if (!newStatus) throw new Error('New status is required');\n  \n  return this.makeRequest(`/opportunities/${opportunityId}`, 'PATCH', {}, { status: newStatus });\n}\n\n// Helper method to format opportunity results\nformatOpportunityResults(results) {\n  if (!results || !results.items || results.items.length === 0) {\n    return 'No opportunities found matching your search criteria.';\n  }\n  \n  return {\n    total: results.total,\n    opportunities: results.items.map(opp => ({\n      id: opp.id,\n      name: opp.name,\n      companyId: opp.company_id,\n      contactId: opp.contact_id,\n      value: opp.value,\n      stage: opp.stage,\n      status: opp.status,\n      expectedCloseDate: opp.expected_close_date\n    }))\n  };\n}\n```",
+        "testStrategy": "1. Unit test the opportunity search method with various search terms, company filters, status filters, and pagination parameters.\n2. Test the getOpportunityById method with valid and invalid IDs.\n3. Test the createOpportunity method with valid and invalid input data, ensuring validation works correctly.\n4. Test the updateOpportunityStatus method with valid and invalid inputs.\n5. Verify the formatOpportunityResults helper correctly formats the API response.\n6. Test edge cases such as empty search results and maximum page size handling.\n7. Integration test with the actual API to verify correct data retrieval, creation, and updates (using test data).",
+        "priority": "high",
+        "dependencies": [
+          1,
+          2,
+          3
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 6,
+        "title": "Implement Quote Management",
+        "description": "Implement functionality to search quotes, retrieve quote details by ID, and create new quotes with line items.",
+        "details": "Create methods to search for quotes (with optional company and opportunity filtering), retrieve quote details by ID, and create new quotes with line items. Implement proper validation for required fields.\n\nEndpoints to implement:\n- `GET /quotes` - Search quotes with parameters: `search`, `company_id`, `opportunity_id`, `from`, `size`\n- `GET /quotes/{id}` - Get quote by ID with line items\n- `POST /quotes` - Create quote with required fields: `name`, `company_id`, `contact_id`, `opportunity_id`, `items[]`\n\n```javascript\n// Add these methods to the SalesbuildrPlugin class\n\nasync searchQuotes(searchTerm, companyId = null, opportunityId = null, from = 0, size = 20) {\n  const params = {\n    search: searchTerm,\n    from,\n    size: Math.min(size, 100)\n  };\n  \n  if (companyId) params.company_id = companyId;\n  if (opportunityId) params.opportunity_id = opportunityId;\n  \n  return this.makeRequest('/quotes', 'GET', params);\n}\n\nasync getQuoteById(quoteId) {\n  if (!quoteId) throw new Error('Quote ID is required');\n  return this.makeRequest(`/quotes/${quoteId}`);\n}\n\nasync createQuote(quoteData) {\n  // Validate required fields\n  const requiredFields = ['name', 'company_id', 'contact_id', 'opportunity_id'];\n  for (const field of requiredFields) {\n    if (!quoteData[field]) {\n      throw new Error(`Missing required field: ${field}`);\n    }\n  }\n  \n  // Validate items array\n  if (!quoteData.items || !Array.isArray(quoteData.items) || quoteData.items.length === 0) {\n    throw new Error('Quote must include at least one item');\n  }\n  \n  // Validate each item has required fields\n  const requiredItemFields = ['product_id', 'quantity', 'price'];\n  for (const item of quoteData.items) {\n    for (const field of requiredItemFields) {\n      if (!item[field]) {\n        throw new Error(`Quote item missing required field: ${field}`);\n      }\n    }\n  }\n  \n  return this.makeRequest('/quotes', 'POST', {}, quoteData);\n}\n\n// Helper method to format quote results\nformatQuoteResults(results) {\n  if (!results || !results.items || results.items.length === 0) {\n    return 'No quotes found matching your search criteria.';\n  }\n  \n  return {\n    total: results.total,\n    quotes: results.items.map(quote => ({\n      id: quote.id,\n      name: quote.name,\n      companyId: quote.company_id,\n      contactId: quote.contact_id,\n      opportunityId: quote.opportunity_id,\n      totalValue: quote.total_value,\n      status: quote.status,\n      createdAt: quote.created_at\n    }))\n  };\n}\n\n// Helper method to format detailed quote with line items\nformatDetailedQuote(quote) {\n  if (!quote) {\n    return 'Quote not found.';\n  }\n  \n  return {\n    id: quote.id,\n    name: quote.name,\n    companyId: quote.company_id,\n    contactId: quote.contact_id,\n    opportunityId: quote.opportunity_id,\n    totalValue: quote.total_value,\n    status: quote.status,\n    createdAt: quote.created_at,\n    items: (quote.items || []).map(item => ({\n      id: item.id,\n      productId: item.product_id,\n      productName: item.product_name,\n      quantity: item.quantity,\n      price: item.price,\n      totalPrice: item.total_price\n    }))\n  };\n}\n```",
+        "testStrategy": "1. Unit test the quote search method with various search terms, company filters, opportunity filters, and pagination parameters.\n2. Test the getQuoteById method with valid and invalid IDs.\n3. Test the createQuote method with valid and invalid input data, ensuring validation works correctly for both quote and line item fields.\n4. Verify the formatQuoteResults and formatDetailedQuote helpers correctly format the API responses.\n5. Test edge cases such as empty search results, quotes with many line items, and maximum page size handling.\n6. Integration test with the actual API to verify correct data retrieval and creation (using test data).",
+        "priority": "high",
+        "dependencies": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 7,
+        "title": "Implement Rate Limiting Mechanism",
+        "description": "Implement a rate limiting mechanism to ensure the plugin respects the Salesbuildr API limit of 500 requests per 10 minutes.",
+        "details": "Create a rate limiting mechanism that tracks API requests and ensures the plugin doesn't exceed the 500 requests per 10 minutes limit. Implement a queue system for requests when approaching the limit.\n\n```javascript\n// Add this class to handle rate limiting\nclass RateLimiter {\n  constructor(maxRequests = 500, timeWindowMs = 10 * 60 * 1000) {\n    this.maxRequests = maxRequests;\n    this.timeWindowMs = timeWindowMs;\n    this.requestTimestamps = [];\n  }\n  \n  async checkLimit() {\n    const now = Date.now();\n    \n    // Remove timestamps older than the time window\n    this.requestTimestamps = this.requestTimestamps.filter(\n      timestamp => now - timestamp < this.timeWindowMs\n    );\n    \n    // Check if we're at the limit\n    if (this.requestTimestamps.length >= this.maxRequests) {\n      const oldestTimestamp = this.requestTimestamps[0];\n      const timeToWaitMs = this.timeWindowMs - (now - oldestTimestamp);\n      \n      // Wait until we can make another request\n      await new Promise(resolve => setTimeout(resolve, timeToWaitMs + 100)); // Add 100ms buffer\n      return this.checkLimit(); // Recursively check again after waiting\n    }\n    \n    // Record this request\n    this.requestTimestamps.push(now);\n    return true;\n  }\n  \n  getRemainingRequests() {\n    const now = Date.now();\n    this.requestTimestamps = this.requestTimestamps.filter(\n      timestamp => now - timestamp < this.timeWindowMs\n    );\n    return this.maxRequests - this.requestTimestamps.length;\n  }\n}\n\n// Modify the SalesbuildrPlugin class to use the rate limiter\nclass SalesbuildrPlugin {\n  constructor(apiKey) {\n    this.apiKey = apiKey;\n    this.baseUrl = 'https://portal.salesbuildr.com/public-api';\n    this.rateLimiter = new RateLimiter(500, 10 * 60 * 1000);\n  }\n  \n  async makeRequest(endpoint, method = 'GET', params = {}, body = null) {\n    // Check rate limit before making request\n    await this.rateLimiter.checkLimit();\n    \n    // Rest of the makeRequest method remains the same\n    // ...\n  }\n  \n  getRemainingRequests() {\n    return this.rateLimiter.getRemainingRequests();\n  }\n}\n```",
+        "testStrategy": "1. Unit test the RateLimiter class with various scenarios, including rapid requests and requests over time.\n2. Test the checkLimit method to ensure it correctly delays requests when approaching the limit.\n3. Test the getRemainingRequests method to ensure it correctly reports the remaining request quota.\n4. Simulate a high volume of requests to verify the rate limiting mechanism works correctly.\n5. Test edge cases such as requests exactly at the limit and requests after the time window has passed.",
+        "priority": "medium",
+        "dependencies": [
+          1
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 8,
+        "title": "Implement Natural Language Command Parser",
+        "description": "Implement a natural language command parser to interpret user commands and map them to the appropriate API functions.",
+        "details": "Create a command parser that can interpret natural language commands from users and map them to the appropriate API functions. The parser should handle various phrasings and extract relevant parameters from the commands.\n\n```javascript\nclass CommandParser {\n  constructor(salesbuildrPlugin) {\n    this.plugin = salesbuildrPlugin;\n  }\n  \n  async parseCommand(command) {\n    const lowerCommand = command.toLowerCase().trim();\n    \n    // Search companies\n    if (lowerCommand.includes('search companies') || lowerCommand.includes('find companies')) {\n      const searchTerm = this.extractSearchTerm(lowerCommand, ['search companies', 'find companies']);\n      const results = await this.plugin.searchCompanies(searchTerm);\n      return this.plugin.formatCompanyResults(results);\n    }\n    \n    // Get company by ID\n    if (lowerCommand.includes('get company') && lowerCommand.includes('id')) {\n      const companyId = this.extractId(lowerCommand);\n      const company = await this.plugin.getCompanyById(companyId);\n      return company;\n    }\n    \n    // Search contacts\n    if (lowerCommand.includes('search contacts') || lowerCommand.includes('find contacts')) {\n      const searchTerm = this.extractSearchTerm(lowerCommand, ['search contacts', 'find contacts']);\n      const companyId = this.extractCompanyId(lowerCommand);\n      const results = await this.plugin.searchContacts(searchTerm, companyId);\n      return this.plugin.formatContactResults(results);\n    }\n    \n    // Similar patterns for other commands...\n    // Get contact by ID\n    // Create contact\n    // Search products\n    // Get product by ID\n    // Search opportunities\n    // Get opportunity by ID\n    // Create opportunity\n    // Update opportunity status\n    // Search quotes\n    // Get quote by ID\n    // Create quote\n    \n    return 'I couldn\\'t understand that command. Please try again with a different phrasing.';\n  }\n  \n  extractSearchTerm(command, prefixes) {\n    let searchTerm = command;\n    for (const prefix of prefixes) {\n      if (command.includes(prefix)) {\n        searchTerm = command.substring(command.indexOf(prefix) + prefix.length).trim();\n        break;\n      }\n    }\n    \n    // Remove common phrases like 'for', 'with name', etc.\n    const phrasesToRemove = ['for', 'with name', 'named', 'called', 'with the name'];\n    for (const phrase of phrasesToRemove) {\n      if (searchTerm.startsWith(phrase + ' ')) {\n        searchTerm = searchTerm.substring(phrase.length + 1).trim();\n      }\n    }\n    \n    return searchTerm;\n  }\n  \n  extractId(command) {\n    const idMatch = command.match(/id\\s+(\\d+)/i) || command.match(/(\\d+)/g);\n    return idMatch ? idMatch[1] : null;\n  }\n  \n  extractCompanyId(command) {\n    const companyIdMatch = command.match(/company\\s+id\\s+(\\d+)/i) || \n                          command.match(/company\\s+(\\d+)/i) ||\n                          command.match(/for\\s+company\\s+(\\d+)/i);\n    return companyIdMatch ? companyIdMatch[1] : null;\n  }\n  \n  // Additional extraction methods for other parameters...\n}\n```",
+        "testStrategy": "1. Unit test the parseCommand method with various natural language commands to ensure it correctly identifies the command type.\n2. Test the extraction methods (extractSearchTerm, extractId, extractCompanyId, etc.) with various phrasings to ensure they correctly extract parameters.\n3. Test edge cases such as ambiguous commands, commands with missing parameters, and commands with extra information.\n4. Test the integration with the SalesbuildrPlugin class to ensure commands are correctly mapped to API functions.\n5. Conduct user testing with sample commands to verify the parser handles real-world usage patterns.",
+        "priority": "high",
+        "dependencies": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 9,
+        "title": "Implement Response Formatting and Display",
+        "description": "Implement response formatting to display API results in a user-friendly format with relevant fields highlighted.",
+        "details": "Create formatting functions for each type of API response to display results in a user-friendly format. Highlight relevant fields and provide context for the data.\n\n```javascript\nclass ResponseFormatter {\n  formatCompanyResponse(company) {\n    if (!company) return 'Company not found.';\n    \n    return `\n## Company Details\n\n**ID:** ${company.id}\n**Name:** ${company.name}\n**Email:** ${company.email || 'N/A'}\n**Phone:** ${company.phone || 'N/A'}\n**Address:** ${company.address || 'N/A'}\n    `;\n  }\n  \n  formatCompanySearchResults(results) {\n    if (!results || !results.companies || results.companies.length === 0) {\n      return 'No companies found matching your search criteria.';\n    }\n    \n    let output = `## Found ${results.total} companies\\n\\n`;\n    \n    results.companies.forEach((company, index) => {\n      output += `### ${index + 1}. ${company.name}\\n`;\n      output += `**ID:** ${company.id}\\n`;\n      if (company.email) output += `**Email:** ${company.email}\\n`;\n      if (company.phone) output += `**Phone:** ${company.phone}\\n`;\n      if (company.address) output += `**Address:** ${company.address}\\n`;\n      output += '\\n';\n    });\n    \n    return output;\n  }\n  \n  formatContactResponse(contact) {\n    if (!contact) return 'Contact not found.';\n    \n    return `\n## Contact Details\n\n**ID:** ${contact.id}\n**Name:** ${contact.first_name} ${contact.last_name}\n**Email:** ${contact.email || 'N/A'}\n**Phone:** ${contact.phone || 'N/A'}\n**Company ID:** ${contact.company_id}\n    `;\n  }\n  \n  // Similar formatting methods for other entity types...\n  // formatContactSearchResults\n  // formatProductResponse\n  // formatProductSearchResults\n  // formatOpportunityResponse\n  // formatOpportunitySearchResults\n  // formatQuoteResponse\n  // formatQuoteSearchResults\n  \n  formatError(error) {\n    return `## Error\n\n${error.message || 'An unknown error occurred.'}`;\n  }\n}\n```",
+        "testStrategy": "1. Unit test each formatting method with various input data to ensure correct output formatting.\n2. Test edge cases such as missing fields, empty results, and maximum result sets.\n3. Verify that the formatting is consistent across different entity types.\n4. Test the error formatting to ensure errors are displayed in a user-friendly way.\n5. Conduct user testing to verify the formatted output is easy to read and understand.",
+        "priority": "medium",
+        "dependencies": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 10,
+        "title": "Implement Plugin Integration with Claude Code",
+        "description": "Integrate the Salesbuildr plugin with Claude Code, exposing the plugin's functionality through the Claude Code interface.",
+        "details": "Create the necessary integration code to expose the Salesbuildr plugin's functionality through the Claude Code interface. This includes registering the plugin, handling authentication, and processing commands.\n\n```javascript\n// Claude Code Plugin Integration\n\nclass SalesbuildrClaudePlugin {\n  constructor() {\n    this.plugin = null;\n    this.commandParser = null;\n    this.responseFormatter = null;\n  }\n  \n  async initialize(apiKey) {\n    if (!apiKey) {\n      throw new Error('API key is required to initialize the Salesbuildr plugin.');\n    }\n    \n    this.plugin = new SalesbuildrPlugin(apiKey);\n    this.commandParser = new CommandParser(this.plugin);\n    this.responseFormatter = new ResponseFormatter();\n    \n    return 'Salesbuildr plugin initialized successfully. You can now use natural language commands to interact with your CRM data.';\n  }\n  \n  async handleCommand(command) {\n    if (!this.plugin) {\n      return 'Please initialize the plugin with your API key first using the initialize command.';\n    }\n    \n    try {\n      const result = await this.commandParser.parseCommand(command);\n      \n      // Format the result based on its type\n      if (typeof result === 'string') {\n        return result;\n      } else if (result.companies) {\n        return this.responseFormatter.formatCompanySearchResults(result);\n      } else if (result.contacts) {\n        return this.responseFormatter.formatContactSearchResults(result);\n      }\n      // Handle other result types...\n      \n      return JSON.stringify(result, null, 2);\n    } catch (error) {\n      return this.responseFormatter.formatError(error);\n    }\n  }\n  \n  // Register the plugin with Claude Code\n  register() {\n    return {\n      name: 'salesbuildr',\n      description: 'Salesbuildr CRM plugin for MSP quoting and sales workflows',\n      version: '1.0.0',\n      commands: [\n        {\n          name: 'initialize',\n          description: 'Initialize the Salesbuildr plugin with your API key',\n          parameters: [\n            {\n              name: 'apiKey',\n              type: 'string',\n              description: 'Your Salesbuildr API key',\n              required: true\n            }\n          ],\n          handler: this.initialize.bind(this)\n        },\n        {\n          name: 'execute',\n          description: 'Execute a natural language command for Salesbuildr',\n          parameters: [\n            {\n              name: 'command',\n              type: 'string',\n              description: 'The natural language command to execute',\n              required: true\n            }\n          ],\n          handler: this.handleCommand.bind(this)\n        }\n      ]\n    };\n  }\n}\n\n// Export the plugin for Claude Code\nexport default new SalesbuildrClaudePlugin().register();\n```",
+        "testStrategy": "1. Test the plugin initialization with valid and invalid API keys.\n2. Test the command handling with various natural language commands.\n3. Verify the plugin correctly integrates with the Claude Code interface.\n4. Test error handling and recovery.\n5. Conduct end-to-end testing with real user scenarios to verify the plugin works correctly in the Claude Code environment.\n6. Verify that all success criteria from the PRD are met:\n   - Authentication with Salesbuildr API\n   - Company search functionality\n   - Contact search with company filtering\n   - Product search with pricing information\n   - Opportunity creation and management\n   - Quote creation with line items\n   - Error handling\n   - Rate limiting compliance",
+        "priority": "high",
+        "dependencies": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "status": "pending",
+        "subtasks": []
+      }
+    ],
+    "metadata": {
+      "created": "2026-02-13T03:48:49.599Z",
+      "updated": "2026-02-13T03:48:49.599Z",
+      "description": "Tasks for master context"
+    }
+  }
+}
