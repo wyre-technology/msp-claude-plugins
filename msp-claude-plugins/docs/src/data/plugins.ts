@@ -10,6 +10,7 @@ export interface Plugin {
   commands: Command[];
   apiInfo: ApiInfo;
   path: string;
+  mcpRepo?: string;
   compatibility: {
     claudeCode: boolean;
     claudeDesktop: boolean | 'coming-soon';
@@ -76,6 +77,7 @@ export const plugins: Plugin[] = [
       docsUrl: 'https://ww5.autotask.net/help/DeveloperHelp/Content/APIs/REST/REST_API_Home.htm'
     },
     path: 'kaseya/autotask',
+    mcpRepo: 'https://github.com/wyre-technology/autotask-mcp',
     compatibility: { claudeCode: true, claudeDesktop: true, validated: true }
   },
   {
@@ -114,6 +116,7 @@ export const plugins: Plugin[] = [
       docsUrl: 'https://rmm.datto.com/help/en/Content/2SETUP/APIv2.htm'
     },
     path: 'kaseya/datto-rmm',
+    mcpRepo: 'https://github.com/wyre-technology/datto-rmm-mcp',
     compatibility: { claudeCode: true, claudeDesktop: 'coming-soon', validated: true }
   },
   {
@@ -153,6 +156,7 @@ export const plugins: Plugin[] = [
       docsUrl: 'https://api.itglue.com/developer/'
     },
     path: 'kaseya/it-glue',
+    mcpRepo: 'https://github.com/wyre-technology/itglue-mcp',
     compatibility: { claudeCode: true, claudeDesktop: 'coming-soon', validated: true }
   },
   {
@@ -194,6 +198,7 @@ export const plugins: Plugin[] = [
       docsUrl: 'https://api-docs.syncromsp.com/'
     },
     path: 'syncro/syncro-msp',
+    mcpRepo: 'https://github.com/wyre-technology/syncro-mcp',
     compatibility: { claudeCode: true, claudeDesktop: 'coming-soon', validated: false }
   },
   {
@@ -237,6 +242,7 @@ export const plugins: Plugin[] = [
       docsUrl: 'https://app.atera.com/apidocs/'
     },
     path: 'atera/atera',
+    mcpRepo: 'https://github.com/wyre-technology/atera-mcp',
     compatibility: { claudeCode: true, claudeDesktop: 'coming-soon', validated: false }
   },
   {
@@ -280,6 +286,7 @@ export const plugins: Plugin[] = [
       docsUrl: 'https://developer.superops.ai/'
     },
     path: 'superops/superops-ai',
+    mcpRepo: 'https://github.com/wyre-technology/superops-mcp',
     compatibility: { claudeCode: true, claudeDesktop: 'coming-soon', validated: false }
   },
   {
@@ -321,6 +328,7 @@ export const plugins: Plugin[] = [
       docsUrl: 'https://halopsa.com/apidocs/'
     },
     path: 'halopsa/halopsa',
+    mcpRepo: 'https://github.com/wyre-technology/halopsa-mcp',
     compatibility: { claudeCode: true, claudeDesktop: 'coming-soon', validated: false }
   },
   {
@@ -364,6 +372,7 @@ export const plugins: Plugin[] = [
       docsUrl: 'https://developer.connectwise.com/Products/ConnectWise_PSA'
     },
     path: 'connectwise/manage',
+    mcpRepo: 'https://github.com/wyre-technology/connectwise-manage-mcp',
     compatibility: { claudeCode: true, claudeDesktop: 'coming-soon', validated: false }
   },
   {
@@ -399,6 +408,7 @@ export const plugins: Plugin[] = [
       docsUrl: 'https://developer.connectwise.com/Products/ConnectWise_Automate'
     },
     path: 'connectwise/automate',
+    mcpRepo: 'https://github.com/wyre-technology/connectwise-automate-mcp',
     compatibility: { claudeCode: true, claudeDesktop: 'coming-soon', validated: false }
   },
   {
@@ -435,6 +445,7 @@ export const plugins: Plugin[] = [
       docsUrl: 'https://app.ninjarmm.com/apidocs/'
     },
     path: 'ninjaone/ninjaone-rmm',
+    mcpRepo: 'https://github.com/wyre-technology/ninjaone-mcp',
     compatibility: { claudeCode: true, claudeDesktop: 'coming-soon', validated: false }
   }
 ];
