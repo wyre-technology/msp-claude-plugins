@@ -2,6 +2,7 @@
 
 ![Claude Code](https://img.shields.io/badge/Claude_Code-✓_Full_Support-blue?logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0xMiAyQzYuNDggMiAyIDYuNDggMiAxMnM0LjQ4IDEwIDEwIDEwIDEwLTQuNDggMTAtMTBTMTcuNTIgMiAxMiAyem0wIDE4Yy00LjQyIDAtOC0zLjU4LTgtOHMzLjU4LTggOC04IDggMy41OCA4IDgtMy41OCA4LTggOHoiLz48L3N2Zz4=)
 ![Claude Desktop](https://img.shields.io/badge/Claude_Desktop-Partial_(MCP_only)-yellow?logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0yMSAzSDNjLTEuMSAwLTIgLjktMiAydjE0YzAgMS4xLjkgMiAyIDJoMThjMS4xIDAgMi0uOSAyLTJWNWMwLTEuMS0uOS0yLTItMnptMCAxNkgzVjVoMTh2MTR6Ii8+PC9zdmc+)
+![Claude Cowork](https://img.shields.io/badge/Claude_Cowork-✓_Full_Support-blue)
 ![License](https://img.shields.io/badge/License-Apache_2.0-green)
 
 Community-driven Claude Code plugins for Managed Service Providers.
@@ -10,8 +11,9 @@ Community-driven Claude Code plugins for Managed Service Providers.
 
 | Platform | Support | Notes |
 |----------|---------|-------|
-| **Claude Code** | ✅ Full | All skills, commands, and MCP servers |
-| **Claude Desktop** | ⚠️ Partial | Only MCP servers (Autotask). Hosted MCP servers coming soon. |
+| **Claude Code** | ✅ Full | All skills, commands, and MCP servers (stdio) |
+| **Claude Cowork** | ✅ Full | All MCP servers via HTTP transport |
+| **Claude Desktop** | ⚠️ Partial | MCP servers only. Hosted MCP servers available. |
 
 ## Quick Start
 
@@ -21,22 +23,45 @@ Community-driven Claude Code plugins for Managed Service Providers.
 
 ## Available Plugins
 
-| Plugin | Vendor | Status | Code | Desktop | Description |
-|--------|--------|--------|------|---------|-------------|
-| `autotask` | Kaseya | ✅ Validated | ✅ | ✅ | Tickets, CRM, projects, contracts |
-| `datto-rmm` | Kaseya | ✅ Validated | ✅ | 🔜 | Devices, alerts, jobs, patches |
-| `it-glue` | Kaseya | ✅ Validated | ✅ | 🔜 | Organizations, assets, passwords, documents |
-| `syncro` | Syncro | 🧪 Community | ✅ | 🔜 | Tickets, customers, assets, invoicing |
-| `atera` | Atera | 🧪 Community | ✅ | 🔜 | Tickets, agents, alerts, monitors |
-| `superops` | SuperOps | 🧪 Community | ✅ | 🔜 | Tickets, assets, alerts, runbooks |
-| `halopsa` | Halo | 🧪 Community | ✅ | 🔜 | Tickets, clients, assets, contracts |
-| `connectwise-psa` | ConnectWise | 🧪 Community | ✅ | 🔜 | Tickets, companies, projects, time |
-| `connectwise-automate` | ConnectWise | 🧪 Community | ✅ | 🔜 | Computers, scripts, monitors |
-| `shared-skills` | — | ✅ Validated | ✅ | — | MSP terminology and ticket triage |
+| Plugin | Vendor | Status | Code | Cowork | Desktop | Description |
+|--------|--------|--------|------|--------|---------|-------------|
+| `autotask` | Kaseya | ✅ Validated | ✅ | ✅ | ✅ | Tickets, CRM, projects, contracts |
+| `datto-rmm` | Kaseya | ✅ Validated | ✅ | ✅ | ✅ | Devices, alerts, jobs, patches |
+| `it-glue` | Kaseya | ✅ Validated | ✅ | ✅ | ✅ | Organizations, assets, passwords, documents |
+| `syncro` | Syncro | 🧪 Community | ✅ | ✅ | ✅ | Tickets, customers, assets, invoicing |
+| `atera` | Atera | 🧪 Community | ✅ | ✅ | ✅ | Tickets, agents, alerts, monitors |
+| `superops` | SuperOps | 🧪 Community | ✅ | ✅ | ✅ | Tickets, assets, alerts, runbooks |
+| `halopsa` | Halo | 🧪 Community | ✅ | ✅ | ✅ | Tickets, clients, assets, contracts |
+| `connectwise-psa` | ConnectWise | 🧪 Community | ✅ | 🔜 | 🔜 | Tickets, companies, projects, time |
+| `connectwise-automate` | ConnectWise | 🧪 Community | ✅ | ✅ | ✅ | Computers, scripts, monitors |
+| `shared-skills` | — | ✅ Validated | ✅ | — | — | MSP terminology and ticket triage |
 
 **Status:** ✅ Validated = Tested against production APIs | 🧪 Community = May need adjustments
-**Code:** Claude Code support (skills + commands) | **Desktop:** Claude Desktop support (MCP server)
-🔜 = Hosted MCP server coming soon
+**Code:** Claude Code (stdio) | **Cowork:** Claude Cowork (HTTP) | **Desktop:** Claude Desktop (MCP)
+
+## Deployment
+
+All MCP servers support dual transport:
+- **stdio** (default) — for Claude Code local usage
+- **HTTP** — for Claude Cowork, Docker, and cloud deployments
+
+### Self-host with Docker
+
+```bash
+docker run -p 8080:8080 \
+  -e MCP_TRANSPORT=http \
+  -e AUTH_MODE=env \
+  -e VENDOR_API_KEY=your-key \
+  ghcr.io/wyre-technology/{vendor}-mcp:latest
+```
+
+### Cloud deployment
+
+Each MCP server includes configs for:
+- **Cloudflare Workers** — `wrangler.json` in each repo
+- **DigitalOcean App Platform** — `.do/app.yaml` in each repo
+
+See the [deployment docs](https://wyre-technology.github.io/msp-claude-plugins/deployment/) for full guides.
 
 ## Commands (71 total)
 
