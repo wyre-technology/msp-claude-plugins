@@ -1,4 +1,7 @@
 ---
+import { plugins } from '@/data/plugins';
+import { mcpServers } from '@/data/mcp-servers';
+
 const baseUrl = import.meta.env.BASE_URL;
 const currentPath = Astro.url.pathname;
 
@@ -10,11 +13,57 @@ const navLinks = [
   { href: `${baseUrl}commands/`, label: 'Commands' },
 ];
 
+const sidebarSections = [
+  {
+    label: 'Getting Started',
+    children: [
+      { label: 'Introduction', href: `${baseUrl}getting-started/` },
+      { label: 'Installation', href: `${baseUrl}getting-started/installation/` },
+      { label: 'Quick Start', href: `${baseUrl}getting-started/quick-start/` },
+      { label: 'Architecture', href: `${baseUrl}getting-started/architecture/` },
+      { label: 'Deployment', href: `${baseUrl}getting-started/deployment/` },
+      { label: 'Gateway', href: `${baseUrl}getting-started/gateway/` },
+    ]
+  },
+  {
+    label: 'Plugins',
+    children: [
+      { label: 'Overview', href: `${baseUrl}plugins/` },
+      ...plugins.map(p => ({
+        label: p.name,
+        href: `${baseUrl}plugins/${p.id}/`
+      }))
+    ]
+  },
+  {
+    label: 'MCP Servers',
+    children: [
+      { label: 'Overview', href: `${baseUrl}mcp-servers/` },
+      ...mcpServers.map(s => ({
+        label: s.name,
+        href: `${baseUrl}mcp-servers/${s.id}/`
+      }))
+    ]
+  },
+  {
+    label: 'Reference',
+    children: [
+      { label: 'Skills', href: `${baseUrl}skills/` },
+      { label: 'Commands', href: `${baseUrl}commands/` },
+    ]
+  }
+];
+
 function isActive(href: string): boolean {
   if (href === baseUrl) {
     return currentPath === baseUrl || currentPath === baseUrl.slice(0, -1);
   }
   return currentPath.startsWith(href);
+}
+
+function isExactActive(href?: string): boolean {
+  if (!href) return false;
+  return currentPath === href || currentPath === href.slice(0, -1);
 }
 ---
 
@@ -40,6 +89,17 @@ function isActive(href: string): boolean {
       </nav>
 
       <div class="flex items-center gap-4">
+        <!-- Mobile menu button -->
+        <button
+          id="mobile-menu-button"
+          class="lg:hidden p-2 rounded-lg hover:bg-[var(--border)] transition-colors"
+          aria-label="Open navigation menu"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+
         <button
           id="search-button"
           class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] hover:border-[var(--text)] transition-colors"
@@ -77,12 +137,74 @@ function isActive(href: string): boolean {
   </div>
 </header>
 
+<!-- Mobile menu overlay -->
+<div id="mobile-menu" class="fixed inset-0 z-[100] hidden">
+  <!-- Backdrop -->
+  <div id="mobile-menu-backdrop" class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+  
+  <!-- Panel -->
+  <div class="absolute inset-y-0 left-0 w-80 max-w-[85vw] bg-[var(--background)] border-r border-[var(--border)] overflow-y-auto shadow-2xl">
+    <!-- Close button -->
+    <div class="flex items-center justify-between h-16 px-4 border-b border-[var(--border)]">
+      <span class="font-semibold">Navigation</span>
+      <button id="mobile-menu-close" class="p-2 rounded-lg hover:bg-[var(--border)] transition-colors" aria-label="Close menu">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+    
+    <!-- Navigation sections -->
+    <nav class="p-4">
+      {sidebarSections.map(section => (
+        <div class="mb-6">
+          <h3 class="font-semibold text-sm uppercase tracking-wider text-[var(--muted)] mb-2 px-3">
+            {section.label}
+          </h3>
+          <ul class="space-y-1">
+            {section.children.map(item => (
+              <li>
+                <a
+                  href={item.href}
+                  class={isExactActive(item.href) ? 'sidebar-link-active sidebar-link' : 'sidebar-link'}
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </nav>
+  </div>
+</div>
+
 <script>
-  // Search shortcut
+  // Mobile menu toggle
+  const menuButton = document.getElementById('mobile-menu-button');
+  const menu = document.getElementById('mobile-menu');
+  const menuClose = document.getElementById('mobile-menu-close');
+  const menuBackdrop = document.getElementById('mobile-menu-backdrop');
+
+  function openMenu() {
+    menu?.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMenu() {
+    menu?.classList.add('hidden');
+    document.body.style.overflow = '';
+  }
+
+  menuButton?.addEventListener('click', openMenu);
+  menuClose?.addEventListener('click', closeMenu);
+  menuBackdrop?.addEventListener('click', closeMenu);
+
+  // Close on Escape
   document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeMenu();
     if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
       e.preventDefault();
-      // Future: Open search dialog
       console.log('Search triggered');
     }
   });
