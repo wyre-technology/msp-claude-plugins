@@ -1,5 +1,13 @@
 ---
 import DocsLayout from '@/layouts/DocsLayout.astro';
+
+const vendorUrlExample = `{
+  "mcpServers": {
+    "autotask": { "url": "https://mcp.wyre.ai/v1/autotask/mcp" },
+    "datto-rmm": { "url": "https://mcp.wyre.ai/v1/datto-rmm/mcp" },
+    "syncro": { "url": "https://mcp.wyre.ai/v1/syncro/mcp" }
+  }
+}`;
 ---
 <DocsLayout title="MCP Gateway" description="Hosted MCP gateway at mcp.wyre.ai with OAuth 2.1 and encrypted credential storage.">
   <h1>MCP Gateway</h1>
@@ -11,7 +19,7 @@ import DocsLayout from '@/layouts/DocsLayout.astro';
 
   <h2>How It Works</h2>
   <ol>
-    <li>Add <code>https://mcp.wyre.ai/v1/{vendor}/mcp</code> as an MCP server URL in Claude Desktop</li>
+    <li>Add <code>{"https://mcp.wyre.ai/v1/{vendor}/mcp"}</code> as an MCP server URL in Claude Desktop</li>
     <li>Claude initiates an OAuth 2.1 + PKCE flow — a browser window opens</li>
     <li>Enter your vendor API credentials (API keys, secrets, etc.)</li>
     <li>The gateway encrypts and stores your credentials (AES-256-GCM)</li>
@@ -37,13 +45,7 @@ import DocsLayout from '@/layouts/DocsLayout.astro';
 
   <h2>Claude Desktop Configuration</h2>
   <p>Add any or all vendors to your Claude Desktop config:</p>
-  <pre><code class="language-json">{
-  "mcpServers": {
-    "autotask": { "url": "https://mcp.wyre.ai/v1/autotask/mcp" },
-    "datto-rmm": { "url": "https://mcp.wyre.ai/v1/datto-rmm/mcp" },
-    "syncro": { "url": "https://mcp.wyre.ai/v1/syncro/mcp" }
-  }
-}</code></pre>
+  <pre><code class="language-json" set:text={vendorUrlExample} /></pre>
 
   <h2>Security</h2>
   <ul>
